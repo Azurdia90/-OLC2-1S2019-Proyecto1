@@ -1,0 +1,101 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package FS_INSTRUCCIONES;
+
+import FS_AST.Nodo_AST_FS;
+import FS_EXPRESION.Expresion;
+import UI.ObjetoEntrada;
+import FS_TABLA_SIMBOLOS.Tabla_Enums;
+import FS_TABLA_SIMBOLOS.Entorno;
+import FS_TABLA_SIMBOLOS.Simbolo;
+import java.util.ArrayList;
+
+/**
+ *
+ * @author crist
+ */
+public class Sentencia_Declaracion implements Instruccion
+{
+    private int fila;
+    private int columna;
+    
+    private ArrayList<String> identificadores;
+    private Expresion expresion;
+    
+    private Nodo_AST_FS lista_identificadores;
+    private Nodo_AST_FS nodo_expresion;
+    
+    public Sentencia_Declaracion(Nodo_AST_FS p_identificador)            
+    {
+        this.lista_identificadores = p_identificador;
+        this.crearLista_identificadores();
+        this.expresion = null;
+    }   
+    
+    @Override
+    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    {
+        if(identificadores.size() > 0)
+        {
+            for(int i = 0; i < identificadores.size(); i++)
+            {
+                try
+                {
+                    Simbolo nuevo_simbolo = new Simbolo();
+                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.variable);
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.nulo);
+                    nuevo_simbolo.setIdentificador(identificadores.get(i));    
+                    //SI LA DECLARACION INCLUYE ASIGNACION DE UN VALOR
+                    if(expresion != null)
+                    {
+                        Simbolo simbolo_expresion = expresion.ejecutar(entorno_local, salida);
+                        nuevo_simbolo.setTipo(simbolo_expresion.getTipo());
+                        nuevo_simbolo.setValor(simbolo_expresion.getValor());
+                    }           
+                    //REALIZAR LA DECLARACION EN EL ENTORNO LOCAL
+                    if(entorno_local.Obtener(identificadores.get(i)).getIdentificador().equals("33-12"))
+                    {
+                        return entorno_local.Crear(identificadores.get(i), nuevo_simbolo);
+                    }
+                    else
+                    {
+                        return entorno_local.Crear(identificadores.get(i), nuevo_simbolo);
+                    }                                   
+                }
+                catch(Exception e)
+                {
+                    System.out.println(e.getMessage());
+                    return null;
+                } 
+            }
+        }
+        else
+        {
+            return null;
+        }
+        return null;
+    }
+
+    private void crearLista_identificadores()
+    {            
+        identificadores = new ArrayList<String>();
+        for(int i = 0; i < lista_identificadores.getHijos().size(); i++)
+        {
+            identificadores.add(lista_identificadores.getHijos().get(i).getValor());
+        }
+    }
+    
+    public Nodo_AST_FS getNodo_expresion() {
+        return nodo_expresion;
+    }
+
+    public void setNodo_expresion(Nodo_AST_FS nodo_expresion) {
+        this.nodo_expresion = nodo_expresion;
+        expresion = new Expresion(nodo_expresion.getHijos().get(0));        
+    }
+            
+}
