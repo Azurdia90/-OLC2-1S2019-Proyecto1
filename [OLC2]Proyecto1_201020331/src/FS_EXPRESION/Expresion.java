@@ -33,13 +33,13 @@ public class Expresion implements Instruccion
             op_der = null;  
             tipo_expresion = p_expresion.getEtiqueta();  
         }
-        else if(p_expresion.getEtiqueta().equals("EXPRESION_ARITMETICA")||p_expresion.getEtiqueta().equals("EXPRESION_RELACIONAL")||p_expresion.getEtiqueta().equals("EXPRESION_LOGICA"))
+        else if(p_expresion.getEtiqueta().equals("EXPRESION_ARITMETICA")||p_expresion.getEtiqueta().equals("EXPRESION_UNARIA")||p_expresion.getEtiqueta().equals("EXPRESION_RELACIONAL")||p_expresion.getEtiqueta().equals("EXPRESION_LOGICA"))
         {//Si es algun tipo de expresion
 
             if(p_expresion.getHijos().get(0).getHijos().size() == 1)
             {
                 op_izq = p_expresion.getHijos().get(0).getHijos().get(0);
-                operador = p_expresion.getHijos().get(0).getHijos().get(1);  
+                operador = p_expresion.getHijos().get(0);  
                 op_der = null;  
             }
             else if(p_expresion.getHijos().get(0).getHijos().size() == 2)
@@ -60,13 +60,20 @@ public class Expresion implements Instruccion
             Expresion_Aritmetica expresion_aritmetica = new Expresion_Aritmetica(op_izq, operador, op_der);
             return expresion_aritmetica.ejecutar(entorno_local, salida);
         }
+        if(tipo_expresion.equals("EXPRESION_UNARIA"))
+        {
+            Expresion_Unaria expresion_unaria = new Expresion_Unaria(op_izq, operador);
+            return expresion_unaria.ejecutar(entorno_local, salida);
+        }
         else if(tipo_expresion.equals("EXPRESION_RELACIONAL"))
         {
-            return null;
+            Expresion_Relacional expresion_relacional = new Expresion_Relacional(op_izq, operador, op_der);
+            return expresion_relacional.ejecutar(entorno_local, salida);
         }
         else if(tipo_expresion.equals("EXPRESION_LOGICA"))
         {
-            return null;
+            Expresion_Logica expresion_logica = new Expresion_Logica(op_izq, operador, op_der);
+            return expresion_logica.ejecutar(entorno_local, salida);
         }
         else
         {

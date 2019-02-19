@@ -18,15 +18,27 @@ import FS_TABLA_SIMBOLOS.Tabla_Enums;
  */
 public class Expresion_Aritmetica implements Instruccion
 {
+    private Nodo_AST_FS p_izq_unario;
+    
     private Expresion p_izq;
     private Expresion p_der;
     private String operador;
     
     public Expresion_Aritmetica(Nodo_AST_FS p_izq, Nodo_AST_FS p_operador, Nodo_AST_FS p_der)
     {
-        this.p_izq = new Expresion(p_izq);
-        this.p_der = new Expresion(p_der);
         this.operador = p_operador.getEtiqueta();        
+        if(operador.equals("++") || operador.equals("--"))
+        {
+            this.p_izq_unario = p_izq;
+            this.p_izq = null;
+            this.p_der = null;             
+        }
+        else
+        {
+            this.p_izq = new Expresion(p_izq);
+            this.p_der = new Expresion(p_der); 
+            this.p_izq_unario = null;
+        }               
     }
 
     @Override
@@ -65,8 +77,13 @@ public class Expresion_Aritmetica implements Instruccion
         }
         else if(operador.equals("++"))
         {
-            Incremento nuevo_incremento = new Incremento(p_izq, p_der);
+            Incremento nuevo_incremento = new Incremento(p_izq_unario);
             return nuevo_incremento.ejecutar(entorno_local,salida);
+        }
+        else if(operador.equals("--"))
+        {
+            Decremento nuevo_decremento = new Decremento(p_izq_unario);
+            return nuevo_decremento.ejecutar(entorno_local,salida);
         }
         else
         {

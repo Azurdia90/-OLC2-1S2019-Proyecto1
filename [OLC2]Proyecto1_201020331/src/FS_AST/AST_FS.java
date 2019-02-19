@@ -25,7 +25,7 @@ public class AST_FS
     {
         this.entrada = p_entrada;
         this.raiz = p_raiz;
-        //entorno_global = new Entorno(); //esto es temporal
+        entorno_global = new Entorno(); //esto es temporal
     }    
     
     public void ejecutar_AST()
@@ -55,10 +55,10 @@ public class AST_FS
                 if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_DECLARACION"))
                 {
                     Nodo_AST_FS nodo_declaracion = nodo.getHijos().get(i);
-                    Sentencia_Declaracion sentencia_declaracion = new Sentencia_Declaracion(nodo_declaracion.getHijos().get(1));
-                    if(nodo_declaracion.getHijos().size() > 2)
+                    Sentencia_Declaracion sentencia_declaracion = new Sentencia_Declaracion(nodo_declaracion.getHijos().get(0));
+                    if(nodo_declaracion.getHijos().size() > 1)
                     {
-                        sentencia_declaracion.setNodo_expresion(nodo_declaracion.getHijos().get(2));
+                        sentencia_declaracion.setNodo_expresion(nodo_declaracion.getHijos().get(1));
                     }
                     sentencia_declaracion.ejecutar(entorno_global,entrada);
                 }

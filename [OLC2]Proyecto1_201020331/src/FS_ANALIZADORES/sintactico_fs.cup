@@ -329,7 +329,7 @@ EXPRESION ::=    EXPRESION_ARITMETICA:n
                     RESULT.setColumna(String.valueOf(nleft));
                     RESULT.getHijos().add(n);
                 :}
-                /*|EXPRESION_UNARIA:n
+                |EXPRESION_UNARIA:n
                 {:
                     RESULT = new Nodo_AST_FS();
                     RESULT.setEtiqueta("EXPRESION_UNARIA");
@@ -337,7 +337,7 @@ EXPRESION ::=    EXPRESION_ARITMETICA:n
                     RESULT.setFila(String.valueOf(nright));
                     RESULT.setColumna(String.valueOf(nleft));
                     RESULT.getHijos().add(n);
-                :}*/
+                :}
                 |EXPRESION_LOGICA:n  
                 {:
                     RESULT = new Nodo_AST_FS();
@@ -436,7 +436,7 @@ EXPRESION_ARITMETICA ::=    EXPRESION:n1 s_plus:o EXPRESION:n2
                                 RESULT.setColumna(String.valueOf(n1left));
                                 RESULT.getHijos().add(n1);
                             :};
-/*
+
 EXPRESION_UNARIA ::=    s_minus:o EXPRESION:n1
                         {:                                
                             RESULT = new Nodo_AST_FS();
@@ -454,7 +454,7 @@ EXPRESION_UNARIA ::=    s_minus:o EXPRESION:n1
                             RESULT.setFila(String.valueOf(n1right));
                             RESULT.setColumna(String.valueOf(n1left));
                             RESULT.getHijos().add(n1);
-                        :};*/
+                        :};
 
 EXPRESION_LOGICA ::=    EXPRESION:n1 s_or:o EXPRESION:n2
                         {:                                
