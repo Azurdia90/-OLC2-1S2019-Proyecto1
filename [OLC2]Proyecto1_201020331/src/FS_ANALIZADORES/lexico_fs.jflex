@@ -1,6 +1,7 @@
 package FS_ANALIZADORES;
 
 import	java_cup.runtime.Symbol; 
+import UI.ObjetoEntrada;
 
 %%
 
@@ -107,10 +108,33 @@ comentario_single = [/][/] [^\n]* [\n]
 comentario_multi = [/]"*" [^*]* "*"[/]
 
 %{
-    private void _error(String erro_texto, int erro_column, int erro_line)
-    {
-        System.out.println("Error Lexico: " + erro_texto + " columna: " + erro_column + " linea: " + erro_line);
-    }
+//codigo que se utilizara en el analizador lexico
+
+private ObjetoEntrada entrada;
+
+public void setObjetoEntrada(ObjetoEntrada p_entrada)
+{
+    entrada = p_entrada;
+}
+
+public ObjetoEntrada getObjetoEntrada()
+{
+    return entrada;
+}
+
+private void _error(String erro_texto, int erro_column, int erro_line)
+{
+    ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
+    error_encontrado.setArchivo(entrada.getNombre_archivo());
+    error_encontrado.setIdentificador("Análisis Léxico FuncionScript");
+    error_encontrado.setDescripcion("Caracter no reconocido: " + erro_texto);
+    error_encontrado.setLinea(Integer.toString(erro_line));
+    error_encontrado.setColumna(Integer.toString(erro_column));
+    error_encontrado.setTipo("Lexico");
+    ERRORES.Tabla_Errores.getInstance().add(error_encontrado);
+    //System.out.println("Error Lexico: " + erro_texto + " columna: " + erro_column + " linea: " + erro_line);
+}
+
 %}
 
 %%

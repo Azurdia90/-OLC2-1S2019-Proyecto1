@@ -26,18 +26,17 @@ public class Entorno extends HashMap<String,Simbolo>
     
     public Simbolo Obtener(String key)
     {
-        Simbolo sim_aux = null;
         if(this.containsKey(key))
         {
             return this.get(key);
         }
         else
         {
-            sim_aux = new Simbolo();
-            sim_aux.setIdentificador("33-12");
+            Simbolo sim_aux = new Simbolo();
             sim_aux.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-            sim_aux.setValor("La variable \""+ key +"\" no ha sido definida.");
             sim_aux.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+            sim_aux.setIdentificador("33-12");            
+            sim_aux.setValor("La variable \""+ key +"\" no ha sido definida.");           
             sim_aux.setRol(Tabla_Enums.tipo_Simbolo.error);
             return sim_aux;
         }                

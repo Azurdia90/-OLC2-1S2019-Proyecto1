@@ -41,22 +41,42 @@ public class Sentencia_Imprimir implements Instruccion
             Simbolo resultado;
             resultado = expresion.ejecutar(entorno_local, salida);
             
-            try
-            {  
-                Document consolazo = salida.getConsola().getDocument();
-                consolazo.insertString(consolazo.getLength(), resultado.getValor().toString() + "\n", null);
-            }
-            catch(Exception e)
-            {
-                JOptionPane.showMessageDialog(null,"Existio un error al escribir en la consola: " + e.getMessage());
-            }
-                    
             Simbolo nuevo_simbolo = new Simbolo();
-            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("10-4");
-            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
-            nuevo_simbolo.setValor("Impresion realizada correctamente");
+            if(resultado.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+            {
+                try
+                {  
+                    Document consolazo = salida.getConsola().getDocument();
+                    consolazo.insertString(consolazo.getLength(), resultado.getValor().toString() + "\n", null);
+                }
+                catch(Exception e)
+                {
+                    JOptionPane.showMessageDialog(null,"Existio un error al escribir en la consola: " + e.getMessage());
+                }
+                                
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador("10-4");
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
+                nuevo_simbolo.setValor("Impresion realizada correctamente");                
+            }
+            else
+            {
+                ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
+                error_encontrado.setArchivo(salida.getNombre_archivo());
+                error_encontrado.setIdentificador("Análisis Semantico FuncionScript");
+                error_encontrado.setDescripcion(resultado.getValor().toString());
+                error_encontrado.setLinea(Integer.toString(fila));
+                error_encontrado.setColumna(Integer.toString(columna));
+                error_encontrado.setTipo("Semantico");
+                ERRORES.Tabla_Errores.getInstance().add(error_encontrado); 
+                
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setValor("Impresion no fue realizada");                
+            }                                
 
             return nuevo_simbolo;
         }
@@ -67,7 +87,7 @@ public class Sentencia_Imprimir implements Instruccion
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
             nuevo_simbolo.setIdentificador("33-12");
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-            nuevo_simbolo.setValor("Impresion no fue realizada, verifique la expresión a imprimir.");
+            nuevo_simbolo.setValor("Impresion no fue realizada, error: " + e.getMessage());
 
             return nuevo_simbolo;
         }        

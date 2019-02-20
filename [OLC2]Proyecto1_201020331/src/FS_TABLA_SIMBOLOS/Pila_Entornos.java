@@ -16,8 +16,6 @@ import javax.swing.JOptionPane;
  */
 public class Pila_Entornos 
 {
-    private static Pila_Entornos _Instance = new Pila_Entornos();
-    
     private Entorno entorno_inicio;
     private Integer tamaño; 
     
@@ -83,7 +81,25 @@ public class Pila_Entornos
         {
             return null;
         }
-    }        
+    }   
+    
+    public Simbolo Buscar_Simbolo(Entorno entorno_actual, String key)
+    {
+        Entorno entorno_aux = entorno_actual;
+        Simbolo simbolo_aux = null;
+        
+        while(entorno_aux != null)
+        {
+            simbolo_aux = entorno_aux.Obtener(key);
+            if(simbolo_aux.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)            
+            {    
+                return simbolo_aux;
+            }
+            entorno_aux = entorno_aux.getSiguiente_entorno();
+        }        
+        
+        return simbolo_aux;
+    }  
     
     public void imprimir()
     {
@@ -121,22 +137,4 @@ public class Pila_Entornos
         this.tamaño = 0;
     }
     
-    public static Pila_Entornos getInstance() 
-    {
-        if(_Instance != null)
-        {
-            return _Instance;
-        }
-        else
-        {
-            _Instance = new Pila_Entornos();
-            JOptionPane.showMessageDialog(null,"Existio un error y fue necesario instanciar nuevamente la Fucking Pila.");
-            return _Instance;
-        }
-    }
-
-    public static void setInstance(Pila_Entornos _Instance) 
-    {
-        Pila_Entornos._Instance = _Instance;
-    }
 }

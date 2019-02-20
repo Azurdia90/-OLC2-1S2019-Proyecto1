@@ -26,6 +26,7 @@ public class AST_FS
         this.entrada = p_entrada;
         this.raiz = p_raiz;
         entorno_global = new Entorno(); //esto es temporal
+        FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_global);
     }    
     
     public void ejecutar_AST()
@@ -55,11 +56,7 @@ public class AST_FS
                 if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_DECLARACION"))
                 {
                     Nodo_AST_FS nodo_declaracion = nodo.getHijos().get(i);
-                    Sentencia_Declaracion sentencia_declaracion = new Sentencia_Declaracion(nodo_declaracion.getHijos().get(0));
-                    if(nodo_declaracion.getHijos().size() > 1)
-                    {
-                        sentencia_declaracion.setNodo_expresion(nodo_declaracion.getHijos().get(1));
-                    }
+                    Sentencia_Declaracion sentencia_declaracion = new Sentencia_Declaracion(nodo_declaracion);
                     sentencia_declaracion.ejecutar(entorno_global,entrada);
                 }
                 else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_ASIGNACION"))
@@ -72,7 +69,14 @@ public class AST_FS
                     Sentencia_Imprimir imprimir = new Sentencia_Imprimir(nodo_imprimir);
                     imprimir.ejecutar(entorno_global, entrada);
                 }
+                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_SI"))
+                {
+                    Nodo_AST_FS nodo_si = nodo.getHijos().get(i);
+                    Sentencia_Si sentencia_si = new Sentencia_Si(nodo_si);
+                    sentencia_si.ejecutar(entorno_global, entrada);
+                }
             }            
         }
+        FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
     }    
 }

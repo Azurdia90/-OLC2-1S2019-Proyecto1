@@ -28,11 +28,20 @@ public class Sentencia_Declaracion implements Instruccion
     private Nodo_AST_FS lista_identificadores;
     private Nodo_AST_FS nodo_expresion;
     
-    public Sentencia_Declaracion(Nodo_AST_FS p_identificador)            
+    public Sentencia_Declaracion(Nodo_AST_FS nodo_sentencia)            
     {
-        this.lista_identificadores = p_identificador;
-        this.crearLista_identificadores();
-        this.expresion = null;
+        if(nodo_sentencia.getHijos().size() == 1)
+        {
+            this.lista_identificadores = nodo_sentencia.getHijos().get(0);
+            this.crearLista_identificadores();
+            this.expresion = null;
+        }
+        else if(nodo_sentencia.getHijos().size() == 2)
+        {
+            this.lista_identificadores = nodo_sentencia.getHijos().get(0);
+            this.crearLista_identificadores();
+            this.expresion = new Expresion(nodo_sentencia.getHijos().get(1).getHijos().get(0));
+        }        
     }   
     
     @Override
@@ -87,15 +96,6 @@ public class Sentencia_Declaracion implements Instruccion
         {
             identificadores.add(lista_identificadores.getHijos().get(i).getValor());
         }
-    }
-    
-    public Nodo_AST_FS getNodo_expresion() {
-        return nodo_expresion;
-    }
-
-    public void setNodo_expresion(Nodo_AST_FS nodo_expresion) {
-        this.nodo_expresion = nodo_expresion;
-        expresion = new Expresion(nodo_expresion.getHijos().get(0));        
     }
             
 }

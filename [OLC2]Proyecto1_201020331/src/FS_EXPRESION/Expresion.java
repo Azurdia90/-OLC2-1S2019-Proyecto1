@@ -8,6 +8,7 @@ package FS_EXPRESION;
 import FS_AST.Nodo_AST_FS;
 import UI.ObjetoEntrada;
 import FS_INSTRUCCIONES.Instruccion;
+import FS_INSTRUCCIONES.Sentencia_Seleccion;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
@@ -49,7 +50,14 @@ public class Expresion implements Instruccion
                 op_der = p_expresion.getHijos().get(0).getHijos().get(1);
             }
             tipo_expresion =  p_expresion.getEtiqueta();
-        }                                                                                                  
+        }
+        else if(p_expresion.getEtiqueta().equals("SENTENCIA_SELECCION"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
     }
         
     @Override
@@ -75,11 +83,16 @@ public class Expresion implements Instruccion
             Expresion_Logica expresion_logica = new Expresion_Logica(op_izq, operador, op_der);
             return expresion_logica.ejecutar(entorno_local, salida);
         }
+        else if(tipo_expresion.equals("SENTENCIA_SELECCION"))
+        {
+            Sentencia_Seleccion expresion_logica = new Sentencia_Seleccion(op_izq);
+            return expresion_logica.ejecutar(entorno_local, salida);
+        }
         else
         {
             if(tipo_expresion.equals("identificador"))
             {
-                Simbolo nuevo_simbolo = entorno_local.Obtener(op_izq.getValor());
+                Simbolo nuevo_simbolo = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,op_izq.getValor());
                 return nuevo_simbolo;    
             }
             else

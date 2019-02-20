@@ -5,10 +5,21 @@
  */
 package FS_INSTRUCCIONES;
 
+import FS_TABLA_SIMBOLOS.Entorno;
+import FS_TABLA_SIMBOLOS.Simbolo;
+import UI.ObjetoEntrada;
+
 /**
  *
  * @author crist
  */
-public class Sentencia_Asignacion {
+public class Sentencia_Asignacion implements Instruccion
+{
+
+    @Override
+    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

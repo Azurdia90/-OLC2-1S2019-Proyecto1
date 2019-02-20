@@ -132,15 +132,22 @@ public class ExtemeEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jMEjecutarMenuSelected
 
     private void jMEjecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMEjecutarMouseClicked
-        JOptionPane.showMessageDialog(rootPane, "Holis!!");
+        //JOptionPane.showMessageDialog(rootPane, "Holis!!");
+        
         if(!entrada_actual.getJTEntrada().getText().equalsIgnoreCase("")){
             try
             {
                 this.jTPConsola.setText("");
+                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().Limpiar();
                 FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
                 FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
                 sintactico_fs.setObjetoEntrada(entrada_actual);
-                sintactico_fs.parse();                
+                sintactico_fs.parse();
+                if(ERRORES.Tabla_Errores.getInstance().size() > 0)
+                {
+                    ERRORES.Ventana_Errores mostrar_error = new ERRORES.Ventana_Errores();
+                    mostrar_error.show();
+                }                  
             }
             catch(Exception e)
             {
