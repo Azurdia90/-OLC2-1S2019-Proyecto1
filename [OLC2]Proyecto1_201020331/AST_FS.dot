@@ -90,7 +90,7 @@ nodo44[label="x"];
 nodo43->nodo44;
 nodo45[label="entero"];
 nodo42->nodo45;
-nodo46[label="4"];
+nodo46[label="400"];
 nodo45->nodo46;
 nodo47[label="LISTA_SENTENCIAS"];
 nodo40->nodo47;

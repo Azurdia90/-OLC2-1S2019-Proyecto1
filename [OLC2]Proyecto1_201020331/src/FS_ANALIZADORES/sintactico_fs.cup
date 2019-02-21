@@ -181,9 +181,12 @@ non terminal Nodo_AST_FS SENTENCIA_IMPRIMIR;
 non terminal Nodo_AST_FS SENTENCIA_SELECCION;
 non terminal Nodo_AST_FS SENTENCIA_SI;
 non terminal Nodo_AST_FS SENTENCIA_SINO_SI;
+non terminal Nodo_AST_FS SENTENCIA_SELECCIONA;
+non terminal Nodo_AST_FS SENTENCIA_CASO;
 
 non terminal Nodo_AST_FS LISTA_IDENTIFICADORES;
 non terminal Nodo_AST_FS LISTA_SENTENCIAS_SINO_SI;
+non terminal Nodo_AST_FS LISTA_SENTENCIAS_CASOS;
 
 non terminal Nodo_AST_FS EXPRESION;
 non terminal Nodo_AST_FS EXPRESION_ARITMETICA;
@@ -246,6 +249,10 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
                         RESULT = n;
                     :}
                     |SENTENCIA_SI:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_SELECCIONA:n
                     {:
                         RESULT = n;
                     :};
@@ -380,6 +387,38 @@ SENTENCIA_SI ::=    r_si:i s_par_open EXPRESION:n1 s_par_close s_key_open LISTA_
                         RESULT.getHijos().add(n4);
                     :}; 
 
+SENTENCIA_SELECCIONA ::=  r_selecciona:n s_par_open EXPRESION:n1 s_par_close s_key_open LISTA_SENTENCIAS_CASOS:n2  r_defecto s_dobledot  s_key_open LISTA_SENTENCIAS:n3 s_key_close s_key_close
+                          {:
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_SELECCIONA");
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(nright));
+                                RESULT.setColumna(String.valueOf(nleft));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                                RESULT.getHijos().add(n3);
+                          :}
+                          |r_selecciona:n s_par_open EXPRESION:n1 s_par_close s_key_open LISTA_SENTENCIAS_CASOS:n2 s_key_close
+                          {:
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_SELECCIONA");
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(nright));
+                                RESULT.setColumna(String.valueOf(nleft));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                          :};
+
+SENTENCIA_CASO  ::= r_caso:n EXPRESION:n1 s_dobledot s_key_open LISTA_SENTENCIAS:n2 s_key_close 
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta("SENTENCIA_CASOS");
+                        RESULT.setValor("");
+                        RESULT.setFila(String.valueOf(nright));
+                        RESULT.setColumna(String.valueOf(nleft));
+                        RESULT.getHijos().add(n1);
+                        RESULT.getHijos().add(n2);
+                    :};                          
 
 SENTENCIA_SINO_SI ::=   r_sino r_si:i s_par_open EXPRESION:n1 s_par_close s_key_open LISTA_SENTENCIAS:n2 s_key_close
                         {:
@@ -434,7 +473,22 @@ LISTA_SENTENCIAS_SINO_SI ::=   LISTA_SENTENCIAS_SINO_SI:n1 SENTENCIA_SINO_SI:n2
                                     RESULT.setFila(String.valueOf(nright));
                                     RESULT.setColumna(String.valueOf(nleft));
                                     RESULT.getHijos().add(n);
-                                :};                            
+                                :};   
+
+LISTA_SENTENCIAS_CASOS ::=   LISTA_SENTENCIAS_CASOS:n1 SENTENCIA_CASO:n2
+                                {:
+                                    RESULT = n1;
+                                    RESULT.getHijos().add(n2);
+                                :}
+                                |SENTENCIA_CASO:n
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("LISTA_SENTENCIA_CASOS");
+                                    RESULT.setValor("");
+                                    RESULT.setFila(String.valueOf(nright));
+                                    RESULT.setColumna(String.valueOf(nleft));
+                                    RESULT.getHijos().add(n);
+                                :};                                                                 
 
 /*******************************************EXPRESIONES*******************************************************************************/
 

@@ -23,20 +23,15 @@ public class Sentencia_Si implements Instruccion
     private int columna;
     
     private Expresion condicion;
-    private ArrayList<Instruccion> lista_sentencias;
-    private ArrayList<Instruccion> lista_sentencias_else_if;
+    private ArrayList<Instruccion> lista_sentencias; 
     private ArrayList<Instruccion> lista_sentencias_else;
     
     private Nodo_AST_FS lista_nodos_sentencias;
-    private Nodo_AST_FS lista_nodos_sentencias_else_if;
     private Nodo_AST_FS lista_nodos_sentencias_else;
     private Entorno entorno_local;
     
     public Sentencia_Si(Nodo_AST_FS nodo_sentencia)
-    {
-        entorno_local = new Entorno();
-        FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
-        
+    {        
         if(nodo_sentencia.getHijos().size() == 2)
         {
             this.condicion = new Expresion(nodo_sentencia.getHijos().get(0));
@@ -44,36 +39,18 @@ public class Sentencia_Si implements Instruccion
             this.lista_nodos_sentencias = nodo_sentencia.getHijos().get(1);
             this.lista_sentencias = new ArrayList<Instruccion>();
             this.llenarListaSentencias(lista_nodos_sentencias,lista_sentencias);
-            this.lista_sentencias_else_if = new ArrayList<Instruccion>();
             this.lista_sentencias_else = new ArrayList<Instruccion>();            
         }
         else if(nodo_sentencia.getHijos().size() == 3)
         {
-            if(nodo_sentencia.getHijos().get(2).IsNodoOrNot("LISTA_SENTENCIAS"))
-            {
-                this.condicion = new Expresion(nodo_sentencia.getHijos().get(0));
-                
-                this.lista_nodos_sentencias = nodo_sentencia.getHijos().get(1);
-                this.lista_sentencias = new ArrayList<Instruccion>();
-                this.llenarListaSentencias(lista_nodos_sentencias,lista_sentencias);
-                this.lista_sentencias_else_if = new ArrayList<Instruccion>();
-                this.lista_nodos_sentencias_else = nodo_sentencia.getHijos().get(2);
-                this.lista_sentencias_else = new ArrayList<Instruccion>();
-                this.llenarListaSentencias(lista_nodos_sentencias_else,lista_sentencias_else);
-                
-            }
-            else
-            {
-                this.condicion = new Expresion(nodo_sentencia.getHijos().get(0));
-                
-                this.lista_nodos_sentencias = nodo_sentencia.getHijos().get(1);
-                this.lista_sentencias = new ArrayList<Instruccion>();
-                this.llenarListaSentencias(lista_nodos_sentencias,lista_sentencias);
-                this.lista_nodos_sentencias_else_if = nodo_sentencia.getHijos().get(2);
-                this.lista_sentencias_else_if = new ArrayList<Instruccion>();
-                this.llenarListaSentencias(lista_nodos_sentencias_else_if,lista_sentencias_else_if);
-                this.lista_sentencias_else = new ArrayList<Instruccion>();
-            }
+            this.condicion = new Expresion(nodo_sentencia.getHijos().get(0));
+
+            this.lista_nodos_sentencias = nodo_sentencia.getHijos().get(1);
+            this.lista_sentencias = new ArrayList<Instruccion>();
+            this.llenarListaSentencias(lista_nodos_sentencias,lista_sentencias);                
+            this.lista_nodos_sentencias_else = nodo_sentencia.getHijos().get(2);
+            this.lista_sentencias_else = new ArrayList<Instruccion>();
+            this.llenarListaSentencias(lista_nodos_sentencias_else,lista_sentencias_else);                
         }
         else if(nodo_sentencia.getHijos().size() == 4)
         {
@@ -82,12 +59,11 @@ public class Sentencia_Si implements Instruccion
             this.lista_nodos_sentencias = nodo_sentencia.getHijos().get(1);
             this.lista_sentencias = new ArrayList<Instruccion>();
             this.llenarListaSentencias(lista_nodos_sentencias,lista_sentencias);
-            this.lista_nodos_sentencias_else_if = nodo_sentencia.getHijos().get(2);
-            this.lista_sentencias_else_if = new ArrayList<Instruccion>();
-            this.llenarListaSentencias(lista_nodos_sentencias_else_if,lista_sentencias_else_if);
-            this.lista_nodos_sentencias_else = nodo_sentencia.getHijos().get(3);
+            this.lista_nodos_sentencias_else = nodo_sentencia.getHijos().get(2);
             this.lista_sentencias_else = new ArrayList<Instruccion>();
-            this.llenarListaSentencias(lista_nodos_sentencias_else,lista_sentencias_else);;
+            this.llenarListaSentencias(lista_nodos_sentencias_else,lista_sentencias_else);                        
+            this.lista_nodos_sentencias_else = nodo_sentencia.getHijos().get(3);
+            this.agregarElseListaSentencias(lista_nodos_sentencias_else,lista_sentencias_else);;
         }
     }
 
@@ -98,27 +74,26 @@ public class Sentencia_Si implements Instruccion
         resultado_condicion = condicion.ejecutar(entorno_padre, salida);
         
         if(resultado_condicion.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
-        {            
+        {       
+            entorno_local = new Entorno();
+            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
+            
             if(resultado_condicion.getValor().equals("verdadero") ? true : false)
-            {
+            {                                
                 for(int i= 0; i < lista_sentencias.size(); i++)
                 {
                     lista_sentencias.get(i).ejecutar(entorno_local, salida);
-                }                                                                  
+                }                
             }
             else
-            {
-                for(int i= 0; i < lista_sentencias_else_if.size(); i++)
-                {
-                    lista_sentencias_else_if.get(i).ejecutar(entorno_local, salida);
-                } 
-                
+            {                                                   
                 for(int i= 0; i < lista_sentencias_else.size(); i++)
                 {
                     lista_sentencias_else.get(i).ejecutar(entorno_local, salida);
-                } 
-                
+                }                  
             }
+            
+            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
             
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
@@ -126,9 +101,7 @@ public class Sentencia_Si implements Instruccion
             nuevo_simbolo.setIdentificador("10-4");
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
             nuevo_simbolo.setValor("Sentencia Si realizada correctamente");  
-            
-            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
-            
+                                    
             return nuevo_simbolo;
         }
         else
@@ -138,9 +111,7 @@ public class Sentencia_Si implements Instruccion
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
             nuevo_simbolo.setIdentificador("33-12");
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-            nuevo_simbolo.setValor("La condicion de la sentencia Si debe dar como resultado un valor booleano.");
-            
-            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+            nuevo_simbolo.setValor("La condicion de la sentencia Si debe dar como resultado un valor booleano.");           
             
             return nuevo_simbolo;
         }
@@ -159,5 +130,32 @@ public class Sentencia_Si implements Instruccion
                 lista_sentencias.add(instruccion_aux);
             }
         }
-    }    
+    }  
+    
+    private void agregarElseListaSentencias(Nodo_AST_FS nodos_sentencias, ArrayList<Instruccion> lista_sentencias)
+    {
+        Fabrica_Sentencias fabrica;
+        Instruccion instruccion_aux;
+        
+        Sentencia_Si sentencia_if_final = (Sentencia_Si)lista_sentencias.get(lista_sentencias.size() - 1);
+        
+        for(int i = 0; i < nodos_sentencias.getHijos().size(); i++)
+        {
+            fabrica = new Fabrica_Sentencias(nodos_sentencias.getHijos().get(i));
+            instruccion_aux = fabrica.ejecutar();
+            if(instruccion_aux != null)
+            {
+               sentencia_if_final.getLista_sentencias_else().add(instruccion_aux);
+            }
+        }
+    } 
+
+    public ArrayList<Instruccion> getLista_sentencias_else() {
+        return lista_sentencias_else;
+    }
+
+    public void setLista_sentencias_else(ArrayList<Instruccion> lista_sentencias_else) {
+        this.lista_sentencias_else = lista_sentencias_else;
+    }
+        
 }

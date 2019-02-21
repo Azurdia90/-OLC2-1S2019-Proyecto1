@@ -75,6 +75,12 @@ public class AST_FS
                     Sentencia_Si sentencia_si = new Sentencia_Si(nodo_si);
                     sentencia_si.ejecutar(entorno_global, entrada);
                 }
+                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_SELECCIONA"))
+                {
+                    Nodo_AST_FS nodo_selecciona = nodo.getHijos().get(i);
+                    Sentencia_Selecciona sentencia_selecciona = new Sentencia_Selecciona(nodo_selecciona);
+                    sentencia_selecciona.ejecutar(entorno_global, entrada);
+                }
             }            
         }
         FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
