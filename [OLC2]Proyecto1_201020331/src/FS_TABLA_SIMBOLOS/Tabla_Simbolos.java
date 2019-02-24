@@ -5,6 +5,7 @@
  */
 package FS_TABLA_SIMBOLOS;
 
+import FS_OBJETOS.Funcion;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
@@ -17,11 +18,29 @@ public class Tabla_Simbolos
     private static Tabla_Simbolos _Instance = new Tabla_Simbolos();
     
     private Pila_Entornos mi_Stack;
-    //private ArrayList<Funciones> lista_funciones;
+    private ArrayList<Funcion> lista_funciones;
     
     public Tabla_Simbolos()
     {
-        mi_Stack = new Pila_Entornos();
+        this.lista_funciones = new ArrayList<Funcion>();
+        this.mi_Stack = new Pila_Entornos();
+    }
+    
+    public boolean existe_metodo(String p_id, int p_parametros)
+    {
+        for(int i = 0; i < lista_funciones.size(); i++)
+        {
+            if(lista_funciones.get(i).getIdentificador().equals(p_id) && lista_funciones.get(i).getLista_parametros().size() == p_parametros)
+            {
+                return true;
+            }
+        }        
+        return false;
+    }
+    
+    public void agregar_metodo(Funcion p_funcion)
+    {
+        lista_funciones.add(p_funcion);
     }
     
     public Simbolo obtener_Simbolo(Entorno entorno_local, String p_key)
@@ -52,7 +71,7 @@ public class Tabla_Simbolos
         else
         {
             _Instance = new Tabla_Simbolos();
-            JOptionPane.showMessageDialog(null,"Existio un error y fue necesario instanciar nuevamente la Fucking Tabla de Simbolos.");
+            JOptionPane.showMessageDialog(null,"Existio un error y fue necesario instanciar nuevamente la Tabla de Simbolos.");
             return _Instance;
         }
     }

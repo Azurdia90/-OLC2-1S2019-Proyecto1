@@ -172,6 +172,9 @@ terminal String r_cerrar;
 
 //NO TERMINALES
 non terminal Nodo_AST_FS INICIO;
+non terminal Nodo_AST_FS CUERPO_FS;
+
+non terminal Nodo_AST_FS FUNCION;
 
 non terminal Nodo_AST_FS LISTA_SENTENCIAS;
 non terminal Nodo_AST_FS SENTENCIA;
@@ -183,6 +186,8 @@ non terminal Nodo_AST_FS SENTENCIA_SI;
 non terminal Nodo_AST_FS SENTENCIA_SINO_SI;
 non terminal Nodo_AST_FS SENTENCIA_SELECCIONA;
 non terminal Nodo_AST_FS SENTENCIA_CASO;
+non terminal Nodo_AST_FS SENTENCIA_DETENER;
+non terminal Nodo_AST_FS SENTENCIA_RETORNAR;
 
 non terminal Nodo_AST_FS LISTA_IDENTIFICADORES;
 non terminal Nodo_AST_FS LISTA_SENTENCIAS_SINO_SI;
@@ -210,7 +215,7 @@ precedence  right       s_increment, s_decrement;
 
 start with INICIO;
 
-INICIO ::=  LISTA_SENTENCIAS:n
+INICIO ::=  CUERPO_FS:n
             {:
                 raiz = new Nodo_AST_FS();
                 raiz.setEtiqueta("AST");
@@ -219,6 +224,55 @@ INICIO ::=  LISTA_SENTENCIAS:n
                 raiz.setColumna(String.valueOf(nleft));
                 raiz.getHijos().add(n);
                 ejecutar_AST();
+            :};
+
+CUERPO_FS ::=   CUERPO_FS:n1 FUNCION:n2
+                {:
+                    RESULT = n1;
+                    RESULT.getHijos().add(n2);
+                :}
+                |CUERPO_FS:n1 SENTENCIA:n2
+                {:
+                    RESULT = n1;
+                    RESULT.getHijos().add(n2);
+                :}
+                |FUNCION:n
+                {:
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("CUERPO_FS");
+                    RESULT.setValor("");
+                    RESULT.setFila(String.valueOf(nright));
+                    RESULT.setColumna(String.valueOf(nleft));
+                    RESULT.getHijos().add(n);
+                :}
+                |SENTENCIA:n
+                {:
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("CUERPO_FS");
+                    RESULT.setValor("");
+                    RESULT.setFila(String.valueOf(nright));
+                    RESULT.setColumna(String.valueOf(nleft));
+                    RESULT.getHijos().add(n);
+                :}; 
+                
+FUNCION ::= r_funcion:n identificador:n1 s_par_open LISTA_IDENTIFICADORES:n2 s_par_close s_key_open LISTA_SENTENCIAS:n3 s_key_close
+            {:
+                RESULT = new Nodo_AST_FS();
+                RESULT.setEtiqueta("FUNCION");
+                RESULT.setValor(n1);
+                RESULT.setFila(String.valueOf(nright));
+                RESULT.setColumna(String.valueOf(nleft));
+                RESULT.getHijos().add(n3);
+                RESULT.getHijos().add(n2);
+            :}
+            |r_funcion:n identificador:n1 s_par_open s_par_close s_key_open LISTA_SENTENCIAS:n2 s_key_close
+            {:
+                RESULT = new Nodo_AST_FS();
+                RESULT.setEtiqueta("FUNCION");
+                RESULT.setValor(n1);
+                RESULT.setFila(String.valueOf(nright));
+                RESULT.setColumna(String.valueOf(nleft));
+                RESULT.getHijos().add(n2);
             :};
 
 LISTA_SENTENCIAS ::=    LISTA_SENTENCIAS:n1 SENTENCIA:n2
@@ -253,6 +307,14 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
                         RESULT = n;
                     :}
                     |SENTENCIA_SELECCIONA:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_DETENER:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_RETORNAR:n s_dotcoma
                     {:
                         RESULT = n;
                     :};
@@ -429,6 +491,25 @@ SENTENCIA_SINO_SI ::=   r_sino r_si:i s_par_open EXPRESION:n1 s_par_close s_key_
                             RESULT.setColumna(String.valueOf(ileft));
                             RESULT.getHijos().add(n1);
                             RESULT.getHijos().add(n2);
+                        :};
+
+SENTENCIA_DETENER ::=   r_detener:n
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("SENTENCIA_DETENER");
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                        :}; 
+
+SENTENCIA_RETORNAR  ::= r_retornar:n EXPRESION:n1
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("SENTENCIA_RETORNAR");
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                            RESULT.getHijos().add(n1);
                         :};
 
 

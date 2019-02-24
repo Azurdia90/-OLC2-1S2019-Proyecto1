@@ -4,7 +4,7 @@ var y = 10;
 si(x<y)
 {
     var x = 11;
-    imprimir("MARICAS " + x );
+    imprimir("PEPA PIG " + x );
 }
 sino si (x==4)
 {
@@ -13,8 +13,42 @@ sino si (x==4)
 sino 
 {
     var y = "AMIGUITOS";
-    imprimir("PUTOS" + " " +  y);
+    imprimir("HOLA" + " " +  y);
 }
 
-imprimir(x);
-imprimir(y);
+selecciona(y/2)
+{
+    caso 1:
+    {
+        imprimir(1);
+    }
+    caso 2:
+    {
+        imprimir(2);
+    }    
+    caso 3:
+    {
+        imprimir(3);        
+    }
+    caso 4:
+    {
+        imprimir(4);
+    }
+    caso 5:
+    {
+        imprimir(5);
+        si(y==10)
+        {
+            imprimir("este es el valor de y " + y );
+        }
+    }
+    defecto:
+    {
+        imprimir("defecto");
+    }
+}
+
+funcion prueba()
+{
+    imprimir("entrando al metodo prueba");
+}

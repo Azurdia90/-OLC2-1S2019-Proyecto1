@@ -73,7 +73,7 @@ public class Ventana_Errores extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTErrores = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTErrores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

@@ -28,6 +28,7 @@ public class Sentencia_Si implements Instruccion
     
     private Nodo_AST_FS lista_nodos_sentencias;
     private Nodo_AST_FS lista_nodos_sentencias_else;
+    
     private Entorno entorno_local;
     
     public Sentencia_Si(Nodo_AST_FS nodo_sentencia)
@@ -70,50 +71,72 @@ public class Sentencia_Si implements Instruccion
     @Override
     public Simbolo ejecutar(Entorno entorno_padre, ObjetoEntrada salida) 
     {
-        Simbolo resultado_condicion = new Simbolo();
-        resultado_condicion = condicion.ejecutar(entorno_padre, salida);
-        
-        if(resultado_condicion.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
-        {       
-            entorno_local = new Entorno();
-            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
-            
-            if(resultado_condicion.getValor().equals("verdadero") ? true : false)
-            {                                
-                for(int i= 0; i < lista_sentencias.size(); i++)
-                {
-                    lista_sentencias.get(i).ejecutar(entorno_local, salida);
-                }                
+        try
+        {
+            Simbolo resultado_condicion = condicion.ejecutar(entorno_padre, salida);
+            Simbolo display;
+
+            if(resultado_condicion.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
+            {       
+                entorno_local = new Entorno();
+                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
+
+                if(resultado_condicion.getValor().equals("verdadero") ? true : false)
+                {                                
+                    for(int i= 0; i < lista_sentencias.size(); i++)
+                    {
+                        display = lista_sentencias.get(i).ejecutar(entorno_local, salida);
+                        if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
+                        {
+                           return display;
+                        }
+                    }                
+                }
+                else
+                {                                                   
+                    for(int i= 0; i < lista_sentencias_else.size(); i++)
+                    {
+                        display = lista_sentencias_else.get(i).ejecutar(entorno_local, salida);
+                        if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
+                        {
+                           return display;
+                        }
+                    }                  
+                }
+
+                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador("10-4");
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
+                nuevo_simbolo.setValor("Sentencia Si realizada correctamente");  
+
+                return nuevo_simbolo;
             }
             else
-            {                                                   
-                for(int i= 0; i < lista_sentencias_else.size(); i++)
-                {
-                    lista_sentencias_else.get(i).ejecutar(entorno_local, salida);
-                }                  
-            }
-            
-            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
-            
-            Simbolo nuevo_simbolo = new Simbolo();
-            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("10-4");
-            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
-            nuevo_simbolo.setValor("Sentencia Si realizada correctamente");  
-                                    
-            return nuevo_simbolo;
+            {
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setValor("La condicion de la sentencia Si debe dar como resultado un valor booleano.");           
+
+                return nuevo_simbolo;
+            }            
         }
-        else
+        catch(Exception e)
         {
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
             nuevo_simbolo.setIdentificador("33-12");
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-            nuevo_simbolo.setValor("La condicion de la sentencia Si debe dar como resultado un valor booleano.");           
-            
-            return nuevo_simbolo;
+            nuevo_simbolo.setValor("Sentencia Selecciona no fue realizada, error: " + e.getMessage());
+
+            return nuevo_simbolo;            
         }
     }
     

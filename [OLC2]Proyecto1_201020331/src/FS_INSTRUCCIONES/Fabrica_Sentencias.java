@@ -32,7 +32,7 @@ public class Fabrica_Sentencias
         }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_ASIGNACION"))
         {
-            Sentencia_Asignacion nueva_asignacion = new Sentencia_Asignacion();
+            Sentencia_Asignacion nueva_asignacion = new Sentencia_Asignacion(sentencia_ejecutar);
             return nueva_asignacion;
         }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_IMPRIMIR"))
@@ -44,6 +44,25 @@ public class Fabrica_Sentencias
         {
             Sentencia_Si nuevo_si = new Sentencia_Si(sentencia_ejecutar);
             return nuevo_si;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_SELECCIONA"))
+        {
+            Sentencia_Selecciona nuevo_selecciona = new Sentencia_Selecciona(sentencia_ejecutar);
+            return nuevo_selecciona;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CASOS"))
+        {
+            Sentencia_Caso nuevo_caso = new Sentencia_Caso(sentencia_ejecutar);
+            return nuevo_caso;
+        }else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_DETENER"))
+        {
+            Sentencia_Detener nuevo_detener = new Sentencia_Detener(sentencia_ejecutar);
+            return nuevo_detener;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_RETORNAR"))
+        {
+            Sentencia_Retornar nuevo_retornar = new Sentencia_Retornar(sentencia_ejecutar);
+            return nuevo_retornar;
         }
         else
         {

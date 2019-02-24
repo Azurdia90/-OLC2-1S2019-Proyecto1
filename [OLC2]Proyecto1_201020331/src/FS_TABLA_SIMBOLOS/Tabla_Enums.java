@@ -14,7 +14,7 @@ public class Tabla_Enums
      /*ENUM PARA TIPOS*/    
     public static enum tipo_primitivo_Simbolo
     {
-        nulo,booleano,entero,decimal,caracter,cadena,identificador,error
+        nulo,booleano,entero,decimal,caracter,cadena,identificador,error,detener,retornar
     }
     
     /*ENUM PARA NIVEL ACCESO*/

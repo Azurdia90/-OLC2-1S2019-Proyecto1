@@ -35,9 +35,15 @@ public class Sentencia_Caso implements Instruccion
     @Override
     public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
     {
+        Simbolo display;
+        
         for(int i = 0; i < lista_sentencias.size(); i++)
         {
-            lista_sentencias.get(i).ejecutar(entorno_local, salida);
+            display = lista_sentencias.get(i).ejecutar(entorno_local, salida);
+            if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener)
+            {
+                return display;
+            }
         }
         
         Simbolo nuevo_simbolo = new Simbolo();

@@ -41,10 +41,96 @@ public class Sentencia_Selecciona implements Instruccion
     }
     
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_padre, ObjetoEntrada salida) 
     {
         try
         {
+            Simbolo condicion_base = condicion.ejecutar(entorno_padre, salida);
+            Simbolo condicion_caso = null;
+            Simbolo display;
+            
+            double valor_base_double;
+            boolean valor_base_booleano;
+            
+            
+            double valor_caso_double;
+            boolean valor_caso_booleano;
+            
+            Entorno entorno_local = new Entorno();            
+            
+            if(condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
+            {                          
+                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
+                boolean continuar_selecciona = false;
+                
+                for(int i = 0; i < lista_casos.size(); i++)
+                {
+                    condicion_caso = lista_casos.get(i).getCondicion().ejecutar(entorno_padre, salida);
+                    
+                    if( (condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano && condicion_caso.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano) || ( (condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal) && (condicion_caso.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || condicion_caso.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal)))
+                    {
+                        if(condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
+                        {
+                           valor_base_booleano = condicion_base.getValor().toString().equals("verdadero") ? true : false;
+                           valor_caso_booleano = condicion_caso.getValor().toString().equals("verdadero") ? true : false;
+                           
+                           if( (continuar_selecciona == true) || (valor_base_booleano == valor_caso_booleano && continuar_selecciona == false))
+                           {
+                               continuar_selecciona = true;
+                               
+                               display = lista_casos.get(i).ejecutar(entorno_local, salida);
+                               if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
+                               {
+                                  return display;
+                               }
+                           }                           
+                        }
+                        else if(condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal)
+                        {
+                           valor_base_double = Double.parseDouble(condicion_base.getValor().toString());
+                           valor_caso_double = Double.parseDouble(condicion_caso.getValor().toString());
+                           
+                           if( (continuar_selecciona == true) || (valor_base_double == valor_caso_double && continuar_selecciona == false) )
+                           {
+                               continuar_selecciona = true;
+                               display = lista_casos.get(i).ejecutar(entorno_local, salida);
+                               if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
+                               {
+                                  return display;
+                               }
+                           } 
+                        }                                                                        
+                    }
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setIdentificador("33-12");
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setValor("Los valores a comparar no son del mismo tipo");
+
+                        return nuevo_simbolo; 
+                    }
+                }  
+                
+                for(int i = 0; i < lista_sentencias_defecto.size(); i++)
+                {
+                    lista_sentencias_defecto.get(i).ejecutar(entorno_local, salida);
+                }  
+                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+            }
+            else
+            {
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setValor("La expresion de control no puede ser del siguiente tipo: " + condicion_base.getTipo());
+
+                return nuevo_simbolo;                
+            }
             
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);

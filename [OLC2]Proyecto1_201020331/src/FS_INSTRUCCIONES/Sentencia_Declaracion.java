@@ -77,8 +77,14 @@ public class Sentencia_Declaracion implements Instruccion
                 }
                 catch(Exception e)
                 {
-                    System.out.println(e.getMessage());
-                    return null;
+                    Simbolo nuevo_simbolo = new Simbolo();
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    nuevo_simbolo.setIdentificador("33-12");
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                    nuevo_simbolo.setValor("Sentencia Declaracion no fue realizada, error: " + e.getMessage());
+
+                    return nuevo_simbolo;
                 } 
             }
         }
