@@ -7,6 +7,7 @@ package FS_TABLA_SIMBOLOS;
 
 import FS_OBJETOS.Funcion;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,50 +19,63 @@ public class Tabla_Simbolos
     private static Tabla_Simbolos _Instance = new Tabla_Simbolos();
     
     private Pila_Entornos mi_Stack;
-    private ArrayList<Funcion> lista_funciones;
+    private HashMap<String,Funcion> tabla_funciones;
     
     public Tabla_Simbolos()
     {
-        this.lista_funciones = new ArrayList<Funcion>();
+        this.tabla_funciones = new HashMap<String,Funcion>();
         this.mi_Stack = new Pila_Entornos();
     }
     
-    public boolean existe_metodo(String p_id, int p_parametros)
+    /***************************METODOS PARA FUNCIONES******************************/
+    
+    public boolean existe_metodo(String p_id)
     {
-        for(int i = 0; i < lista_funciones.size(); i++)
-        {
-            if(lista_funciones.get(i).getIdentificador().equals(p_id) && lista_funciones.get(i).getLista_parametros().size() == p_parametros)
-            {
-                return true;
-            }
-        }        
-        return false;
+        return tabla_funciones.containsKey(p_id);
     }
     
-    public void agregar_metodo(Funcion p_funcion)
+    public Funcion obtener_Metodo(String p_id)
     {
-        lista_funciones.add(p_funcion);
+        return tabla_funciones.get(p_id);
     }
+    
+    public void agregar_metodo(String p_id, Funcion p_funcion)
+    {
+        this.tabla_funciones.put(p_id, p_funcion);
+    }
+    
+    /*************************FIN METODOS PARA FUNCIONES******************************/
+    
+    /*************************METODOS PARA VARIABLES*********************************/
     
     public Simbolo obtener_Simbolo(Entorno entorno_local, String p_key)
     {
         return mi_Stack.Buscar_Simbolo(entorno_local, p_key);
     }
 
+    /*************************FIN METODOS PARA VARIABLES****************************/
+    
     public Pila_Entornos getMi_Stack() {
         return mi_Stack;
     }
 
+    /*************************METODOS PARA PILA VARIABLES*********************************/
     public void setMi_Stack(Pila_Entornos mi_Stack) {
         this.mi_Stack = mi_Stack;
     }
     
+    /*************************FIN METODOS PARA PILA VARIABLES****************************/
+    
+    /*************************METODOS PARA MANEJO TABLA SIMBOLOS************************/
     public void Limpiar()
     {
-        mi_Stack = new Pila_Entornos();
+        this.mi_Stack.vaciar();
+        this.tabla_funciones.clear();
     }            
     
-    /*METODOS PARA SINGLETON*/
+    /**********************FIN METODOS PARA MANEJO TABLA SIMBOLOS***********************/
+    
+    /****************************METODOS PARA SINGLETON********************************/
     public static Tabla_Simbolos getInstance() 
     {
         if(_Instance != null)
@@ -80,4 +94,6 @@ public class Tabla_Simbolos
     {
         Tabla_Simbolos._Instance = _Instance;
     }
+    
+    /****************************FIN METODOS PARA SINGLETON*****************************/
 }

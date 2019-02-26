@@ -25,6 +25,8 @@ public class Funcion implements Instruccion
     private ArrayList<String> lista_parametros;
     private ArrayList<Instruccion> lista_instrucciones;
     
+    private ArrayList<Simbolo> lista_parametros_enviados;
+    
     public Funcion(Nodo_AST_FS nodo_funcion)
     {
         this.identificador = nodo_funcion.getValor();
@@ -35,10 +37,11 @@ public class Funcion implements Instruccion
         {
             this.crearLista_identificadores(nodo_funcion.getHijos().get(1), lista_parametros);
         }        
+        this.lista_parametros_enviados = new ArrayList<Simbolo>();
     }
 
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_padre, ObjetoEntrada salida) 
     {
         try
         {            
@@ -46,7 +49,17 @@ public class Funcion implements Instruccion
             FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
             
             Simbolo display;
-            cargarParametros(lista_parametros);
+            if(!cargarParametros())
+            {
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setValor("La funcion no fue ejecutada, verifique la cantidad de parametros enviados");
+
+                return nuevo_simbolo; 
+            }
             
             for(int i = 0; i < lista_instrucciones.size(); i++)
             {
@@ -105,24 +118,35 @@ public class Funcion implements Instruccion
         }
     } 
     
-    private void cargarParametros(ArrayList<String> lista_parametros)
+    public boolean cargarParametros()
     {
-        Simbolo nuevo_simbolo;
-        for(int i = 0; i < lista_parametros.size(); i++)
+        if(lista_parametros.size() == lista_parametros_enviados.size())
         {
-            try
+            Simbolo simbolo_nuevo;
+            Simbolo simbolo_enviado;
+            for(int i = 0; i < lista_parametros.size(); i++)
             {
-                nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.variable);
-                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador(lista_parametros.get(i));
-                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
-                entorno_local.Crear(lista_parametros.get(i), nuevo_simbolo);                
+                try
+                {
+                    simbolo_enviado = lista_parametros_enviados.get(i);
+                    
+                    simbolo_nuevo = new Simbolo();
+                    simbolo_nuevo.setRol(Tabla_Enums.tipo_Simbolo.variable);
+                    simbolo_nuevo.setAcceso(Tabla_Enums.tipo_Acceso.publico);                    
+                    simbolo_nuevo.setTipo(simbolo_enviado.getTipo());
+                    simbolo_nuevo.setIdentificador(simbolo_enviado.getIdentificador());
+                    entorno_local.Crear(lista_parametros.get(i), simbolo_nuevo);                
+                }
+                catch(Exception e)
+                {
+                    return false;
+                }
             }
-            catch(Exception e)
-            {
-                break;
-            }
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
@@ -134,11 +158,12 @@ public class Funcion implements Instruccion
         this.identificador = identificador;
     }
 
-    public ArrayList<String> getLista_parametros() {
-        return lista_parametros;
+    public ArrayList<Simbolo> getLista_parametros_enviados() {
+        return lista_parametros_enviados;
     }
 
-    public void setLista_parametros(ArrayList<String> lista_parametros) {
-        this.lista_parametros = lista_parametros;
-    }        
+    public void setLista_parametros_enviados(ArrayList<Simbolo> lista_parametros_enviados) {
+        this.lista_parametros_enviados = lista_parametros_enviados;
+    }
+        
 }

@@ -47,8 +47,3 @@ selecciona(y/2)
         imprimir("defecto");
     }
 }
-
-funcion prueba()
-{
-    imprimir("entrando al metodo prueba");
-}

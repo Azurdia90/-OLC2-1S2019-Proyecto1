@@ -69,9 +69,9 @@ public class AST_FS
                 {
                     Nodo_AST_FS nodo_funcion = nodo.getHijos().get(i);
                     Funcion funcion= new Funcion(nodo_funcion);
-                    if(!FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().existe_metodo(funcion.getIdentificador(), funcion.getLista_parametros().size()))
+                    if(!FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().existe_metodo(funcion.getIdentificador()))
                     {
-                        FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().agregar_metodo(funcion);
+                        FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().agregar_metodo(nodo_funcion.getValor(),funcion);
                     }
                     else
                     {
