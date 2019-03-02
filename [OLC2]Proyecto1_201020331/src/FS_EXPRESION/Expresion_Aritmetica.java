@@ -18,6 +18,9 @@ import FS_TABLA_SIMBOLOS.Tabla_Enums;
  */
 public class Expresion_Aritmetica implements Instruccion
 {
+    private int fila;
+    private int columna;
+    
     private Nodo_AST_FS p_izq_unario;
     
     private Expresion p_izq;
@@ -26,6 +29,9 @@ public class Expresion_Aritmetica implements Instruccion
     
     public Expresion_Aritmetica(Nodo_AST_FS p_izq, Nodo_AST_FS p_operador, Nodo_AST_FS p_der)
     {
+        this.fila = Integer.parseInt(p_izq.getFila());
+        this.columna = Integer.parseInt(p_izq.getColumna());
+        
         this.operador = p_operador.getEtiqueta();        
         if(operador.equals("++") || operador.equals("--"))
         {
@@ -90,7 +96,7 @@ public class Expresion_Aritmetica implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("No es posible realizar la expresion aritmetica, verifique los valores.");
             return nuevo_simbolo;

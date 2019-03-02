@@ -18,6 +18,9 @@ import UI.ObjetoEntrada;
  */
 public class Expresion_Unaria implements Instruccion
 {
+    private int fila;
+    private int columna;
+    
     private Expresion p_izq;
     
     private String operador;
@@ -26,6 +29,9 @@ public class Expresion_Unaria implements Instruccion
     
     public Expresion_Unaria(Nodo_AST_FS p_izq, Nodo_AST_FS p_operador) 
     {
+        this.fila = Integer.parseInt(p_izq.getFila());
+        this.columna = Integer.parseInt(p_izq.getColumna());
+        
         this.p_izq = new Expresion(p_izq);
         this.operador = p_operador.getEtiqueta();
     }
@@ -86,7 +92,7 @@ public class Expresion_Unaria implements Instruccion
             {
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setIdentificador(fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setValor("No es posible usar operadores unarios en un valor del tipo " + valor1.getTipo() + ".");                
             }
@@ -98,7 +104,7 @@ public class Expresion_Unaria implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("No es posible realizar una operacion unaria, error: " + e.getMessage());
             

@@ -30,6 +30,9 @@ public class Sentencia_Declaracion implements Instruccion
     
     public Sentencia_Declaracion(Nodo_AST_FS nodo_sentencia)            
     {
+        this.fila = Integer.parseInt(nodo_sentencia.getFila());
+        this.columna = Integer.parseInt(nodo_sentencia.getColumna());
+        
         if(nodo_sentencia.getHijos().size() == 1)
         {
             this.lista_identificadores = nodo_sentencia.getHijos().get(0);
@@ -47,52 +50,132 @@ public class Sentencia_Declaracion implements Instruccion
     @Override
     public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
     {
-        if(identificadores.size() > 0)
+        
+        try
         {
-            for(int i = 0; i < identificadores.size(); i++)
-            {
-                try
+            if( identificadores.size()> 1)
+            {   
+                for(int i = 0; i < identificadores.size()-1; i++)
                 {
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.variable);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.nulo);
+                    nuevo_simbolo.setValor(null);
                     nuevo_simbolo.setIdentificador(identificadores.get(i));    
-                    //SI LA DECLARACION INCLUYE ASIGNACION DE UN VALOR
-                    if(expresion != null)
-                    {
-                        Simbolo simbolo_expresion = expresion.ejecutar(entorno_local, salida);
-                        nuevo_simbolo.setTipo(simbolo_expresion.getTipo());
-                        nuevo_simbolo.setValor(simbolo_expresion.getValor());
-                    }           
-                    //REALIZAR LA DECLARACION EN EL ENTORNO LOCAL
-                    if(entorno_local.Obtener(identificadores.get(i)).getIdentificador().equals("33-12"))
+
+                    if(entorno_local.Obtener(identificadores.get(i)).getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
                     {
                         return entorno_local.Crear(identificadores.get(i), nuevo_simbolo);
                     }
                     else
-                    {
-                        return entorno_local.Crear(identificadores.get(i), nuevo_simbolo);
-                    }                                   
-                }
-                catch(Exception e)
-                {
-                    Simbolo nuevo_simbolo = new Simbolo();
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
-                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("33-12");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                    nuevo_simbolo.setValor("Sentencia Declaracion no fue realizada, error: " + e.getMessage());
-
-                    return nuevo_simbolo;
+                    {   
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);                        
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador(fila + " - " + columna);
+                        nuevo_simbolo.setValor("La variable \"" + identificadores.get(0) + "\" ya existe en el entorno local");
+                        return nuevo_simbolo;
+                    }                                                               
                 } 
+     
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.variable);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.nulo);
+                nuevo_simbolo.setIdentificador(identificadores.get(identificadores.size()-1));   
+
+
+                if(expresion != null)
+                {
+                    Simbolo simbolo_expresion = expresion.ejecutar(entorno_local, salida);
+                    if(simbolo_expresion.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                    {
+                        nuevo_simbolo.setTipo(simbolo_expresion.getTipo());
+                        nuevo_simbolo.setValor(simbolo_expresion.getValor()); 
+                    }
+                    else
+                    {
+                        return simbolo_expresion;
+                    }
+                           
+                }    
+                
+                //REALIZAR LA DECLARACION EN EL ENTORNO LOCAL
+                if(entorno_local.Obtener(identificadores.get(identificadores.size()-1)).getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    return entorno_local.Crear(identificadores.get(identificadores.size()-1), nuevo_simbolo);
+                }
+                else
+                {                           
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);                        
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                    nuevo_simbolo.setIdentificador(fila + " - " + columna);
+                    nuevo_simbolo.setValor("La variable \"" + identificadores.get(0) + "\" ya existe en el entorno local");
+                    return nuevo_simbolo;
+                }
+            }        
+            else if(identificadores.size() == 1)
+            {
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.variable);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.nulo);
+                nuevo_simbolo.setIdentificador(identificadores.get(0));   
+                nuevo_simbolo.setValor(null);
+                    
+                if(expresion != null)
+                {
+                    Simbolo simbolo_expresion = expresion.ejecutar(entorno_local, salida);
+                    if(simbolo_expresion.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                    {
+                        nuevo_simbolo.setTipo(simbolo_expresion.getTipo());
+                        nuevo_simbolo.setValor(simbolo_expresion.getValor());                        
+                    }
+                    else
+                    {
+                        return simbolo_expresion;
+                    }                    
+                }
+                
+                //REALIZAR LA DECLARACION EN EL ENTORNO LOCAL
+                if(entorno_local.Obtener(identificadores.get(0)).getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    return entorno_local.Crear(identificadores.get(0), nuevo_simbolo);
+                }
+                else
+                {                          
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                    nuevo_simbolo.setIdentificador(fila + " - " + columna);
+                    nuevo_simbolo.setValor("La variable \"" + identificadores.get(0) + "\" ya existe en el entorno local");
+                    return nuevo_simbolo;
+                }  
             }
+            else
+            {
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador(fila + " - " + columna);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setValor("Sentencia Declaracion no fue realizada, no existian valariables a declarar.");
+
+                return nuevo_simbolo;                
+            }
+            
         }
-        else
+        catch(Exception e)
         {
-            return null;
-        }
-        return null;
+            Simbolo nuevo_simbolo = new Simbolo();
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
+            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+            nuevo_simbolo.setValor("Sentencia Declaracion no fue realizada, error: " + e.getMessage());
+
+            return nuevo_simbolo;
+        } 
     }
 
     private void crearLista_identificadores()

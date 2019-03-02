@@ -36,14 +36,20 @@ public class Sentencia_Retornar implements Instruccion
     {
         try
         {
-            return valor_retorno.ejecutar(entorno_local, salida);
+            Simbolo nuevo_simbolo = new Simbolo();
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+            nuevo_simbolo.setIdentificador("10-4");
+            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.retornar);
+            nuevo_simbolo.setValor(valor_retorno.ejecutar(entorno_local, salida));  
+            return nuevo_simbolo;
         }
         catch(Exception e )
         {
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador( fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("Sentencia Detener no fue realizada, error: " + e.getMessage());
             

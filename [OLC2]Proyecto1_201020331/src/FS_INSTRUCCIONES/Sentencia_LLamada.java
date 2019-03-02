@@ -43,7 +43,7 @@ public class Sentencia_LLamada implements Instruccion
     }
     
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_padre, ObjetoEntrada salida) 
     {
         try
         {
@@ -51,10 +51,10 @@ public class Sentencia_LLamada implements Instruccion
             {
                 
                 Funcion funcion_invocada = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Metodo(identificador);
-                crear_Valores_Enviar(entorno_local, salida, lista_parametros);
+                crear_Valores_Enviar(entorno_padre, salida, lista_parametros);
                 funcion_invocada.setLista_parametros_enviados(lista_parametros);
                 funcion_invocada.cargarParametros();
-                Simbolo simbolo_retorno = funcion_invocada.ejecutar(entorno_local, salida);
+                Simbolo simbolo_retorno = funcion_invocada.ejecutar(entorno_padre, salida);
                 return simbolo_retorno;
                 
                 /*Simbolo nuevo_simbolo = new Simbolo();            
@@ -71,7 +71,7 @@ public class Sentencia_LLamada implements Instruccion
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setValor("La funcion " + identificador + " no existe.");
                     
@@ -83,7 +83,7 @@ public class Sentencia_LLamada implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador( fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("La funcion no fue ejecutada, error: " + e.getMessage());
 

@@ -20,8 +20,13 @@ import java.util.ArrayList;
  */
 public class Funcion implements Instruccion
 {
+    private int fila; 
+    private int columna; 
+      
+    private FS_TABLA_SIMBOLOS.Tabla_Simbolos.tipo_primitivo_Simbolo tipo_retorno;
     private Entorno entorno_local;
     private String identificador;
+    //private ArrayList<FS_TABLA_SIMBOLOS.Tabla_Simbolos.tipo_primitivo_Simbolo> lista_tipo_parametros;
     private ArrayList<String> lista_parametros;
     private ArrayList<Instruccion> lista_instrucciones;
     
@@ -29,6 +34,9 @@ public class Funcion implements Instruccion
     
     public Funcion(Nodo_AST_FS nodo_funcion)
     {
+        this.fila = Integer.parseInt(nodo_funcion.getFila());
+        this.columna = Integer.parseInt(nodo_funcion.getColumna());
+        
         this.identificador = nodo_funcion.getValor();
         this.lista_instrucciones = new ArrayList<Instruccion>();
         this.llenarListaSentencias(nodo_funcion.getHijos().get(0), lista_instrucciones);
@@ -54,7 +62,7 @@ public class Funcion implements Instruccion
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setIdentificador(fila + "-" + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setValor("La funcion no fue ejecutada, verifique la cantidad de parametros enviados");
 
@@ -64,20 +72,53 @@ public class Funcion implements Instruccion
             for(int i = 0; i < lista_instrucciones.size(); i++)
             {
                 display = lista_instrucciones.get(i).ejecutar(entorno_local, salida);
-                if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
+                if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar )
                 {
-                   return display;
+                    FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+                    
+                    //if(display.getTipo().equals(tipo_retorno))
+                    //{
+                        return display;
+                    //}
+                    //else
+                    /*{
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setIdentificador(fila + " - " + columna);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setValor("El tipo del valor retornado no es el mismo del tipo."); 
+                        return nuevo_simbolo;
+                    }*/                                        
+                }
+                else if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.detener)
+                {
+                    FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+                    
+                    Simbolo nuevo_simbolo = new Simbolo();
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    nuevo_simbolo.setIdentificador(display.getIdentificador());
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                    nuevo_simbolo.setValor("Una funcion no debe tener sentencias Detener.");
+                    
+                    return nuevo_simbolo;                            
+                }
+                else if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+                    return display;
                 }
             }
             
-            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
+            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
             
             Simbolo nuevo_simbolo = new Simbolo();            
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
             nuevo_simbolo.setIdentificador("10-4");
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
-            nuevo_simbolo.setValor("Sentencia Si realizada correctamente");  
+            nuevo_simbolo.setValor("Funcion realizada correctamente");  
 
             return nuevo_simbolo;                        
         }
@@ -86,7 +127,7 @@ public class Funcion implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("La funcion no fue ejecutada, error: " + e.getMessage());
 
@@ -96,7 +137,6 @@ public class Funcion implements Instruccion
                       
     private void crearLista_identificadores(Nodo_AST_FS lista_identificadores, ArrayList<String> identificadores)
     {            
-        identificadores = new ArrayList<String>();
         for(int i = 0; i < lista_identificadores.getHijos().size(); i++)
         {
             identificadores.add(lista_identificadores.getHijos().get(i).getValor());
@@ -124,6 +164,15 @@ public class Funcion implements Instruccion
         {
             Simbolo simbolo_nuevo;
             Simbolo simbolo_enviado;
+            
+            /*for(int i = 0; i< lista_parametros_enviados.size(); i++)
+            {
+                if(!lista_parametros_enviados.get(i).getTipo().equals(lista_tipo_parametros.get(i)))
+                {
+                    return false;
+                }
+            }*/
+            
             for(int i = 0; i < lista_parametros.size(); i++)
             {
                 try
@@ -134,7 +183,8 @@ public class Funcion implements Instruccion
                     simbolo_nuevo.setRol(Tabla_Enums.tipo_Simbolo.variable);
                     simbolo_nuevo.setAcceso(Tabla_Enums.tipo_Acceso.publico);                    
                     simbolo_nuevo.setTipo(simbolo_enviado.getTipo());
-                    simbolo_nuevo.setIdentificador(simbolo_enviado.getIdentificador());
+                    simbolo_nuevo.setIdentificador(lista_parametros.get(i));
+                    simbolo_nuevo.setValor(simbolo_enviado.getValor());
                     entorno_local.Crear(lista_parametros.get(i), simbolo_nuevo);                
                 }
                 catch(Exception e)

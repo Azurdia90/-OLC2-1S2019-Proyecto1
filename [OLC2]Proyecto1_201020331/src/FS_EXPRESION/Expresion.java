@@ -8,6 +8,7 @@ package FS_EXPRESION;
 import FS_AST.Nodo_AST_FS;
 import UI.ObjetoEntrada;
 import FS_INSTRUCCIONES.Instruccion;
+import FS_INSTRUCCIONES.Sentencia_LLamada;
 import FS_INSTRUCCIONES.Sentencia_Seleccion;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
@@ -19,6 +20,9 @@ import FS_TABLA_SIMBOLOS.Tabla_Enums;
  */
 public class Expresion implements Instruccion
 {
+    private int fila;
+    private int columna;
+    
     private Nodo_AST_FS op_izq;
     private Nodo_AST_FS op_der;
     private Nodo_AST_FS operador;
@@ -27,6 +31,9 @@ public class Expresion implements Instruccion
     
     public Expresion(Nodo_AST_FS p_expresion)
     {        
+        this.fila = Integer.parseInt(p_expresion.getFila());
+        this.columna = Integer.parseInt(p_expresion.getColumna());
+        
         if(p_expresion.getEtiqueta().equals("booleano") || p_expresion.getEtiqueta().equals("entero") || p_expresion.getEtiqueta().equals("decimal") || p_expresion.getEtiqueta().equals("caracter") || p_expresion.getEtiqueta().equals("cadena") || p_expresion.getEtiqueta().equals("identificador"))
         {//si es un dato primitivo
             op_izq = p_expresion;
@@ -58,60 +65,125 @@ public class Expresion implements Instruccion
             op_der = null;  
             tipo_expresion = p_expresion.getEtiqueta();
         }
+        else if(p_expresion.getEtiqueta().equals("SENTENCIA_LLAMADA"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
     }
         
     @Override
     public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
     {
-        if(tipo_expresion.equals("EXPRESION_ARITMETICA"))
+        try
         {
-            Expresion_Aritmetica expresion_aritmetica = new Expresion_Aritmetica(op_izq, operador, op_der);
-            return expresion_aritmetica.ejecutar(entorno_local, salida);
-        }
-        if(tipo_expresion.equals("EXPRESION_UNARIA"))
-        {
-            Expresion_Unaria expresion_unaria = new Expresion_Unaria(op_izq, operador);
-            return expresion_unaria.ejecutar(entorno_local, salida);
-        }
-        else if(tipo_expresion.equals("EXPRESION_RELACIONAL"))
-        {
-            Expresion_Relacional expresion_relacional = new Expresion_Relacional(op_izq, operador, op_der);
-            return expresion_relacional.ejecutar(entorno_local, salida);
-        }
-        else if(tipo_expresion.equals("EXPRESION_LOGICA"))
-        {
-            Expresion_Logica expresion_logica = new Expresion_Logica(op_izq, operador, op_der);
-            return expresion_logica.ejecutar(entorno_local, salida);
-        }
-        else if(tipo_expresion.equals("SENTENCIA_SELECCION"))
-        {
-            Sentencia_Seleccion expresion_logica = new Sentencia_Seleccion(op_izq);
-            return expresion_logica.ejecutar(entorno_local, salida);
-        }
-        else
-        {
-            if(tipo_expresion.equals("identificador"))
+             Simbolo nuevo_simbolo = new Simbolo();
+            if(tipo_expresion.equals("EXPRESION_ARITMETICA"))
             {
-                Simbolo nuevo_simbolo = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,op_izq.getValor());
-                return nuevo_simbolo;    
-            }
-            else
-            {
-                Simbolo nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("10-4");
-                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.valueOf(tipo_expresion));
-                if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.caracter || nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.cadena)
+                Expresion_Aritmetica expresion_aritmetica = new Expresion_Aritmetica(op_izq, operador, op_der);
+                nuevo_simbolo = expresion_aritmetica.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
                 {
-                    nuevo_simbolo.setValor(op_izq.getValor().substring(1, op_izq.getValor().length()-1));   
+                    nuevo_simbolo.setIdentificador(fila + "-" + columna);
+                }
+                return nuevo_simbolo;          
+            }
+            if(tipo_expresion.equals("EXPRESION_UNARIA"))
+            {
+                Expresion_Unaria expresion_unaria = new Expresion_Unaria(op_izq, operador);
+                nuevo_simbolo = expresion_unaria.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    nuevo_simbolo.setIdentificador(fila + "-" + columna);
+                }
+                return nuevo_simbolo;
+            }
+            else if(tipo_expresion.equals("EXPRESION_RELACIONAL"))
+            {
+                Expresion_Relacional expresion_relacional = new Expresion_Relacional(op_izq, operador, op_der);
+                nuevo_simbolo = expresion_relacional.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    nuevo_simbolo.setIdentificador(fila + "-" + columna);
+                }
+                return nuevo_simbolo;
+            }
+            else if(tipo_expresion.equals("EXPRESION_LOGICA"))
+            {
+                Expresion_Logica expresion_logica = new Expresion_Logica(op_izq, operador, op_der);
+                nuevo_simbolo = expresion_logica.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    nuevo_simbolo.setIdentificador(fila + "-" + columna);
+                }
+                return nuevo_simbolo;
+            }
+            else if(tipo_expresion.equals("SENTENCIA_SELECCION"))
+            {
+                Sentencia_Seleccion sentencia_seleccion = new Sentencia_Seleccion(op_izq);
+                nuevo_simbolo = sentencia_seleccion.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    nuevo_simbolo.setIdentificador(fila + "-" + columna);
+                }
+                return nuevo_simbolo;
+            }
+            else if(tipo_expresion.equals("SENTENCIA_LLAMADA"))
+            {
+                Sentencia_LLamada sentencia_llamada = new Sentencia_LLamada(op_izq);
+                nuevo_simbolo = sentencia_llamada.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    return (Simbolo) nuevo_simbolo.getValor();
                 }
                 else
                 {
-                    nuevo_simbolo.setValor(op_izq.getValor());
+                    return nuevo_simbolo;
                 }                
-                return nuevo_simbolo;    
             }
+            else
+            {
+                if(tipo_expresion.equals("identificador"))
+                {
+                    nuevo_simbolo = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,op_izq.getValor());
+                    if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+                    {
+                        nuevo_simbolo.setIdentificador(fila + "-" + columna);
+                    }
+                    return nuevo_simbolo;    
+                }
+                else
+                {
+                   
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    nuevo_simbolo.setIdentificador("10-4");
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.valueOf(tipo_expresion));
+
+                    if(nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.caracter || nuevo_simbolo.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.cadena)
+                    {
+                        nuevo_simbolo.setValor(op_izq.getValor().substring(1, op_izq.getValor().length()-1));   
+                    }
+                    else
+                    {
+                        nuevo_simbolo.setValor(op_izq.getValor());
+                    }                
+                    return nuevo_simbolo;    
+                }
+            }            
+        }
+        catch(Exception e)
+        {
+            Simbolo nuevo_simbolo = new Simbolo();
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+            nuevo_simbolo.setIdentificador( fila + " - " + columna);
+            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+            nuevo_simbolo.setValor("Expresion no fue realizada, error: " + e.getMessage());
+            
+            return nuevo_simbolo; 
         }
     }    
 }

@@ -32,7 +32,10 @@ public class Sentencia_Si implements Instruccion
     private Entorno entorno_local;
     
     public Sentencia_Si(Nodo_AST_FS nodo_sentencia)
-    {        
+    {   
+        this.fila = Integer.parseInt(nodo_sentencia.getFila());
+        this.columna = Integer.parseInt(nodo_sentencia.getColumna());
+        
         if(nodo_sentencia.getHijos().size() == 2)
         {
             this.condicion = new Expresion(nodo_sentencia.getHijos().get(0));
@@ -88,6 +91,7 @@ public class Sentencia_Si implements Instruccion
                         display = lista_sentencias.get(i).ejecutar(entorno_local, salida);
                         if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
                         {
+                           FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
                            return display;
                         }
                     }                
@@ -99,6 +103,7 @@ public class Sentencia_Si implements Instruccion
                         display = lista_sentencias_else.get(i).ejecutar(entorno_local, salida);
                         if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
                         {
+                           FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
                            return display;
                         }
                     }                  
@@ -115,12 +120,16 @@ public class Sentencia_Si implements Instruccion
 
                 return nuevo_simbolo;
             }
-            else
+            else if(resultado_condicion.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+            {
+                return resultado_condicion;
+            }
+            else    
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setIdentificador(fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setValor("La condicion de la sentencia Si debe dar como resultado un valor booleano.");           
 
@@ -132,7 +141,7 @@ public class Sentencia_Si implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("Sentencia Selecciona no fue realizada, error: " + e.getMessage());
 

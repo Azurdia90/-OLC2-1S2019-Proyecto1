@@ -59,6 +59,11 @@ public class Fabrica_Sentencias
             Sentencia_Detener nuevo_detener = new Sentencia_Detener(sentencia_ejecutar);
             return nuevo_detener;
         }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_LLAMADA"))
+        {
+            Sentencia_LLamada nueva_llamada = new Sentencia_LLamada(sentencia_ejecutar);
+            return nueva_llamada;
+        }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_RETORNAR"))
         {
             Sentencia_Retornar nuevo_retornar = new Sentencia_Retornar(sentencia_ejecutar);

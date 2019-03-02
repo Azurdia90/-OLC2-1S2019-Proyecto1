@@ -28,6 +28,9 @@ public class Sentencia_Selecciona implements Instruccion
     
     public Sentencia_Selecciona(Nodo_AST_FS nodo_sentencia)
     {
+        this.fila = Integer.parseInt(nodo_sentencia.getFila());
+        this.columna = Integer.parseInt(nodo_sentencia.getColumna());
+        
         this.condicion = new Expresion(nodo_sentencia.getHijos().get(0));
         
         this.lista_casos = new ArrayList<Sentencia_Caso>();
@@ -55,12 +58,13 @@ public class Sentencia_Selecciona implements Instruccion
             
             double valor_caso_double;
             boolean valor_caso_booleano;
-            
-            Entorno entorno_local = new Entorno();            
-            
-            if(condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
+                      
+            if(condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+            {
+                return condicion_base;
+            }
+            else if(condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal || condicion_base.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
             {                          
-                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
                 boolean continuar_selecciona = false;
                 
                 for(int i = 0; i < lista_casos.size(); i++)
@@ -78,9 +82,10 @@ public class Sentencia_Selecciona implements Instruccion
                            {
                                continuar_selecciona = true;
                                
-                               display = lista_casos.get(i).ejecutar(entorno_local, salida);
+                               display = lista_casos.get(i).ejecutar(entorno_padre, salida);
                                if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
                                {
+                                  FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
                                   return display;
                                }
                            }                           
@@ -93,9 +98,10 @@ public class Sentencia_Selecciona implements Instruccion
                            if( (continuar_selecciona == true) || (valor_base_double == valor_caso_double && continuar_selecciona == false) )
                            {
                                continuar_selecciona = true;
-                               display = lista_casos.get(i).ejecutar(entorno_local, salida);
+                               display = lista_casos.get(i).ejecutar(entorno_padre, salida);
                                if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
                                {
+                                  FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
                                   return display;
                                }
                            } 
@@ -106,7 +112,7 @@ public class Sentencia_Selecciona implements Instruccion
                         Simbolo nuevo_simbolo = new Simbolo();
                         nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                         nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                        nuevo_simbolo.setIdentificador("33-12");
+                        nuevo_simbolo.setIdentificador(fila + " - " + columna);
                         nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                         nuevo_simbolo.setValor("Los valores a comparar no son del mismo tipo");
 
@@ -116,16 +122,24 @@ public class Sentencia_Selecciona implements Instruccion
                 
                 for(int i = 0; i < lista_sentencias_defecto.size(); i++)
                 {
-                    lista_sentencias_defecto.get(i).ejecutar(entorno_local, salida);
+                    Entorno entorno_local = new Entorno();   
+                    FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_local);
+                    display = lista_sentencias_defecto.get(i).ejecutar(entorno_padre, salida);
+                    if(display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .detener || display.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo .retornar)
+                    {
+                       FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+                       return display;
+                    }
                 }  
+                
                 FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
-            }
+            }            
             else
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setIdentificador(fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setValor("La expresion de control no puede ser del siguiente tipo: " + condicion_base.getTipo());
 
@@ -133,11 +147,11 @@ public class Sentencia_Selecciona implements Instruccion
             }
             
             Simbolo nuevo_simbolo = new Simbolo();
-            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
-            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-            nuevo_simbolo.setValor("Impresion no fue realizada");  
+            nuevo_simbolo.setIdentificador("10-4");
+            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+            nuevo_simbolo.setValor("Sentencia Selecciona fue realizada correctamente.");  
             
             return nuevo_simbolo;
         }
@@ -146,7 +160,7 @@ public class Sentencia_Selecciona implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("Sentencia Selecciona no fue realizada, error: " + e.getMessage());
 

@@ -8,6 +8,7 @@ import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import FS_INSTRUCCIONES.*;
 import FS_OBJETOS.Funcion;
 import FS_TABLA_SIMBOLOS.Entorno;
+import FS_TABLA_SIMBOLOS.Simbolo;
 import javax.swing.JPanel;
 
 /**
@@ -84,7 +85,7 @@ public class AST_FS
     
     public void segundo_recorrido_AST(Nodo_AST_FS nodo)
     {
-       
+        Simbolo resultado;
         if(nodo.getHijos().size() > 0)
         {                       
             for(int i=0; i < nodo.getHijos().size(); i++)
@@ -97,27 +98,54 @@ public class AST_FS
                 {
                     Nodo_AST_FS nodo_asignacion = nodo.getHijos().get(i);
                     Sentencia_Asignacion asignacion = new Sentencia_Asignacion(nodo_asignacion);
-                    asignacion.ejecutar(entorno_global, entrada);
+                    resultado = asignacion.ejecutar(entorno_global, entrada);
+                    manejoErrorEjecucion(resultado);
                 }
                 else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_IMPRIMIR"))
                 {
                     Nodo_AST_FS nodo_imprimir = nodo.getHijos().get(i);
                     Sentencia_Imprimir imprimir = new Sentencia_Imprimir(nodo_imprimir);
-                    imprimir.ejecutar(entorno_global, entrada);
+                    resultado = imprimir.ejecutar(entorno_global, entrada);
+                    manejoErrorEjecucion(resultado);
                 }
                 else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_SI"))
                 {
                     Nodo_AST_FS nodo_si = nodo.getHijos().get(i);
                     Sentencia_Si sentencia_si = new Sentencia_Si(nodo_si);
-                    sentencia_si.ejecutar(entorno_global, entrada);
+                    resultado = sentencia_si.ejecutar(entorno_global, entrada);
+                    manejoErrorEjecucion(resultado);
                 }
                 else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_SELECCIONA"))
                 {
                     Nodo_AST_FS nodo_selecciona = nodo.getHijos().get(i);
                     Sentencia_Selecciona sentencia_selecciona = new Sentencia_Selecciona(nodo_selecciona);
-                    sentencia_selecciona.ejecutar(entorno_global, entrada);
+                    resultado = sentencia_selecciona.ejecutar(entorno_global, entrada);
+                    manejoErrorEjecucion(resultado);
+                }
+                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_LLAMADA"))
+                {
+                    Nodo_AST_FS nodo_selecciona = nodo.getHijos().get(i);
+                    Sentencia_LLamada sentencia_llamada = new Sentencia_LLamada(nodo_selecciona);
+                    resultado = sentencia_llamada.ejecutar(entorno_global, entrada);
+                    manejoErrorEjecucion(resultado);
                 }
             }            
         }        
-    }    
+    }
+
+    private void manejoErrorEjecucion(Simbolo simbolo_resultado)
+    {
+        if(simbolo_resultado.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
+        {
+            String[] pos = simbolo_resultado.getIdentificador().split("-");
+            ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
+            error_encontrado.setArchivo(entrada.getNombre_archivo());
+            error_encontrado.setIdentificador("Análisis Semantico FuncionScript");
+            error_encontrado.setDescripcion(simbolo_resultado.getValor().toString());
+            error_encontrado.setLinea(pos[0]);
+            error_encontrado.setColumna(pos[1]);
+            error_encontrado.setTipo("Semantico");
+            ERRORES.Tabla_Errores.getInstance().add(error_encontrado); 
+        }
+    }
 }

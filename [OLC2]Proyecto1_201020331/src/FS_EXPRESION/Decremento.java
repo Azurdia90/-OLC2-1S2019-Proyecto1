@@ -18,6 +18,9 @@ import UI.ObjetoEntrada;
  */
 public class Decremento implements Instruccion
 {
+    private int fila;
+    private int columna;
+    
     boolean variable_o_no;
     
     private Nodo_AST_FS p_izq_aux;
@@ -27,6 +30,9 @@ public class Decremento implements Instruccion
     
     public Decremento(Nodo_AST_FS p_izq) 
     {
+        this.fila = Integer.parseInt(p_izq.getFila());
+        this.columna = Integer.parseInt(p_izq.getColumna());
+        
         String cadena_comp = p_izq.getEtiqueta();
         
         if(cadena_comp.equals("identificador"))
@@ -98,7 +104,7 @@ public class Decremento implements Instruccion
                 {
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("33-12");
+                    nuevo_simbolo.setIdentificador(fila + "-" + columna);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                     nuevo_simbolo.setValor("No es posible aumentar un valor del tipo " + valor1.getTipo() + ".");                
                 }
@@ -107,57 +113,12 @@ public class Decremento implements Instruccion
                 
             }
             else
-            {
-                valor1 = (p_izq == null) ? null : p_izq.ejecutar(entorno_local, salida);
-
-                if(valor1 == null)
-                {
-                    return null;
-                }
-                else if(valor1.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
-                {
-                    return valor1;
-                }                
-
-                if(valor1.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero)
-                {
-                    int val1_entero = Integer.parseInt(valor1.getValor().toString());
-
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("10-4");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
-                    nuevo_simbolo.setValor(val1_entero + 1);
-
-                }    
-                else if(valor1.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.caracter)
-                {
-                    int val1_entero = (int) valor1.getValor().toString().charAt(0);
-
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("10-4");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.entero);
-                    nuevo_simbolo.setValor(val1_entero + 1);
-                }
-                else if(valor1.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal)
-                {
-                    double val1_double = Double.parseDouble(valor1.getValor().toString());
-
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("10-4");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.decimal);
-                    nuevo_simbolo.setValor(val1_double + 1);                
-                }
-                else
-                {
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
-                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("33-12");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                    nuevo_simbolo.setValor("No es posible disminuir un valor del tipo " + valor1.getTipo() + ".");                
-                }
+            {                               
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador(fila + "-" + columna);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setValor("Solo es posible disminuir un identificador.");                                
 
                 return nuevo_simbolo;                
             }
@@ -167,7 +128,7 @@ public class Decremento implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + "-" + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("No es posible realizar la disminucion, error: " + e.getMessage());
             

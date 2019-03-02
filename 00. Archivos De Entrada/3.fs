@@ -1,21 +1,6 @@
 var x = 4;
 var y = 10;
 
-si(x<y)
-{
-    var x = 11;
-    imprimir("PEPA PIG " + x );
-}
-sino si (x==4)
-{
-    imprimir("entro al sino si");
-}
-sino 
-{
-    var y = "AMIGUITOS";
-    imprimir("HOLA" + " " +  y);
-}
-
 selecciona(y/2)
 {
     caso 1:
@@ -46,4 +31,19 @@ selecciona(y/2)
     {
         imprimir("defecto");
     }
+}
+
+si(x<y)
+{
+    var x = 11;
+    imprimir("PEPA PIG " + x );
+}
+sino si (x==4)
+{
+    imprimir("entro al sino si");
+}
+sino 
+{
+    var y = "AMIGUITOS";
+    imprimir("HOLA" + " " +  y);
 }

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Tabla_Errores extends ArrayList<Nodo_Error>
 {
     private static Tabla_Errores _Instance = new Tabla_Errores();
-    
+        
     public static Tabla_Errores getInstance() 
     {
         if (_Instance != null){

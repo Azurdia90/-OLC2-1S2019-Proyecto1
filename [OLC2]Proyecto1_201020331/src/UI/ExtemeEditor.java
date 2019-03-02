@@ -138,7 +138,8 @@ public class ExtemeEditor extends javax.swing.JFrame {
             try
             {
                 this.jTPConsola.setText("");
-                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().Limpiar();
+                ERRORES.Tabla_Errores.getInstance().clear();
+                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().Limpiar();                
                 FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
                 FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
                 sintactico_fs.setObjetoEntrada(entrada_actual);

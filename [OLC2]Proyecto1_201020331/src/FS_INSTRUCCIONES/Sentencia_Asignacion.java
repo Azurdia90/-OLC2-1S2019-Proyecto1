@@ -27,6 +27,9 @@ public class Sentencia_Asignacion implements Instruccion
     
     public Sentencia_Asignacion(Nodo_AST_FS nodo_sentencia)
     {
+        this.fila = Integer.parseInt(nodo_sentencia.getFila());
+        this.columna = Integer.parseInt(nodo_sentencia.getColumna());
+        
         this.crearLista_identificadores(nodo_sentencia.getHijos().get(0), lista_identificadores);
         this.expresion = new Expresion(nodo_sentencia.getHijos().get(1).getHijos().get(0));
     }
@@ -74,7 +77,7 @@ public class Sentencia_Asignacion implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("Sentencia Asignacion no fue realizada, error: " + e.getMessage());
 

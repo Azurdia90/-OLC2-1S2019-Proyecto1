@@ -18,6 +18,9 @@ import UI.ObjetoEntrada;
  */
 public class Sentencia_Seleccion implements Instruccion
 {
+    private int fila;
+    private int columna;
+    
     private Expresion expresion_condicion;
     private Expresion expresion1;
     private Expresion expresion2;
@@ -28,6 +31,9 @@ public class Sentencia_Seleccion implements Instruccion
     
     public Sentencia_Seleccion(Nodo_AST_FS nodo_sentencia)
     {
+        this.fila = Integer.parseInt(nodo_sentencia.getFila());
+        this.columna = Integer.parseInt(nodo_sentencia.getColumna());
+        
         this.expresion_condicion = new Expresion(nodo_sentencia.getHijos().get(0));
         this.expresion1 = new Expresion(nodo_sentencia.getHijos().get(1));
         this.expresion2 = new Expresion(nodo_sentencia.getHijos().get(2));
@@ -75,7 +81,7 @@ public class Sentencia_Seleccion implements Instruccion
             {
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("33-12");
+                nuevo_simbolo.setIdentificador(fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setValor("No es posible que la condicion de la sentencia seleccion de como resultado un valor tipo  " + expresion.getTipo() + ".");
             }                               
@@ -87,7 +93,7 @@ public class Sentencia_Seleccion implements Instruccion
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("33-12");
+            nuevo_simbolo.setIdentificador(fila + " - " + columna);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setValor("No es posible realizar la sentencia seleccion, error: " + e.getMessage());
             
