@@ -20,6 +20,7 @@ parser code
 
 private ObjetoEntrada entrada;
 private Nodo_AST_FS raiz;
+private boolean importar;
 
 public void setObjetoEntrada(ObjetoEntrada p_entrada)
 {
@@ -41,13 +42,23 @@ public Nodo_AST_FS getRaiz()
     return raiz;
 }
 
+public void setImportar(boolean p_importar)
+{
+    importar = p_importar;
+}
+
+public boolean getImportar()
+{
+    return importar;
+}
+
 public void ejecutar_AST()
 {
     if(raiz != null)
     {
         Grafica_AST_FS grafica = new Grafica_AST_FS(raiz);
         grafica.graficar_AST();
-        AST_FS ejecutar = new AST_FS(raiz,entrada);
+        AST_FS ejecutar = new AST_FS(raiz,entrada,importar);
         ejecutar.ejecutar_AST();
     }    
 }
@@ -174,6 +185,8 @@ terminal String r_cerrar;
 non terminal Nodo_AST_FS INICIO;
 non terminal Nodo_AST_FS CUERPO_FS;
 
+non terminal Nodo_AST_FS SENTENCIA_IMPORTAR;
+
 non terminal Nodo_AST_FS FUNCION;
 
 non terminal Nodo_AST_FS LISTA_SENTENCIAS;
@@ -232,7 +245,12 @@ INICIO ::=  CUERPO_FS:n
                 ejecutar_AST();
             :};
 
-CUERPO_FS ::=   CUERPO_FS:n1 FUNCION:n2
+CUERPO_FS ::=   CUERPO_FS:n1 SENTENCIA_IMPORTAR:n2
+                {:
+                    RESULT = n1;
+                    RESULT.getHijos().add(n2);
+                :}
+                |CUERPO_FS:n1 FUNCION:n2
                 {:
                     RESULT = n1;
                     RESULT.getHijos().add(n2);
@@ -241,6 +259,15 @@ CUERPO_FS ::=   CUERPO_FS:n1 FUNCION:n2
                 {:
                     RESULT = n1;
                     RESULT.getHijos().add(n2);
+                :}
+                |SENTENCIA_IMPORTAR:n
+                {:
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("CUERPO_FS");
+                    RESULT.setValor("");
+                    RESULT.setFila(String.valueOf(nright));
+                    RESULT.setColumna(String.valueOf(nleft));
+                    RESULT.getHijos().add(n);
                 :}
                 |FUNCION:n
                 {:
@@ -260,7 +287,17 @@ CUERPO_FS ::=   CUERPO_FS:n1 FUNCION:n2
                     RESULT.setColumna(String.valueOf(nleft));
                     RESULT.getHijos().add(n);
                 :}; 
-                
+
+
+SENTENCIA_IMPORTAR ::=  r_importar:n1 s_par_open cadena:n2 s_par_close s_dotcoma
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("SENTENCIA_IMPORTAR");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                        :};
+
 FUNCION ::= r_funcion:n identificador:n1 s_par_open LISTA_PARAMETROS:n2 s_par_close s_key_open LISTA_SENTENCIAS:n3 s_key_close
             {:
                 RESULT = new Nodo_AST_FS();

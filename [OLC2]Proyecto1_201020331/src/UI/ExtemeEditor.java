@@ -143,6 +143,7 @@ public class ExtemeEditor extends javax.swing.JFrame {
                 FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
                 FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
                 sintactico_fs.setObjetoEntrada(entrada_actual);
+                sintactico_fs.setImportar(false);
                 sintactico_fs.parse();
                 if(ERRORES.Tabla_Errores.getInstance().size() > 0)
                 {

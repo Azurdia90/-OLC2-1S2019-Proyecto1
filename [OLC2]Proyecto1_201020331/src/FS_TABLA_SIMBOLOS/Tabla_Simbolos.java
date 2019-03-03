@@ -5,6 +5,7 @@
  */
 package FS_TABLA_SIMBOLOS;
 
+import FS_INSTRUCCIONES.Instruccion;
 import FS_OBJETOS.Funcion;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +20,13 @@ public class Tabla_Simbolos
     private static Tabla_Simbolos _Instance = new Tabla_Simbolos();
     
     private Pila_Entornos mi_Stack;
-    private HashMap<String,Funcion> tabla_funciones;
+    private HashMap<String,Funcion> tabla_funciones;    
+    private ArrayList<Instruccion> lista_instrucciones;
     
     public Tabla_Simbolos()
     {
         this.tabla_funciones = new HashMap<String,Funcion>();
+        this.lista_instrucciones = new ArrayList<Instruccion>();
         this.mi_Stack = new Pila_Entornos();
     }
     
@@ -43,24 +46,35 @@ public class Tabla_Simbolos
     {
         this.tabla_funciones.put(p_id, p_funcion);
     }
-    
     /*************************FIN METODOS PARA FUNCIONES******************************/
     
-    /*************************METODOS PARA VARIABLES*********************************/
-    
-    public Simbolo obtener_Simbolo(Entorno entorno_local, String p_key)
+    /*************************METODOS PARA INSTRUCCIONES*********************************/
+    public void setLista_instrucciones(ArrayList<Instruccion> lista_instrucciones) 
     {
+        this.lista_instrucciones = lista_instrucciones;
+    }
+
+    public ArrayList<Instruccion> getLista_instrucciones()
+    {
+        return lista_instrucciones;
+    }
+    /*************************FIN METODOS PARA INSTRUCCIONES****************************/
+    
+    /*************************METODOS PARA VARIABLES*********************************/
+    public Simbolo obtener_Simbolo(Entorno entorno_local, String p_key) {
         return mi_Stack.Buscar_Simbolo(entorno_local, p_key);
     }
 
     /*************************FIN METODOS PARA VARIABLES****************************/
     
-    public Pila_Entornos getMi_Stack() {
+    /*************************METODOS PARA PILA VARIABLES*********************************/    
+    public Pila_Entornos getMi_Stack() 
+    {
         return mi_Stack;
     }
-
-    /*************************METODOS PARA PILA VARIABLES*********************************/
-    public void setMi_Stack(Pila_Entornos mi_Stack) {
+    
+    public void setMi_Stack(Pila_Entornos mi_Stack) 
+    {
         this.mi_Stack = mi_Stack;
     }
     

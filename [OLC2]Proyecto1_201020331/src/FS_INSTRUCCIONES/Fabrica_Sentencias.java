@@ -8,6 +8,7 @@ package FS_INSTRUCCIONES;
 import FS_AST.Nodo_AST_FS;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
+import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import UI.ObjetoEntrada;
 
 /**
@@ -16,21 +17,22 @@ import UI.ObjetoEntrada;
  */
 public class Fabrica_Sentencias
 {
-    Nodo_AST_FS sentencia_ejecutar;
+    private int fila;
+    private int columna;
+    
+    private Nodo_AST_FS sentencia_ejecutar;
     
     public Fabrica_Sentencias(Nodo_AST_FS nodo_sentencia)
     {
-        sentencia_ejecutar = nodo_sentencia;
+        this.fila = Integer.parseInt(nodo_sentencia.getFila());
+        this.columna = Integer.parseInt(nodo_sentencia.getColumna());
+        
+        this.sentencia_ejecutar = nodo_sentencia;
     }
 
     public Instruccion ejecutar() 
     {
-        if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_DECLARACION"))
-        {
-            Sentencia_Declaracion nueva_declaracion = new Sentencia_Declaracion(sentencia_ejecutar);
-            return nueva_declaracion;
-        }
-        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_ASIGNACION"))
+        if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_ASIGNACION"))
         {
             Sentencia_Asignacion nueva_asignacion = new Sentencia_Asignacion(sentencia_ejecutar);
             return nueva_asignacion;

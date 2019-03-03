@@ -19,26 +19,42 @@ public class AST_FS
 {
     private ObjetoEntrada entrada;
     private Nodo_AST_FS raiz;
-   
+    private boolean importar;
     private Entorno entorno_global;    
-    
-    private ArrayList<Nodo_AST_FS> lista_sentencias;
-    
-    public AST_FS(Nodo_AST_FS p_raiz, ObjetoEntrada p_entrada)
+        
+    //CONSTRUCTOR QUE SE UTILIZA DESDE LA GRAMATICA ORIGINAL
+    public AST_FS(Nodo_AST_FS p_raiz, ObjetoEntrada p_entrada, boolean p_importar)
     {
         this.entrada = p_entrada;
         this.raiz = p_raiz;
-        entorno_global = new Entorno(); //esto es temporal        
+        this.importar = p_importar;
+        
+        if(p_importar)
+        {
+            entorno_global = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().peek();
+        }
+        else
+        {
+            entorno_global = new Entorno();     
+        }        
     }    
     
     public void ejecutar_AST()
     {
-        if(raiz.IsNodoOrNot("AST"))
+        if(raiz.IsNodoOrNot("AST") && importar == false)
         {
             FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_global);
             this.primer_recorrido_AST(raiz.getHijos().get(0));
             this.segundo_recorrido_AST(raiz.getHijos().get(0));
+            this.tercer_recorrido_AST(raiz.getHijos().get(0));
+            this.ejecutar_FS();
             FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+        }
+        else if(raiz.IsNodoOrNot("AST") && importar == true)
+        {
+            this.primer_recorrido_AST(raiz.getHijos().get(0));
+            this.segundo_recorrido_AST(raiz.getHijos().get(0)); 
+            this.tercer_recorrido_AST(raiz.getHijos().get(0));            
         }
         else
         {
@@ -46,6 +62,7 @@ public class AST_FS
         }
     }
     
+    //PRIMER RECORRECORRIDO ES PARA GUARDAR FUNCIONES Y VARIABLES DEL ARCHIVO BASE
     public void primer_recorrido_AST(Nodo_AST_FS nodo)
     {
         if(nodo.getHijos().size() > 0)
@@ -55,10 +72,6 @@ public class AST_FS
                 if(nodo.getHijos().get(i).IsNodoOrNot("CUERPO_FS"))
                 {
                     primer_recorrido_AST(nodo.getHijos().get(0));
-                }
-                else if(nodo.getHijos().get(i).IsNodoOrNot("IMPORTAR"))
-                {
-                
                 }
                 else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_DECLARACION"))
                 {
@@ -76,14 +89,46 @@ public class AST_FS
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(null,"El metodo ya existe.");
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setIdentificador(nodo.getHijos().get(i).getFila() + " - " + nodo.getHijos().get(i).getColumna());
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setValor("La funcion \"" + nodo.getHijos().get(i).getValor() + "\" ya existe."); 
                     }
                 }
             }            
         }
     }
     
+    //TERCER RECORRECORRIDO ES PARA GUARDAR SENTENCIAS
     public void segundo_recorrido_AST(Nodo_AST_FS nodo)
+    {
+        if(nodo.getHijos().size() > 0)
+        {
+            for(int i=0; i < nodo.getHijos().size(); i++)
+            {
+                if(nodo.getHijos().get(i).IsNodoOrNot("CUERPO_FS"))
+                {
+                    segundo_recorrido_AST(nodo.getHijos().get(0));
+                }               
+                else if(!(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_IMPORTAR") || nodo.getHijos().get(i).IsNodoOrNot("FUNCION")))
+                {
+                    Fabrica_Sentencias fabrica;
+                    Instruccion instruccion_aux;
+                    fabrica = new Fabrica_Sentencias(nodo.getHijos().get(i));
+                    instruccion_aux = fabrica.ejecutar();
+                    if(instruccion_aux != null)
+                    {
+                       FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getLista_instrucciones().add(instruccion_aux);
+                    }                    
+                }
+            }
+        }
+    }    
+    
+    //SEGUNDO RECORRECORRIDO ES PARA GUARDAR FUNCIONES, VARIABLES, SENTENCIAS DE ARCHIVOS IMPORTADOS
+    public void tercer_recorrido_AST(Nodo_AST_FS nodo)
     {
         Simbolo resultado;
         if(nodo.getHijos().size() > 0)
@@ -92,47 +137,35 @@ public class AST_FS
             {
                 if(nodo.getHijos().get(i).IsNodoOrNot("CUERPO_FS"))
                 {
-                    segundo_recorrido_AST(nodo.getHijos().get(0));
+                    tercer_recorrido_AST(nodo.getHijos().get(0));
                 }               
-                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_ASIGNACION"))
-                {
-                    Nodo_AST_FS nodo_asignacion = nodo.getHijos().get(i);
-                    Sentencia_Asignacion asignacion = new Sentencia_Asignacion(nodo_asignacion);
+                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_IMPORTAR"))
+                {                    
+                    Nodo_AST_FS nodo_importar = nodo.getHijos().get(i);
+                    Sentencia_Importar asignacion = new Sentencia_Importar(nodo_importar);
                     resultado = asignacion.ejecutar(entorno_global, entrada);
-                    manejoErrorEjecucion(resultado);
-                }
-                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_IMPRIMIR"))
-                {
-                    Nodo_AST_FS nodo_imprimir = nodo.getHijos().get(i);
-                    Sentencia_Imprimir imprimir = new Sentencia_Imprimir(nodo_imprimir);
-                    resultado = imprimir.ejecutar(entorno_global, entrada);
-                    manejoErrorEjecucion(resultado);
-                }
-                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_SI"))
-                {
-                    Nodo_AST_FS nodo_si = nodo.getHijos().get(i);
-                    Sentencia_Si sentencia_si = new Sentencia_Si(nodo_si);
-                    resultado = sentencia_si.ejecutar(entorno_global, entrada);
-                    manejoErrorEjecucion(resultado);
-                }
-                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_SELECCIONA"))
-                {
-                    Nodo_AST_FS nodo_selecciona = nodo.getHijos().get(i);
-                    Sentencia_Selecciona sentencia_selecciona = new Sentencia_Selecciona(nodo_selecciona);
-                    resultado = sentencia_selecciona.ejecutar(entorno_global, entrada);
-                    manejoErrorEjecucion(resultado);
-                }
-                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_LLAMADA"))
-                {
-                    Nodo_AST_FS nodo_selecciona = nodo.getHijos().get(i);
-                    Sentencia_LLamada sentencia_llamada = new Sentencia_LLamada(nodo_selecciona);
-                    resultado = sentencia_llamada.ejecutar(entorno_global, entrada);
                     manejoErrorEjecucion(resultado);
                 }
             }            
         }        
     }
+    
 
+    
+    //TERCER RECORRECORRIDO ES PARA EJECUTAR SENTENCIAS DE ARCHIVO BASE
+    public void ejecutar_FS()
+    {
+        Simbolo resultado;
+        if(FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getLista_instrucciones().size() > 0)
+        {                       
+            for(int i=0; i < FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getLista_instrucciones().size(); i++)
+            {                
+                resultado = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getLista_instrucciones().get(i).ejecutar(entorno_global, entrada);                    
+                manejoErrorEjecucion(resultado);
+            }            
+        }        
+    }
+        
     private void manejoErrorEjecucion(Simbolo simbolo_resultado)
     {
         if(simbolo_resultado.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
