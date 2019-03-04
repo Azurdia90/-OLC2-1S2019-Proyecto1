@@ -32,7 +32,12 @@ public class Fabrica_Sentencias
 
     public Instruccion ejecutar() 
     {
-        if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_ASIGNACION"))
+        if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_DECLARACION"))
+        {
+            Sentencia_Declaracion nueva_declaracion = new Sentencia_Declaracion(sentencia_ejecutar);
+            return nueva_declaracion;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_ASIGNACION"))
         {
             Sentencia_Asignacion nueva_asignacion = new Sentencia_Asignacion(sentencia_ejecutar);
             return nueva_asignacion;
@@ -70,6 +75,31 @@ public class Fabrica_Sentencias
         {
             Sentencia_Retornar nuevo_retornar = new Sentencia_Retornar(sentencia_ejecutar);
             return nuevo_retornar;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_ACCESO"))
+        {
+            Sentencia_LLamada nueva_llamada = new Sentencia_LLamada(sentencia_ejecutar);
+            return nueva_llamada;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_VENTANA"))
+        {
+            Sentencia_Crear_Ventana nuevo_crear_ventana = new Sentencia_Crear_Ventana(sentencia_ejecutar);
+            return nuevo_crear_ventana;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_CONTENEDOR"))
+        {
+            Sentencia_Crear_Contenedor nuevo_contenedor = new Sentencia_Crear_Contenedor(sentencia_ejecutar);
+            return nuevo_contenedor;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_EVENTO_ALCARGAR"))
+        {
+            Sentencia_Evento_AlCargar nuevo_cargar = new Sentencia_Evento_AlCargar(sentencia_ejecutar);
+            return nuevo_cargar;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_EVENTO_ALCERRAR"))
+        {
+            Sentencia_Evento_AlCerrar nuevo_cerrar = new Sentencia_Evento_AlCerrar(sentencia_ejecutar);
+            return nuevo_cerrar;
         }
         else
         {

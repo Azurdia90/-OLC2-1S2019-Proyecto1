@@ -8,6 +8,7 @@ package FS_EXPRESION;
 import FS_AST.Nodo_AST_FS;
 import UI.ObjetoEntrada;
 import FS_INSTRUCCIONES.Instruccion;
+import FS_INSTRUCCIONES.Sentencia_Crear_Ventana;
 import FS_INSTRUCCIONES.Sentencia_LLamada;
 import FS_INSTRUCCIONES.Sentencia_Seleccion;
 import FS_TABLA_SIMBOLOS.Entorno;
@@ -34,14 +35,14 @@ public class Expresion implements Instruccion
         this.fila = Integer.parseInt(p_expresion.getFila());
         this.columna = Integer.parseInt(p_expresion.getColumna());
         
-        if(p_expresion.getEtiqueta().equals("booleano") || p_expresion.getEtiqueta().equals("entero") || p_expresion.getEtiqueta().equals("decimal") || p_expresion.getEtiqueta().equals("caracter") || p_expresion.getEtiqueta().equals("cadena") || p_expresion.getEtiqueta().equals("identificador"))
+        if(p_expresion.IsNodoOrNot("booleano") || p_expresion.IsNodoOrNot("entero") || p_expresion.IsNodoOrNot("decimal") || p_expresion.IsNodoOrNot("caracter") || p_expresion.IsNodoOrNot("cadena") || p_expresion.IsNodoOrNot("identificador"))
         {//si es un dato primitivo
             op_izq = p_expresion;
             operador = null;
             op_der = null;  
             tipo_expresion = p_expresion.getEtiqueta();  
         }
-        else if(p_expresion.getEtiqueta().equals("EXPRESION_ARITMETICA")||p_expresion.getEtiqueta().equals("EXPRESION_UNARIA")||p_expresion.getEtiqueta().equals("EXPRESION_RELACIONAL")||p_expresion.getEtiqueta().equals("EXPRESION_LOGICA"))
+        else if(p_expresion.IsNodoOrNot("EXPRESION_ARITMETICA")||p_expresion.IsNodoOrNot("EXPRESION_UNARIA")||p_expresion.IsNodoOrNot("EXPRESION_RELACIONAL")||p_expresion.IsNodoOrNot("EXPRESION_LOGICA"))
         {//Si es algun tipo de expresion
 
             if(p_expresion.getHijos().get(0).getHijos().size() == 1)
@@ -58,14 +59,28 @@ public class Expresion implements Instruccion
             }
             tipo_expresion =  p_expresion.getEtiqueta();
         }
-        else if(p_expresion.getEtiqueta().equals("SENTENCIA_SELECCION"))
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_SELECCION"))
         {
             op_izq = p_expresion;
             operador = null;
             op_der = null;  
             tipo_expresion = p_expresion.getEtiqueta();
         }
-        else if(p_expresion.getEtiqueta().equals("SENTENCIA_LLAMADA"))
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_LLAMADA"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_ACCESO"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_CREAR_VENTANA"))
         {
             op_izq = p_expresion;
             operador = null;
@@ -137,6 +152,32 @@ public class Expresion implements Instruccion
                 if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
                 {
                     return (Simbolo) nuevo_simbolo.getValor();
+                }
+                else
+                {
+                    return nuevo_simbolo;
+                }                
+            }
+            else if(tipo_expresion.equals("SENTENCIA_ACCESO"))
+            {
+                Sentencia_LLamada sentencia_llamada = new Sentencia_LLamada(op_izq);
+                nuevo_simbolo = sentencia_llamada.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    return (Simbolo) nuevo_simbolo.getValor();
+                }
+                else
+                {
+                    return nuevo_simbolo;
+                }                
+            }
+            else if(tipo_expresion.equals("SENTENCIA_CREAR_VENTANA"))
+            {
+                Sentencia_Crear_Ventana sentencia_crear_ventana = new Sentencia_Crear_Ventana(op_izq);
+                nuevo_simbolo = sentencia_crear_ventana.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    return nuevo_simbolo;
                 }
                 else
                 {

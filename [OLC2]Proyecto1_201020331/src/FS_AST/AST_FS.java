@@ -67,6 +67,7 @@ public class AST_FS
     {
         if(nodo.getHijos().size() > 0)
         {  
+            Simbolo resultado;
             for(int i=0; i < nodo.getHijos().size(); i++)
             {
                 if(nodo.getHijos().get(i).IsNodoOrNot("CUERPO_FS"))
@@ -77,7 +78,8 @@ public class AST_FS
                 {
                     Nodo_AST_FS nodo_declaracion = nodo.getHijos().get(i);
                     Sentencia_Declaracion sentencia_declaracion = new Sentencia_Declaracion(nodo_declaracion);
-                    sentencia_declaracion.ejecutar(entorno_global,entrada);
+                    resultado = sentencia_declaracion.ejecutar(entorno_global,entrada);
+                    manejoErrorEjecucion(resultado);
                 }
                 else if(nodo.getHijos().get(i).IsNodoOrNot("FUNCION"))
                 {
@@ -89,12 +91,13 @@ public class AST_FS
                     }
                     else
                     {
-                        Simbolo nuevo_simbolo = new Simbolo();
-                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
-                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                        nuevo_simbolo.setIdentificador(nodo.getHijos().get(i).getFila() + " - " + nodo.getHijos().get(i).getColumna());
-                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                        nuevo_simbolo.setValor("La funcion \"" + nodo.getHijos().get(i).getValor() + "\" ya existe."); 
+                        resultado = new Simbolo();
+                        resultado.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        resultado.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        resultado.setIdentificador(nodo.getHijos().get(i).getFila() + " - " + nodo.getHijos().get(i).getColumna());
+                        resultado.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        resultado.setValor("La funcion \"" + nodo.getHijos().get(i).getValor() + "\" ya existe."); 
+                        manejoErrorEjecucion(resultado);
                     }
                 }
             }            
@@ -149,9 +152,7 @@ public class AST_FS
             }            
         }        
     }
-    
-
-    
+        
     //TERCER RECORRECORRIDO ES PARA EJECUTAR SENTENCIAS DE ARCHIVO BASE
     public void ejecutar_FS()
     {

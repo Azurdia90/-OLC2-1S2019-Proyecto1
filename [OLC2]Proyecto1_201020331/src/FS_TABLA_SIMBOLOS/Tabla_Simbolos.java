@@ -85,6 +85,7 @@ public class Tabla_Simbolos
     {
         this.mi_Stack.vaciar();
         this.tabla_funciones.clear();
+        this.lista_instrucciones.clear();
     }            
     
     /**********************FIN METODOS PARA MANEJO TABLA SIMBOLOS***********************/

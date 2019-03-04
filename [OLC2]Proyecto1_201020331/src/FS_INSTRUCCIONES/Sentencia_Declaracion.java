@@ -130,6 +130,7 @@ public class Sentencia_Declaracion implements Instruccion
                     Simbolo simbolo_expresion = expresion.ejecutar(entorno_local, salida);
                     if(simbolo_expresion.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
                     {
+                        nuevo_simbolo.setRol(simbolo_expresion.getRol());
                         nuevo_simbolo.setTipo(simbolo_expresion.getTipo());
                         nuevo_simbolo.setValor(simbolo_expresion.getValor());                        
                     }
