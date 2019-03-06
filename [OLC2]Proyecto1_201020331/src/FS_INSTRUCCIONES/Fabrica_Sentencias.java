@@ -91,6 +91,31 @@ public class Fabrica_Sentencias
             Sentencia_Crear_Contenedor nuevo_contenedor = new Sentencia_Crear_Contenedor(sentencia_ejecutar);
             return nuevo_contenedor;
         }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_TEXTO"))
+        {
+            Sentencia_Crear_Texto nuevo_texto = new Sentencia_Crear_Texto(sentencia_ejecutar);
+            return nuevo_texto;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_CAJA_TEXTO"))
+        {
+            Sentencia_Crear_Caja_Texto nuevo_caja_texto = new Sentencia_Crear_Caja_Texto(sentencia_ejecutar);
+            return nuevo_caja_texto;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_AREA_TEXTO"))
+        {
+            Sentencia_Crear_Area_Texto nuevo_area_texto = new Sentencia_Crear_Area_Texto(sentencia_ejecutar);
+            return nuevo_area_texto;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_BOTON"))
+        {
+            Sentencia_Crear_Boton nuevo_boton = new Sentencia_Crear_Boton(sentencia_ejecutar);
+            return nuevo_boton;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_EVENTO_ALCLIC"))
+        {
+            Sentencia_Evento_AlClic nuevo_clic = new Sentencia_Evento_AlClic(sentencia_ejecutar);
+            return nuevo_clic;
+        }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_EVENTO_ALCARGAR"))
         {
             Sentencia_Evento_AlCargar nuevo_cargar = new Sentencia_Evento_AlCargar(sentencia_ejecutar);

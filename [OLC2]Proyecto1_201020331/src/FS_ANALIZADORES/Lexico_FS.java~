@@ -3,6 +3,7 @@
 package FS_ANALIZADORES;
 
 import	java_cup.runtime.Symbol; 
+import UI.ObjetoEntrada;
 
 
 /**
@@ -40,12 +41,12 @@ public class Lexico_FS implements java_cup.runtime.Scanner {
     "\1\4\1\30\12\3\1\42\1\44\1\35\1\33\1\36\1\41\1\0"+
     "\1\13\1\56\1\54\1\12\1\10\1\15\1\57\1\61\1\50\1\63"+
     "\1\1\1\16\1\51\1\45\1\14\1\52\1\62\1\11\1\20\1\53"+
-    "\1\46\1\7\1\1\1\55\1\60\1\1\3\0\1\31\1\2\1\0"+
-    "\1\13\1\56\1\54\1\12\1\10\1\15\1\57\1\61\1\50\1\63"+
-    "\1\1\1\16\1\51\1\45\1\14\1\52\1\62\1\11\1\20\1\53"+
-    "\1\46\1\7\1\1\1\55\1\60\1\1\1\21\1\37\1\22\7\0"+
-    "\1\66\75\0\1\1\154\0\2\47\115\0\1\17\u1e98\0\1\1\17\0"+
-    "\1\66\1\66\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+    "\1\46\1\7\1\1\1\55\1\60\1\1\1\0\1\0\1\0\1\31"+
+    "\1\2\1\0\1\13\1\56\1\54\1\12\1\10\1\15\1\57\1\61"+
+    "\1\50\1\63\1\1\1\16\1\51\1\45\1\14\1\52\1\62\1\11"+
+    "\1\20\1\53\1\46\1\7\1\1\1\55\1\60\1\1\1\21\1\37"+
+    "\1\22\7\0\1\66\75\0\1\1\154\0\2\47\115\0\1\17\u1e98\0"+
+    "\1\1\17\0\1\66\1\66\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
   /** 
    * Translates characters to character classes
@@ -762,10 +763,33 @@ public class Lexico_FS implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-    private void _error(String erro_texto, int erro_column, int erro_line)
-    {
-        System.out.println("Error Lexico: " + erro_texto + " columna: " + erro_column + " linea: " + erro_line);
-    }
+//codigo que se utilizara en el analizador lexico
+
+private ObjetoEntrada entrada;
+
+public void setObjetoEntrada(ObjetoEntrada p_entrada)
+{
+    entrada = p_entrada;
+}
+
+public ObjetoEntrada getObjetoEntrada()
+{
+    return entrada;
+}
+
+private void _error(String erro_texto, int erro_column, int erro_line)
+{
+    ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
+    error_encontrado.setArchivo(entrada.getNombre_archivo());
+    error_encontrado.setIdentificador("Análisis Léxico FuncionScript");
+    error_encontrado.setDescripcion("Caracter no reconocido: " + erro_texto);
+    error_encontrado.setLinea(Integer.toString(erro_line));
+    error_encontrado.setColumna(Integer.toString(erro_column));
+    error_encontrado.setTipo("Lexico");
+    ERRORES.Tabla_Errores.getInstance().add(error_encontrado);
+    //System.out.println("Error Lexico: " + erro_texto + " columna: " + erro_column + " linea: " + erro_line);
+}
+
 
 
   /**
@@ -788,7 +812,7 @@ public class Lexico_FS implements java_cup.runtime.Scanner {
     char [] map = new char[0x110000];
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
-    while (i < 238) {
+    while (i < 242) {
       int  count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);

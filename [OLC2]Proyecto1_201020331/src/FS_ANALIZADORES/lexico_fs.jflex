@@ -29,6 +29,9 @@ booleano = "verdadero"| "falso"
 s_key_open  = "{"
 s_key_close = "}"
 
+s_cor_open  = "["
+s_cor_close = "]"
+
 s_par_open       = "("
 s_par_close      = ")"
 s_plus           = "+"
@@ -142,6 +145,8 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 //simbolos de operacion
 {s_par_open}                        {return new Symbol(Tabla_Simbolos_FS_CUP.s_par_open, yycolumn,yyline, new String(yytext()));}
 {s_par_close}                       {return new Symbol(Tabla_Simbolos_FS_CUP.s_par_close, yycolumn,yyline, new String(yytext()));}
+{s_cor_open}                        {return new Symbol(Tabla_Simbolos_FS_CUP.s_cor_open, yycolumn,yyline, new String(yytext()));}
+{s_cor_close}                       {return new Symbol(Tabla_Simbolos_FS_CUP.s_cor_close, yycolumn,yyline, new String(yytext()));}
 {s_plus}                            {return new Symbol(Tabla_Simbolos_FS_CUP.s_plus, yycolumn,yyline, new String(yytext()));}
 {s_minus}                           {return new Symbol(Tabla_Simbolos_FS_CUP.s_minus, yycolumn,yyline, new String(yytext()));}
 {s_mul}                             {return new Symbol(Tabla_Simbolos_FS_CUP.s_mul, yycolumn,yyline, new String(yytext()));}

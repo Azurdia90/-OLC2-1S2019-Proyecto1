@@ -8,6 +8,8 @@ package FS_EXPRESION;
 import FS_AST.Nodo_AST_FS;
 import UI.ObjetoEntrada;
 import FS_INSTRUCCIONES.Instruccion;
+import FS_INSTRUCCIONES.Sentencia_Crear_Boton;
+import FS_INSTRUCCIONES.Sentencia_Crear_Contenedor;
 import FS_INSTRUCCIONES.Sentencia_Crear_Ventana;
 import FS_INSTRUCCIONES.Sentencia_LLamada;
 import FS_INSTRUCCIONES.Sentencia_Seleccion;
@@ -81,6 +83,20 @@ public class Expresion implements Instruccion
             tipo_expresion = p_expresion.getEtiqueta();
         }
         else if(p_expresion.IsNodoOrNot("SENTENCIA_CREAR_VENTANA"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_CREAR_CONTENEDOR"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_CREAR_BOTON"))
         {
             op_izq = p_expresion;
             operador = null;
@@ -175,6 +191,32 @@ public class Expresion implements Instruccion
             {
                 Sentencia_Crear_Ventana sentencia_crear_ventana = new Sentencia_Crear_Ventana(op_izq);
                 nuevo_simbolo = sentencia_crear_ventana.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    return nuevo_simbolo;
+                }
+                else
+                {
+                    return nuevo_simbolo;
+                }                
+            }
+            else if(tipo_expresion.equals("SENTENCIA_CREAR_CONTENEDOR"))
+            {
+                Sentencia_Crear_Contenedor sentencia_crear_contenedor = new Sentencia_Crear_Contenedor(op_izq);
+                nuevo_simbolo = sentencia_crear_contenedor.ejecutar(entorno_local, salida);
+                if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    return nuevo_simbolo;
+                }
+                else
+                {
+                    return nuevo_simbolo;
+                }                
+            }
+            else if(tipo_expresion.equals("SENTENCIA_CREAR_BOTON"))
+            {
+                Sentencia_Crear_Boton sentencia_crear_boton = new Sentencia_Crear_Boton(op_izq);
+                nuevo_simbolo = sentencia_crear_boton.ejecutar(entorno_local, salida);
                 if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
                 {
                     return nuevo_simbolo;

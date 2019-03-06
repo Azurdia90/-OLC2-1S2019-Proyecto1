@@ -115,7 +115,7 @@ public class AST_FS
                 {
                     segundo_recorrido_AST(nodo.getHijos().get(0));
                 }               
-                else if(!(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_IMPORTAR") || nodo.getHijos().get(i).IsNodoOrNot("FUNCION")))
+                else if(!(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_IMPORTAR") || nodo.getHijos().get(i).IsNodoOrNot("FUNCION") || nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_DECLARACION")))
                 {
                     Fabrica_Sentencias fabrica;
                     Instruccion instruccion_aux;

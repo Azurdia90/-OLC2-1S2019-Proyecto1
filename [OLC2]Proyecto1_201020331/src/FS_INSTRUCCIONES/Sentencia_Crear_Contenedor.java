@@ -40,7 +40,7 @@ public class Sentencia_Crear_Contenedor implements Instruccion
         
         this.identificador = nodo_sentencia.getValor();
         
-        this.cadena_color = nodo_sentencia.getHijos().get(1).getValor();                
+        this.cadena_color = nodo_sentencia.getHijos().get(0).getValor().substring(1,nodo_sentencia.getHijos().get(0).getValor().length()-1);                
         this.alto =  new Expresion(nodo_sentencia.getHijos().get(1));
         this.ancho = new Expresion(nodo_sentencia.getHijos().get(2));
         this.borde = new Expresion(nodo_sentencia.getHijos().get(3));
@@ -64,7 +64,7 @@ public class Sentencia_Crear_Contenedor implements Instruccion
             Simbolo pos_x_r = pos_x.ejecutar(entorno_local, salida);
             Simbolo pos_y_r = pos_y.ejecutar(entorno_local, salida);
             
-            if(alto_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.entero || alto_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.decimal)
+            if(!(alto_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || alto_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
@@ -76,7 +76,7 @@ public class Sentencia_Crear_Contenedor implements Instruccion
                 return nuevo_simbolo;
             }
             
-            if(ancho_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.entero || ancho_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.decimal)
+            if(!(ancho_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || ancho_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
@@ -100,7 +100,7 @@ public class Sentencia_Crear_Contenedor implements Instruccion
                 return nuevo_simbolo;
             }
             
-            if(pos_x_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.entero || pos_x_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.decimal)
+            if(!(pos_x_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || pos_x_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
@@ -112,7 +112,7 @@ public class Sentencia_Crear_Contenedor implements Instruccion
                 return nuevo_simbolo;
             }
             
-            if(pos_y_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.entero || pos_y_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.decimal)
+            if(!(pos_y_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || pos_y_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
@@ -150,6 +150,7 @@ public class Sentencia_Crear_Contenedor implements Instruccion
                 {
                     FS_Ventana ventana_modificar = (FS_Ventana) ventana.getValor();
                     ventana_modificar.add(nuevo_contenedor);
+                    ventana_modificar.repaint();
                     
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
@@ -180,7 +181,5 @@ public class Sentencia_Crear_Contenedor implements Instruccion
 
             return nuevo_simbolo;
         }
-    }
-    
-    
+    }        
 }

@@ -6,6 +6,7 @@
 package FS_OBJETOS;
 
 import java.awt.Color;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
@@ -20,6 +21,8 @@ public class FS_Contenedor extends JPanel
     private int pos_x;
     private int pos_y;
     
+    private boolean borde;
+    
     public FS_Contenedor(int p_alto, int p_ancho, Color p_color, boolean p_borde, int p_pos_x, int p_pos_y)
     {
         this.alto = p_alto;
@@ -31,5 +34,9 @@ public class FS_Contenedor extends JPanel
         this.setSize(alto,ancho);
         this.setBackground(color);
         this.setLocation(pos_x,pos_y);
+        if(borde)
+        {
+            this.setBorder(BorderFactory.createRaisedBevelBorder());
+        }        
     }
 }
