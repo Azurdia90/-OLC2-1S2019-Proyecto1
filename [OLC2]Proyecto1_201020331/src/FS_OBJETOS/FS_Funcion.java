@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *
  * @author Cristian Azurdia
  */
-public class Funcion implements Instruccion
+public class FS_Funcion implements Instruccion
 {
     private int fila; 
     private int columna; 
@@ -32,7 +32,7 @@ public class Funcion implements Instruccion
     
     private ArrayList<Simbolo> lista_parametros_enviados;
     
-    public Funcion(Nodo_AST_FS nodo_funcion)
+    public FS_Funcion(Nodo_AST_FS nodo_funcion)
     {
         this.fila = Integer.parseInt(nodo_funcion.getFila());
         this.columna = Integer.parseInt(nodo_funcion.getColumna());
@@ -214,6 +214,14 @@ public class Funcion implements Instruccion
 
     public void setLista_parametros_enviados(ArrayList<Simbolo> lista_parametros_enviados) {
         this.lista_parametros_enviados = lista_parametros_enviados;
+    }
+
+    public ArrayList<String> getLista_parametros() {
+        return lista_parametros;
+    }
+
+    public void setLista_parametros(ArrayList<String> lista_parametros) {
+        this.lista_parametros = lista_parametros;
     }
         
 }

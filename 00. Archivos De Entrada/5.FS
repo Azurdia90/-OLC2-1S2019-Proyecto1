@@ -12,5 +12,3 @@ funcion metodo1()
     imprimir("hola si funciona el boton :)");
     retornar nulo;
 }
-
-ventana_nueva.crearcontenedor(100,100,"#01DF74",verdadero,10,10);

@@ -7,7 +7,7 @@ package FS_INSTRUCCIONES;
 
 import FS_AST.Nodo_AST_FS;
 import FS_EXPRESION.Expresion;
-import FS_OBJETOS.Funcion;
+import FS_OBJETOS.FS_Funcion;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
@@ -50,7 +50,7 @@ public class Sentencia_LLamada implements Instruccion
             if(FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().existe_metodo(identificador))
             {
                 
-                Funcion funcion_invocada = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Metodo(identificador);
+                FS_Funcion funcion_invocada = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Metodo(identificador);
                 crear_Valores_Enviar(entorno_padre, salida, lista_parametros);
                 funcion_invocada.setLista_parametros_enviados(lista_parametros);
                 funcion_invocada.cargarParametros();

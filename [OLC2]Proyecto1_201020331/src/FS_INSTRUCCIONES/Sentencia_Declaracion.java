@@ -7,6 +7,8 @@ package FS_INSTRUCCIONES;
 
 import FS_AST.Nodo_AST_FS;
 import FS_EXPRESION.Expresion;
+import FS_OBJETOS.FS_Arreglo;
+import FS_OBJETOS.FS_Objeto;
 import UI.ObjetoEntrada;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import FS_TABLA_SIMBOLOS.Entorno;
@@ -24,9 +26,11 @@ public class Sentencia_Declaracion implements Instruccion
     
     private ArrayList<String> identificadores;
     private Expresion expresion;
+    private FS_Arreglo arreglo;
+    private FS_Objeto objeto;
     
     private Nodo_AST_FS lista_identificadores;
-    private Nodo_AST_FS nodo_expresion;
+    private int tipo_valor;  //0 sin valor  1 Expresion, 2 Arreglo, 3 Objeto
     
     public Sentencia_Declaracion(Nodo_AST_FS nodo_sentencia)            
     {
@@ -37,13 +41,28 @@ public class Sentencia_Declaracion implements Instruccion
         {
             this.lista_identificadores = nodo_sentencia.getHijos().get(0);
             this.crearLista_identificadores();
-            this.expresion = null;
+            this.tipo_valor = 0;
         }
         else if(nodo_sentencia.getHijos().size() == 2)
         {
             this.lista_identificadores = nodo_sentencia.getHijos().get(0);
             this.crearLista_identificadores();
-            this.expresion = new Expresion(nodo_sentencia.getHijos().get(1).getHijos().get(0));
+            
+            if(nodo_sentencia.getHijos().get(1).IsNodoOrNot("EXPRESION"))
+            {
+                this.expresion = new Expresion(nodo_sentencia.getHijos().get(1).getHijos().get(0));
+                this.tipo_valor = 1;
+            }
+            else if(nodo_sentencia.getHijos().get(1).IsNodoOrNot("ARREGLO"))
+            {
+                this.arreglo = new FS_Arreglo(nodo_sentencia.getHijos().get(1));
+                this.tipo_valor = 2;
+            }
+            else if(nodo_sentencia.getHijos().get(1).IsNodoOrNot("OBJETO"))
+            {
+                this.objeto = new FS_Objeto(nodo_sentencia.getHijos().get(1));
+                this.tipo_valor = 3;
+            }
         }        
     }   
     
@@ -86,20 +105,48 @@ public class Sentencia_Declaracion implements Instruccion
                 nuevo_simbolo.setIdentificador(identificadores.get(identificadores.size()-1));   
 
 
-                if(expresion != null)
+                if(tipo_valor == 1)
                 {
                     Simbolo simbolo_expresion = expresion.ejecutar(entorno_local, salida);
                     if(simbolo_expresion.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
                     {
+                        nuevo_simbolo.setRol(simbolo_expresion.getRol());
                         nuevo_simbolo.setTipo(simbolo_expresion.getTipo());
                         nuevo_simbolo.setValor(simbolo_expresion.getValor()); 
                     }
                     else
                     {
                         return simbolo_expresion;
-                    }
-                           
+                    }                           
                 }    
+                else if(tipo_valor == 2)
+                {
+                    Simbolo simbolo_arreglo = arreglo.ejecutar(entorno_local, salida);
+                    if(simbolo_arreglo.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                    {
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.arreglo);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setValor(arreglo); 
+                    }
+                    else
+                    {
+                        return simbolo_arreglo;
+                    }
+                }
+                else if(tipo_valor ==3)
+                {
+                    Simbolo simbolo_objeto = objeto.ejecutar(entorno_local, salida);
+                    if(simbolo_objeto.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                    {
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setValor(objeto); 
+                    }
+                    else
+                    {
+                        return simbolo_objeto;
+                    }
+                }
                 
                 //REALIZAR LA DECLARACION EN EL ENTORNO LOCAL
                 if(entorno_local.Obtener(identificadores.get(identificadores.size()-1)).getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
@@ -125,7 +172,7 @@ public class Sentencia_Declaracion implements Instruccion
                 nuevo_simbolo.setIdentificador(identificadores.get(0));   
                 nuevo_simbolo.setValor(null);
                     
-                if(expresion != null)
+                if(tipo_valor == 1)
                 {
                     Simbolo simbolo_expresion = expresion.ejecutar(entorno_local, salida);
                     if(simbolo_expresion.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
@@ -138,6 +185,34 @@ public class Sentencia_Declaracion implements Instruccion
                     {
                         return simbolo_expresion;
                     }                    
+                }
+                else if(tipo_valor == 2)
+                {
+                    Simbolo simbolo_arreglo = arreglo.ejecutar(entorno_local, salida);
+                    if(simbolo_arreglo.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                    {
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.arreglo);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setValor(arreglo);                        
+                    }
+                    else
+                    {
+                        return simbolo_arreglo;
+                    }
+                }
+                else if(tipo_valor == 3)
+                {
+                    Simbolo simbolo_objeto = objeto.ejecutar(entorno_local, salida);
+                    if(simbolo_objeto.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                    {
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setValor(arreglo);                        
+                    }
+                    else
+                    {
+                        return simbolo_objeto;
+                    }
                 }
                 
                 //REALIZAR LA DECLARACION EN EL ENTORNO LOCAL

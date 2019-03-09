@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import FS_INSTRUCCIONES.*;
-import FS_OBJETOS.Funcion;
+import FS_OBJETOS.FS_Funcion;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
 import javax.swing.JPanel;
@@ -47,6 +47,7 @@ public class AST_FS
             this.primer_recorrido_AST(raiz.getHijos().get(0));
             this.segundo_recorrido_AST(raiz.getHijos().get(0));
             this.tercer_recorrido_AST(raiz.getHijos().get(0));
+            this.cuarto_recorrido_AST(raiz.getHijos().get(0));
             this.ejecutar_FS();
             FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
         }
@@ -55,6 +56,7 @@ public class AST_FS
             this.primer_recorrido_AST(raiz.getHijos().get(0));
             this.segundo_recorrido_AST(raiz.getHijos().get(0)); 
             this.tercer_recorrido_AST(raiz.getHijos().get(0));            
+            this.cuarto_recorrido_AST(raiz.getHijos().get(0));
         }
         else
         {
@@ -62,7 +64,7 @@ public class AST_FS
         }
     }
     
-    //PRIMER RECORRECORRIDO ES PARA GUARDAR FUNCIONES Y VARIABLES DEL ARCHIVO BASE
+    //PRIMER RECORRECORRIDO ES PARA GUARDAR FUNCIONES DEL ARCHIVO EN CURSO
     public void primer_recorrido_AST(Nodo_AST_FS nodo)
     {
         if(nodo.getHijos().size() > 0)
@@ -74,17 +76,10 @@ public class AST_FS
                 {
                     primer_recorrido_AST(nodo.getHijos().get(0));
                 }
-                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_DECLARACION"))
-                {
-                    Nodo_AST_FS nodo_declaracion = nodo.getHijos().get(i);
-                    Sentencia_Declaracion sentencia_declaracion = new Sentencia_Declaracion(nodo_declaracion);
-                    resultado = sentencia_declaracion.ejecutar(entorno_global,entrada);
-                    manejoErrorEjecucion(resultado);
-                }
                 else if(nodo.getHijos().get(i).IsNodoOrNot("FUNCION"))
                 {
                     Nodo_AST_FS nodo_funcion = nodo.getHijos().get(i);
-                    Funcion funcion= new Funcion(nodo_funcion);
+                    FS_Funcion funcion= new FS_Funcion(nodo_funcion);
                     if(!FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().existe_metodo(funcion.getIdentificador()))
                     {
                         FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().agregar_metodo(nodo_funcion.getValor(),funcion);
@@ -104,8 +99,31 @@ public class AST_FS
         }
     }
     
-    //TERCER RECORRECORRIDO ES PARA GUARDAR SENTENCIAS
+    //SEGUNDO RECORRECORRIDO ES PARA DECLARAR VARIABLES GLOBALES DEL ARCHIVO EN CURSO
     public void segundo_recorrido_AST(Nodo_AST_FS nodo)
+    {
+        if(nodo.getHijos().size() > 0)
+        {  
+            Simbolo resultado;
+            for(int i=0; i < nodo.getHijos().size(); i++)
+            {
+                if(nodo.getHijos().get(i).IsNodoOrNot("CUERPO_FS"))
+                {
+                    primer_recorrido_AST(nodo.getHijos().get(0));
+                }
+                else if(nodo.getHijos().get(i).IsNodoOrNot("SENTENCIA_DECLARACION"))
+                {
+                    Nodo_AST_FS nodo_declaracion = nodo.getHijos().get(i);
+                    Sentencia_Declaracion sentencia_declaracion = new Sentencia_Declaracion(nodo_declaracion);
+                    resultado = sentencia_declaracion.ejecutar(entorno_global,entrada);
+                    manejoErrorEjecucion(resultado);
+                }
+            }            
+        }
+    }                 
+    
+    //TERCER RECORRECORRIDO ES PARA GUARDAR SENTENCIAS DEL ARCHIVO EN CURSO
+    public void tercer_recorrido_AST(Nodo_AST_FS nodo)
     {
         if(nodo.getHijos().size() > 0)
         {
@@ -130,8 +148,8 @@ public class AST_FS
         }
     }    
     
-    //SEGUNDO RECORRECORRIDO ES PARA GUARDAR FUNCIONES, VARIABLES, SENTENCIAS DE ARCHIVOS IMPORTADOS
-    public void tercer_recorrido_AST(Nodo_AST_FS nodo)
+    //CUARTO RECORRECORRIDO ES PARA GUARDAR FUNCIONES, VARIABLES, SENTENCIAS DE ARCHIVOS IMPORTADOS
+    public void cuarto_recorrido_AST(Nodo_AST_FS nodo)
     {
         Simbolo resultado;
         if(nodo.getHijos().size() > 0)

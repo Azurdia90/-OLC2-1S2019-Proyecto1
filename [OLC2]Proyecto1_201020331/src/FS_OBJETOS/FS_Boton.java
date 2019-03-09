@@ -13,7 +13,7 @@ import javax.swing.JButton;
  *
  * @author Cristian Azurdia
  */
-public class FS_Boton extends JButton
+public class FS_Boton extends JButton 
 {
     private String fuente;
     private int tamaño;

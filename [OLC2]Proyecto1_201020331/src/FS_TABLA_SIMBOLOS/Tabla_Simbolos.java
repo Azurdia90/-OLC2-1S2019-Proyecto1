@@ -6,7 +6,7 @@
 package FS_TABLA_SIMBOLOS;
 
 import FS_INSTRUCCIONES.Instruccion;
-import FS_OBJETOS.Funcion;
+import FS_OBJETOS.FS_Funcion;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -20,12 +20,12 @@ public class Tabla_Simbolos
     private static Tabla_Simbolos _Instance = new Tabla_Simbolos();
     
     private Pila_Entornos mi_Stack;
-    private HashMap<String,Funcion> tabla_funciones;    
+    private HashMap<String,FS_Funcion> tabla_funciones;    
     private ArrayList<Instruccion> lista_instrucciones;
     
     public Tabla_Simbolos()
     {
-        this.tabla_funciones = new HashMap<String,Funcion>();
+        this.tabla_funciones = new HashMap<String,FS_Funcion>();
         this.lista_instrucciones = new ArrayList<Instruccion>();
         this.mi_Stack = new Pila_Entornos();
     }
@@ -37,12 +37,12 @@ public class Tabla_Simbolos
         return tabla_funciones.containsKey(p_id);
     }
     
-    public Funcion obtener_Metodo(String p_id)
+    public FS_Funcion obtener_Metodo(String p_id)
     {
         return tabla_funciones.get(p_id);
     }
     
-    public void agregar_metodo(String p_id, Funcion p_funcion)
+    public void agregar_metodo(String p_id, FS_Funcion p_funcion)
     {
         this.tabla_funciones.put(p_id, p_funcion);
     }

@@ -205,6 +205,21 @@ non terminal Nodo_AST_FS SENTENCIA_DETENER;
 non terminal Nodo_AST_FS SENTENCIA_LLAMADA;
 non terminal Nodo_AST_FS SENTENCIA_RETORNAR;
 non terminal Nodo_AST_FS SENTENCIA_ACCESO;
+non terminal Nodo_AST_FS SENTENCIA_LLAMADA_FUNCIONES_ARREGLO;
+non terminal Nodo_AST_FS LISTA_LLAMADAS_FUNCIONES_ARREGLO;
+non terminal Nodo_AST_FS FUNCION_ARREGLO;
+non terminal Nodo_AST_FS FUNCION_DESCENDENTE;
+non terminal Nodo_AST_FS FUNCION_ASCENDENTE;
+non terminal Nodo_AST_FS FUNCION_CREAR_DESDE_ARCHIVO;
+non terminal Nodo_AST_FS FUNCION_INVERTIR;
+non terminal Nodo_AST_FS FUNCION_MAXIMO;
+non terminal Nodo_AST_FS FUNCION_MINIMO;
+non terminal Nodo_AST_FS FUNCION_FILTRAR;
+non terminal Nodo_AST_FS FUNCION_BUSCAR;
+non terminal Nodo_AST_FS FUNCION_MAP;
+non terminal Nodo_AST_FS FUNCION_REDUCE;
+non terminal Nodo_AST_FS FUNCION_TODOS;
+non terminal Nodo_AST_FS FUNCION_ALGUNO;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_VENTANA;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_CONTENEDOR;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_TEXTO;
@@ -227,7 +242,11 @@ non terminal Nodo_AST_FS EXPRESION_UNARIA;
 non terminal Nodo_AST_FS EXPRESION_LOGICA;
 non terminal Nodo_AST_FS EXPRESION_RELACIONAL;
 non terminal Nodo_AST_FS DATO_PRIMITIVO;
+non terminal Nodo_AST_FS VALOR;
 non terminal Nodo_AST_FS ARREGLO;
+non terminal Nodo_AST_FS OBJETO;
+non terminal Nodo_AST_FS LISTA_ATRIBUTOS;
+non terminal Nodo_AST_FS ATRIBUTO;
 
 precedence	right 		s_equal;
 precedence  right  		identificador;
@@ -373,8 +392,12 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
                     |SENTENCIA_LLAMADA:n s_dotcoma
                     {:
                         RESULT = n;
-                    :}
+                    :}                    
                     |SENTENCIA_RETORNAR:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_LLAMADA_FUNCIONES_ARREGLO:n s_dotcoma
                     {:
                         RESULT = n;
                     :}
@@ -419,24 +442,7 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
 /*******************************************INSTRUCCCIONES****************************************************************************/
 
 //DECLACION
-SENTENCIA_DECLARACION ::=   r_var:n1 LISTA_IDENTIFICADORES:n2 s_equal EXPRESION:n3 
-                            {:
-                                Nodo_AST_FS nodo_expresion = new Nodo_AST_FS();
-                                nodo_expresion.setEtiqueta("EXPRESION");
-                                nodo_expresion.setValor("");
-                                nodo_expresion.setFila(String.valueOf(n3right));
-                                nodo_expresion.setColumna(String.valueOf(n3left));
-                                nodo_expresion.getHijos().add(n3);
-                                
-                                RESULT = new Nodo_AST_FS();
-                                RESULT.setEtiqueta("SENTENCIA_DECLARACION");
-                                RESULT.setValor("");
-                                RESULT.setFila(String.valueOf(n1right));
-                                RESULT.setColumna(String.valueOf(n1left));
-                                RESULT.getHijos().add(n2);
-                                RESULT.getHijos().add(nodo_expresion);
-                            :}
-                            r_var:n1 LISTA_IDENTIFICADORES:n2 s_equal ARREGLO:n3 
+SENTENCIA_DECLARACION ::=   r_var:n1 LISTA_IDENTIFICADORES:n2 s_equal VALOR:n3 
                             {:                                
                                 RESULT = new Nodo_AST_FS();
                                 RESULT.setEtiqueta("SENTENCIA_DECLARACION");
@@ -456,24 +462,7 @@ SENTENCIA_DECLARACION ::=   r_var:n1 LISTA_IDENTIFICADORES:n2 s_equal EXPRESION:
                                 RESULT.getHijos().add(n2);
                             :};
 //ASIGNACION
-SENTENCIA_ASIGNACION ::=    LISTA_IDENTIFICADORES:n1 s_equal EXPRESION:n2 
-                            {:
-                                Nodo_AST_FS nodo_expresion = new Nodo_AST_FS();
-                                nodo_expresion.setEtiqueta("EXPRESION");
-                                nodo_expresion.setValor("");
-                                nodo_expresion.setFila(String.valueOf(n2right));
-                                nodo_expresion.setColumna(String.valueOf(n2left));
-                                nodo_expresion.getHijos().add(n2);
-
-                                RESULT = new Nodo_AST_FS();
-                                RESULT.setEtiqueta("SENTENCIA_ASIGNACION");
-                                RESULT.setValor("");
-                                RESULT.setFila(String.valueOf(n1right));
-                                RESULT.setColumna(String.valueOf(n1left));
-                                RESULT.getHijos().add(n1);
-                                RESULT.getHijos().add(nodo_expresion);
-                            :}
-                            |LISTA_IDENTIFICADORES:n1 s_equal ARRAY:n2 
+SENTENCIA_ASIGNACION ::=    LISTA_IDENTIFICADORES:n1 s_equal VALOR:n2 
                             {:
                                 RESULT = new Nodo_AST_FS();
                                 RESULT.setEtiqueta("SENTENCIA_ASIGNACION");
@@ -483,6 +472,24 @@ SENTENCIA_ASIGNACION ::=    LISTA_IDENTIFICADORES:n1 s_equal EXPRESION:n2
                                 RESULT.getHijos().add(n1);
                                 RESULT.getHijos().add(n2);
                             :};
+
+VALOR ::=   EXPRESION:n
+            {:
+                RESULT = new Nodo_AST_FS();
+                RESULT.setEtiqueta("EXPRESION");
+                RESULT.setValor("");
+                RESULT.setFila(String.valueOf(nright));
+                RESULT.setColumna(String.valueOf(nleft));
+                RESULT.getHijos().add(n);
+            :}
+            |ARREGLO:n
+            {:
+                RESULT = n;
+            :}
+            |OBJETO:n
+            {:
+                RESULT = n;
+            :};
 
 SENTENCIA_IMPRIMIR ::=  r_imprimir:n s_par_open EXPRESION:n2 s_par_close 
                         {:
@@ -646,15 +653,220 @@ SENTENCIA_RETORNAR  ::= r_retornar:n EXPRESION:n1
                             RESULT.getHijos().add(n1);
                         :};
 
-SENTENCIA_ACCESO    ::= identificador:n1 s_dot SENTENCIA_LLAMADA:n2
+SENTENCIA_ACCESO    ::= identificador:n1 s_dot identificador:n2
                         {:
+                            Nodo_AST_FS nodo_id = new Nodo_AST_FS();
+                            nodo_id.setEtiqueta("IDENTIFICADOR");
+                            nodo_id.setValor(n2);
+                            nodo_id.setFila(String.valueOf(n2right));
+                            nodo_id.setColumna(String.valueOf(n2left));
+
                             RESULT = new Nodo_AST_FS();
                             RESULT.setEtiqueta("SENTENCIA_ACCESO");
                             RESULT.setValor(n1);
                             RESULT.setFila(String.valueOf(n1right));
                             RESULT.setColumna(String.valueOf(n1left));
-                            RESULT.getHijos().add(n2);
+                            RESULT.getHijos().add(nodo_id);
+                        :}
+                        |identificador:n1 s_cor_open EXPRESION:n2 s_cor_close
+                        {:
+                            Nodo_AST_FS nodo_expresion = new Nodo_AST_FS();
+                            nodo_expresion.setEtiqueta("EXPRESION");
+                            nodo_expresion.setValor("");
+                            nodo_expresion.setFila(String.valueOf(n2right));
+                            nodo_expresion.setColumna(String.valueOf(n2left));
+                            nodo_expresion.getHijos().add(n2);
+
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("SENTENCIA_ACCESO");
+                            RESULT.setValor(n1);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                            RESULT.getHijos().add(nodo_expresion);
                         :};
+
+SENTENCIA_LLAMADA_FUNCIONES_ARREGLO ::=    identificador:n1 LISTA_LLAMADAS_FUNCIONES_ARREGLO:n2
+                                            {:
+                                                RESULT = new Nodo_AST_FS();
+                                                RESULT.setEtiqueta("SENTENCIA_LLAMADA_FUNCIONES_ARREGLO");
+                                                RESULT.setValor(n1);
+                                                RESULT.setFila(String.valueOf(n1right));
+                                                RESULT.setColumna(String.valueOf(n1left));
+                                                RESULT.getHijos().add(n2); 
+                                            :};
+
+LISTA_LLAMADAS_FUNCIONES_ARREGLO ::=    LISTA_LLAMADAS_FUNCIONES_ARREGLO:n1 s_dot FUNCION_ARREGLO:n2
+                                        {:
+                                            RESULT = n1;
+                                            RESULT.getHijos().add(n2);
+                                        :}
+                                        | s_dot FUNCION_ARREGLO:n
+                                        {:
+                                            RESULT = new Nodo_AST_FS();
+                                            RESULT.setEtiqueta("LISTA_LLAMADAS_FUNCIONES_ARREGLO");
+                                            RESULT.setValor("");
+                                            RESULT.setFila(String.valueOf(nright));
+                                            RESULT.setColumna(String.valueOf(nleft));
+                                            RESULT.getHijos().add(n);                                                    
+                                        :};
+
+FUNCION_ARREGLO  ::= FUNCION_DESCENDENTE:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_ASCENDENTE:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_CREAR_DESDE_ARCHIVO:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_INVERTIR:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_MAXIMO:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_MINIMO:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_FILTRAR:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_BUSCAR:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_MAP:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_REDUCE:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_TODOS:n
+                    {:
+                        RESULT = n; 
+                    :}
+                    |FUNCION_ALGUNO:n
+                    {:
+                        RESULT = n;
+                    :};
+
+FUNCION_DESCENDENTE ::= r_descendente:n s_par_open s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_DESCENDENTE");
+                            RESULT.setValor(n);
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                        :};
+
+FUNCION_ASCENDENTE ::= r_ascendente:n s_par_open s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_ASCENDENTE");
+                            RESULT.setValor(n);
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                        :};
+
+FUNCION_CREAR_DESDE_ARCHIVO ::= r_creararray:n s_par_open cadena:n1 s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("FUNCION_CREAR_DESDE_ARCHIVO");
+                                    RESULT.setValor(n1);
+                                    RESULT.setFila(String.valueOf(nright));
+                                    RESULT.setColumna(String.valueOf(nleft));
+                                :};
+
+FUNCION_INVERTIR ::=    r_invertir:n s_par_open s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_INVERTIR");
+                            RESULT.setValor(n);
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                        :};       
+
+FUNCION_MAXIMO ::=      r_maximo:n s_par_open s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_MAXIMO");
+                            RESULT.setValor(n);
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                        :};
+
+FUNCION_MINIMO ::=      r_minimo:n s_par_open s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_MINIMO");
+                            RESULT.setValor(n);
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                        :};
+
+FUNCION_FILTRAR ::=      r_filtrar:n1 s_par_open identificador:n2 s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_FILTRAR");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                        :};
+
+FUNCION_BUSCAR ::=     r_buscar:n1 s_par_open identificador:n2 s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_BUSCAR");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                        :};
+
+FUNCION_MAP ::=     r_map:n1 s_par_open identificador:n2 s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_MAP");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                        :};
+
+FUNCION_REDUCE ::=     r_reduce:n1 s_par_open identificador:n2 s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_REDUCE");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                        :};
+
+FUNCION_TODOS ::=     r_todos:n1 s_par_open identificador:n2 s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_TODOS");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                        :};
+
+FUNCION_ALGUNO ::=      r_alguno:n1 s_par_open identificador:n2 s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("FUNCION_ALGUNO");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                        :};                        
+
 
 SENTENCIA_CREAR_VENTANA    ::= r_crearventana:n1 s_par_open cadena:n2 s_coma EXPRESION:n3 s_coma EXPRESION:n4 s_coma EXPRESION:n5 s_par_close
                             {:
@@ -990,6 +1202,10 @@ EXPRESION ::=    EXPRESION_ARITMETICA:n
                 {:
                     RESULT = n;
                 :}
+                |SENTENCIA_LLAMADA_FUNCIONES_ARREGLO:n
+                {:
+                    RESULT = n;
+                :}
                 |SENTENCIA_CREAR_VENTANA:n
                 {:
                     RESULT = n;
@@ -1252,22 +1468,51 @@ DATO_PRIMITIVO ::=  r_nulo:v
 ARREGLO ::= s_cor_open  LISTA_EXPRESIONES:n s_cor_close
             {:
                 RESULT = new Nodo_AST_FS();
-                RESULT.setEtiqueta("ARRAY");
+                RESULT.setEtiqueta("ARREGLO");
                 RESULT.setValor("");
                 RESULT.setFila(String.valueOf(nright));
                 RESULT.setColumna(String.valueOf(nleft));
+                RESULT.getHijos().add(n);
             :};        
 
 OBJETO ::= s_key_open LISTA_ATRIBUTOS:n s_key_close
             {:
                 RESULT = new Nodo_AST_FS();
-                RESULT.setEtiqueta("OBJETOS");
+                RESULT.setEtiqueta("OBJETO");
                 RESULT.setValor("");
                 RESULT.setFila(String.valueOf(nright));
                 RESULT.setColumna(String.valueOf(nleft));
+                RESULT.getHijos().add(n);
             :}; 
 
-LISTA_ATRIBUTOS ::= LISTA_ATRIBUTOS s_coma ATRIBUTO
-                    |ATRIBUTO;
+LISTA_ATRIBUTOS ::= LISTA_ATRIBUTOS:n1 s_coma ATRIBUTO:n2
+                    {:
+                        RESULT = n1;
+                        RESULT.getHijos().add(n2);
+                    :}
+                    |ATRIBUTO:n
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta("LISTA_ATRIBUTOS");
+                        RESULT.setValor("");
+                        RESULT.setFila(String.valueOf(nright));
+                        RESULT.setColumna(String.valueOf(nleft));
+                        RESULT.getHijos().add(n);
+                    :};
 
-ATRIBUTO    ::= identificador s_dobledot EXPRESION 
+ATRIBUTO    ::= identificador:n1 s_dobledot EXPRESION:n2 
+                {:
+                    Nodo_AST_FS nodo_expresion = new Nodo_AST_FS();
+                    nodo_expresion.setEtiqueta("EXPRESION");
+                    nodo_expresion.setValor("");
+                    nodo_expresion.setFila(String.valueOf(n2right));
+                    nodo_expresion.setColumna(String.valueOf(n2left));
+                    nodo_expresion.getHijos().add(n2);
+
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("ATRIBUTO");
+                    RESULT.setValor(n1);
+                    RESULT.setFila(String.valueOf(n1right));
+                    RESULT.setColumna(String.valueOf(n1left));
+                    RESULT.getHijos().add(nodo_expresion);
+                :};

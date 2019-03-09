@@ -8,10 +8,12 @@ package FS_EXPRESION;
 import FS_AST.Nodo_AST_FS;
 import UI.ObjetoEntrada;
 import FS_INSTRUCCIONES.Instruccion;
+import FS_INSTRUCCIONES.Sentencia_Acceso;
 import FS_INSTRUCCIONES.Sentencia_Crear_Boton;
 import FS_INSTRUCCIONES.Sentencia_Crear_Contenedor;
 import FS_INSTRUCCIONES.Sentencia_Crear_Ventana;
 import FS_INSTRUCCIONES.Sentencia_LLamada;
+import FS_INSTRUCCIONES.Sentencia_LLamada_Funciones_Arreglo;
 import FS_INSTRUCCIONES.Sentencia_Seleccion;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
@@ -76,6 +78,13 @@ public class Expresion implements Instruccion
             tipo_expresion = p_expresion.getEtiqueta();
         }
         else if(p_expresion.IsNodoOrNot("SENTENCIA_ACCESO"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_LLAMADA_FUNCIONES_ARREGLO"))
         {
             op_izq = p_expresion;
             operador = null;
@@ -176,16 +185,15 @@ public class Expresion implements Instruccion
             }
             else if(tipo_expresion.equals("SENTENCIA_ACCESO"))
             {
-                Sentencia_LLamada sentencia_llamada = new Sentencia_LLamada(op_izq);
-                nuevo_simbolo = sentencia_llamada.ejecutar(entorno_local, salida);
-                if(nuevo_simbolo.getTipo()  != Tabla_Enums.tipo_primitivo_Simbolo.error)
-                {
-                    return (Simbolo) nuevo_simbolo.getValor();
-                }
-                else
-                {
-                    return nuevo_simbolo;
-                }                
+                Sentencia_Acceso sentencia_acceso = new Sentencia_Acceso(op_izq);
+                nuevo_simbolo = sentencia_acceso.ejecutar(entorno_local, salida);
+                return nuevo_simbolo;
+            }
+            else if(tipo_expresion.equals("SENTENCIA_LLAMADA_FUNCIONES_ARREGLO"))
+            {
+                Sentencia_LLamada_Funciones_Arreglo sentencia_llamada_funciones_arreglo = new Sentencia_LLamada_Funciones_Arreglo(op_izq);
+                nuevo_simbolo = sentencia_llamada_funciones_arreglo.ejecutar(entorno_local, salida);
+                return nuevo_simbolo;
             }
             else if(tipo_expresion.equals("SENTENCIA_CREAR_VENTANA"))
             {

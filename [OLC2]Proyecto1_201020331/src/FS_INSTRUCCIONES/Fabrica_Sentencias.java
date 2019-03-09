@@ -81,6 +81,11 @@ public class Fabrica_Sentencias
             Sentencia_LLamada nueva_llamada = new Sentencia_LLamada(sentencia_ejecutar);
             return nueva_llamada;
         }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_LLAMADA_FUNCIONES_ARREGLO"))
+        {
+            Sentencia_LLamada_Funciones_Arreglo nueva_llamada = new Sentencia_LLamada_Funciones_Arreglo(sentencia_ejecutar);
+            return nueva_llamada;
+        }    
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_VENTANA"))
         {
             Sentencia_Crear_Ventana nuevo_crear_ventana = new Sentencia_Crear_Ventana(sentencia_ejecutar);

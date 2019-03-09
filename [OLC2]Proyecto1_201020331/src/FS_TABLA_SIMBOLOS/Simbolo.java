@@ -5,6 +5,8 @@
  */
 package FS_TABLA_SIMBOLOS;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author crist
