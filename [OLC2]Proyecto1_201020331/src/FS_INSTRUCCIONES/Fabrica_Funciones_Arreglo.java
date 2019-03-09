@@ -77,31 +77,31 @@ public class Fabrica_Funciones_Arreglo
         }
         else if(funcion_ejecutar.IsNodoOrNot("FUNCION_BUSCAR"))
         {
-            Funcion_Ascendente nueva_funcion = new Funcion_Ascendente(funcion_ejecutar,p_arreglo);
+            Funcion_Buscar nueva_funcion = new Funcion_Buscar(funcion_ejecutar,p_arreglo);
             resultado = nueva_funcion.ejecutar(entorno_local, salida);
             return resultado;
         }
         else if(funcion_ejecutar.IsNodoOrNot("FUNCION_MAP"))
         {
-            Funcion_Ascendente nueva_funcion = new Funcion_Ascendente(funcion_ejecutar,p_arreglo);
+            Funcion_Map nueva_funcion = new Funcion_Map(funcion_ejecutar,p_arreglo);
             resultado = nueva_funcion.ejecutar(entorno_local, salida);
             return resultado;
         }
         else if(funcion_ejecutar.IsNodoOrNot("FUNCION_REDUCE"))
         {
-            Funcion_Ascendente nueva_funcion = new Funcion_Ascendente(funcion_ejecutar,p_arreglo);
+            Funcion_Reduce nueva_funcion = new Funcion_Reduce(funcion_ejecutar,p_arreglo);
             resultado = nueva_funcion.ejecutar(entorno_local, salida);
             return resultado;
         }
         else if(funcion_ejecutar.IsNodoOrNot("FUNCION_TODOS"))
         {
-            Funcion_Ascendente nueva_funcion = new Funcion_Ascendente(funcion_ejecutar,p_arreglo);
+            Funcion_Todos nueva_funcion = new Funcion_Todos(funcion_ejecutar,p_arreglo);
             resultado = nueva_funcion.ejecutar(entorno_local, salida);
             return resultado;
         }
         else if(funcion_ejecutar.IsNodoOrNot("FUNCION_ALGUNO"))
         {
-            Funcion_Ascendente nueva_funcion = new Funcion_Ascendente(funcion_ejecutar,p_arreglo);
+            Funcion_Alguno nueva_funcion = new Funcion_Alguno(funcion_ejecutar,p_arreglo);
             resultado = nueva_funcion.ejecutar(entorno_local, salida);
             return resultado;
         }

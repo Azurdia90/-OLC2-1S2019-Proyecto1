@@ -27,7 +27,7 @@ public class Sentencia_Acceso implements Instruccion
     private String atributo;
     private Expresion posicion;
     
-    private int tipo_acceso; //0 error 1 arreglo 2 objeto
+    private int tipo_acceso; //0 error 1 objeto 2 arreglo
     
     public Sentencia_Acceso(Nodo_AST_FS nodo_sentencia)
     {

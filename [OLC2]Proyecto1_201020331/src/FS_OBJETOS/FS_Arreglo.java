@@ -85,10 +85,10 @@ public class FS_Arreglo extends ArrayList<Simbolo> implements Instruccion
                 else if(simbolo_aux.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.identificador)
                 {
                     Simbolo nuevo_simbolo = new Simbolo();
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador(fila + " - " + columna);
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                    nuevo_simbolo.setIdentificador(fila + " - " + columna);                    
                     nuevo_simbolo.setValor("Arreglo no puede ser Asignado, error: No se permite Almacenar Objetos en un Arreglo");
 
                     return nuevo_simbolo;

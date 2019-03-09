@@ -13,13 +13,12 @@ import FS_TABLA_SIMBOLOS.Simbolo;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import FS_TABLA_SIMBOLOS.Tabla_Simbolos;
 import UI.ObjetoEntrada;
-import java.util.Comparator;
 
 /**
  *
  * @author Cristian Azurdia
  */
-public class Funcion_Filtrar implements Instruccion
+public class Funcion_Buscar implements Instruccion
 {
     private int fila;
     private int columna;
@@ -27,7 +26,7 @@ public class Funcion_Filtrar implements Instruccion
     private String identificador;
     private FS_Arreglo arreglo;
     
-    public Funcion_Filtrar(Nodo_AST_FS nodo_funcion, FS_Arreglo p_arreglo)
+    public Funcion_Buscar(Nodo_AST_FS nodo_funcion, FS_Arreglo p_arreglo)
     {
         this.fila = Integer.parseInt(nodo_funcion.getFila());
         this.columna = Integer.parseInt(nodo_funcion.getColumna());
@@ -42,7 +41,6 @@ public class Funcion_Filtrar implements Instruccion
         try
         {
             FS_Funcion funcion_llamar;
-            FS_Arreglo arreglo_final = new FS_Arreglo();
             Simbolo simbolo_aux;            
             
             if(arreglo.size() > 0)
@@ -68,7 +66,7 @@ public class Funcion_Filtrar implements Instruccion
                                 simbolo_aux = (Simbolo) simbolo_aux.getValor();
                                 if(simbolo_aux.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano && simbolo_aux.getValor().equals("verdadero"))
                                 {
-                                    arreglo_final.add(arreglo.get(i));
+                                    return arreglo.get(i);
                                 }                                
                             }
                             else
@@ -78,7 +76,7 @@ public class Funcion_Filtrar implements Instruccion
                                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                                nuevo_simbolo.setValor("La llamada a Funcion Filtrar de Arreglo no puede recibir como retorno objetos o arreglos, así como metodos sin retorno.");
+                                nuevo_simbolo.setValor("La llamada a Funcion Buscar de Arreglo no puede recibir como retorno objetos o arreglos, así como metodos sin retorno.");
 
                                 return nuevo_simbolo;  
                             }
@@ -87,10 +85,10 @@ public class Funcion_Filtrar implements Instruccion
                         
                         Simbolo nuevo_simbolo = new Simbolo();
                         nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.arreglo);
-                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.variable);                                                
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.nulo);
                         nuevo_simbolo.setIdentificador("10-4");                        
-                        nuevo_simbolo.setValor(arreglo_final);
+                        nuevo_simbolo.setValor("nulo");
                         
                         return nuevo_simbolo;
                         
@@ -102,7 +100,7 @@ public class Funcion_Filtrar implements Instruccion
                         nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                         nuevo_simbolo.setIdentificador( fila + " - " + columna);
                         nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                        nuevo_simbolo.setValor("La llamada a Funcion Filtrar de Arreglo no puede ejecutarse la funcion a ejecutar tiene mas de un parametro o no tiene.");
+                        nuevo_simbolo.setValor("La llamada a Funcion Buscar de Arreglo no puede ejecutarse la funcion a ejecutar tiene mas de un parametro o no tiene.");
 
                         return nuevo_simbolo;  
                     }
@@ -114,7 +112,7 @@ public class Funcion_Filtrar implements Instruccion
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                     nuevo_simbolo.setIdentificador( fila + " - " + columna);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                    nuevo_simbolo.setValor("La llamada a Funcion Filtrar de Arreglo no puede ejecutarse la funcion a ejecutar no existe.");
+                    nuevo_simbolo.setValor("La llamada a Funcion Buscar de Arreglo no puede ejecutarse la funcion a ejecutar no existe.");
 
                     return nuevo_simbolo;  
                 }    
@@ -127,7 +125,7 @@ public class Funcion_Filtrar implements Instruccion
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La llamada a Funcion Filtrar de Arreglo no puede ejecutarse en un arreglo vacio.");
+                nuevo_simbolo.setValor("La llamada a Funcion Buscar de Arreglo no puede ejecutarse en un arreglo vacio.");
 
                 return nuevo_simbolo;                
             }
@@ -143,5 +141,5 @@ public class Funcion_Filtrar implements Instruccion
             
             return nuevo_simbolo;
         }
-    }    
+    }  
 }

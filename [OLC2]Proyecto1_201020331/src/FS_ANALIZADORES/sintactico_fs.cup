@@ -471,6 +471,16 @@ SENTENCIA_ASIGNACION ::=    LISTA_IDENTIFICADORES:n1 s_equal VALOR:n2
                                 RESULT.setColumna(String.valueOf(n1left));
                                 RESULT.getHijos().add(n1);
                                 RESULT.getHijos().add(n2);
+                            :}
+                            |SENTENCIA_ACCESO:n1 s_equal VALOR:n2 
+                            {:
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_ASIGNACION");
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
                             :};
 
 VALOR ::=   EXPRESION:n

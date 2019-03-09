@@ -44,8 +44,8 @@ public class FS_Objeto extends HashMap<String,Simbolo> implements Instruccion
         for(int i = 0; i < lista_nodos_atributos.getHijos().size(); i++)
         {
             nodo_atributo = lista_nodos_atributos.getHijos().get(i);
-            lista_identificadores.add(nodo_atributo.getHijos().get(0).getValor());
-            lista_expresion.add(new Expresion(nodo_atributo.getHijos().get(1)));
+            lista_identificadores.add(nodo_atributo.getValor());
+            lista_expresion.add(new Expresion(nodo_atributo.getHijos().get(0).getHijos().get(0)));
         }
     }
     
@@ -101,11 +101,11 @@ public class FS_Objeto extends HashMap<String,Simbolo> implements Instruccion
                 }               
             }
                         
-            Simbolo nuevo_simbolo = new Simbolo();
-            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+            Simbolo nuevo_simbolo = new Simbolo();            
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador("10-4");
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+            nuevo_simbolo.setIdentificador("10-4");            
             nuevo_simbolo.setValor("El Objeto si puede ser asignado.");
 
             return nuevo_simbolo;

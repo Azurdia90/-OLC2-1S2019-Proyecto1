@@ -207,7 +207,7 @@ public class Sentencia_Declaracion implements Instruccion
                     {
                         nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
                         nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
-                        nuevo_simbolo.setValor(arreglo);                        
+                        nuevo_simbolo.setValor(objeto);                        
                     }
                     else
                     {
