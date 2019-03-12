@@ -76,3 +76,8 @@ funcion verificaredad(var edad)
 var arreglo_prueba =  [32,300,33,100,160,40];
 var resultado_aux = arreglo_prueba.alguno(verificaredad);
 imprimir(resultado_aux);
+
+
+//INCREMENTO DECREMENTO CON ARREGLOS
+var arreglo_prueba =  [32,300,18,10,16,40];
+arreglo_prueba[0]++;

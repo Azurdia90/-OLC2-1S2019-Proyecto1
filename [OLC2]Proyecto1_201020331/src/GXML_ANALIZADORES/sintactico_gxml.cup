@@ -1,0 +1,425 @@
+package GXML_ANALIZADORES;
+
+import java.io.File;
+import java_cup.runtime.*; 
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+import UI.ObjetoEntrada;
+import GXML_INSTRUCCION.*;
+import FS_TABLA_SIMBOLOS.Tabla_Enums;
+
+parser code 
+{: 
+
+private ObjetoEntrada entrada;
+private ArrayList<Instruccion> lista_instrucciones;
+private boolean importar;
+
+public void setObjetoEntrada(ObjetoEntrada p_entrada)
+{
+    entrada = p_entrada;
+}
+
+public ObjetoEntrada getObjetoEntrada()
+{
+    return entrada;
+}
+
+//public void setRaiz(Nodo_AST_FS p_raiz)
+//{
+    //raiz = p_raiz;
+//}
+
+//public Nodo_AST_FS getRaiz()
+//{
+    //return raiz;
+//}
+
+public void setImportar(boolean p_importar)
+{
+    importar = p_importar;
+}
+
+public boolean getImportar()
+{
+    return importar;
+}
+
+//public void ejecutar_AST()
+//{
+    //if(raiz != null)
+    //{
+        //Grafica_AST_FS grafica = new Grafica_AST_FS(raiz);
+        //grafica.graficar_AST();
+        //AST_FS ejecutar = new AST_FS(raiz,entrada,importar);
+        //ejecutar.ejecutar_AST();
+    //}    
+//}
+
+/**Metodo al que se llama automáticamente ante algún error sintactico.*/ 
+public void syntax_error(Symbol s)
+{ 
+    ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
+    error_encontrado.setArchivo(entrada.getNombre_archivo());
+    error_encontrado.setIdentificador("Análisis Sintactico GMXL");
+    error_encontrado.setDescripcion(s.value.toString() + "  " + s.sym );
+    error_encontrado.setLinea(Integer.toString(s.right+1));
+    error_encontrado.setColumna(Integer.toString(s.left));
+    error_encontrado.setTipo("Sintactico");
+    ERRORES.Tabla_Errores.getInstance().add(error_encontrado);        
+	//System.out.println("Error en la Línea " + (s.right+1) +" Columna " +s.left+ ". Identificador " +s.value + " no reconocido." ); 
+} 
+ /**Metodo al que se llama en el momento en que ya no es posible una recuperación de errores.*/ 
+public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
+{ 
+    ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
+    error_encontrado.setArchivo(entrada.getNombre_archivo());
+    error_encontrado.setIdentificador("Análisis Sintactico GXML");
+    error_encontrado.setDescripcion("Error del cual no es posible recuperarse: " + s.value.toString());
+    error_encontrado.setLinea(Integer.toString(s.right+1));
+    error_encontrado.setColumna(Integer.toString(s.left));
+    error_encontrado.setTipo("Sintactico");
+    ERRORES.Tabla_Errores.getInstance().add(error_encontrado);  
+	//System.out.println("Error en la Línea " + (s.right+1) +" Columna " +s.left+ ". Identificador " +s.value + " no reconocido." ); 
+} 
+
+:}
+
+//expresiones usadas en el lenguaje
+terminal String booleano;
+terminal String entero;
+terminal String decimal;
+terminal String caracter;
+terminal String cadena;
+terminal String identificador;
+terminal String contenido_tag;
+
+//simbolos utilizados en el lenguaje
+terminal String s_key_open;
+terminal String s_key_close;
+terminal String s_cor_open;
+terminal String s_cor_close;
+terminal String s_dobledot;
+terminal String s_dot;
+terminal String s_coma;
+terminal String s_dotcoma;
+
+//simbolos para expresiones
+terminal String s_par_open; 
+terminal String s_par_close; 
+terminal String s_plus;
+terminal String s_minus;
+terminal String s_mul;
+terminal String s_div;
+terminal String s_to;
+terminal String s_mod;
+terminal String s_increment; 
+terminal String s_decrement;
+terminal String s_compare;
+terminal String s_diferent;
+terminal String s_less;
+terminal String s_greather;
+terminal String s_less_equal;
+terminal String s_greather_equal;
+terminal String s_or; 
+terminal String s_and;
+terminal String s_not;
+terminal String s_equal;
+
+//palabras reservadas etiquetas
+terminal String r_importar;
+terminal String r_ventana;
+terminal String r_contenedor;
+terminal String r_texto;
+terminal String r_controlador;
+terminal String r_listadatos;
+terminal String r_dato;
+terminal String r_control;
+terminal String r_defecto;
+terminal String r_multimedia;
+terminal String r_boton;
+terminal String r_enviar;
+
+//funciones parametros
+terminal String r_id;
+terminal String r_tipo;
+terminal String r_principal;
+terminal String r_secundaria;
+terminal String r_color;
+terminal String r_accioninicial;
+terminal String r_accionfinal;
+terminal String r_posx;
+terminal String r_posy;
+terminal String r_alto;
+terminal String r_ancho;
+terminal String r_borde;
+terminal String r_nombre;
+terminal String r_fuente;
+terminal String r_tamano;
+terminal String r_negrita;
+terminal String r_cursiva;
+terminal String r_numerico;
+terminal String r_textoarea;
+terminal String r_desplegable;
+terminal String r_maximo;
+terminal String r_minimo;
+terminal String r_accion;
+terminal String r_referencia;
+terminal String r_musica;
+terminal String r_video;
+terminal String r_imagen;
+terminal String r_path;
+terminal String r_autoreproduccion;
+
+//NO TERMINALES
+non terminal Instruccion INICIO;
+non terminal ArrayList<Instruccion> CUERPO_GXML;
+
+non terminal Instruccion SENTENCIA_IMPORTAR;
+
+non terminal Instruccion TAG_VENTANA;
+non terminal ArrayList<Instruccion> LISTA_CONTENIDO_VENTANA;
+non terminal Instruccion CONTENIDO_VENTANA;
+
+non terminal Instruccion TAG_CONTENEDOR;
+
+non terminal ArrayList<GXML_Elemento> LISTA_ELEMENTOS;
+non terminal GXML_Elemento ELEMENTO;
+non terminal GXML_Elemento ELEMENTO_ID;
+non terminal GXML_Elemento ELEMENTO_TIPO;
+non terminal GXML_Elemento ELEMENTO_COLOR;
+non terminal GXML_Elemento ELEMENTO_ACCIONINICIAL;
+non terminal GXML_Elemento ELEMENTO_ACCIONFINAL;
+non terminal GXML_Elemento ELEMENTO_POSX;
+non terminal GXML_Elemento ELEMENTO_POSY;
+non terminal GXML_Elemento ELEMENTO_ALTO;
+non terminal GXML_Elemento ELEMENTO_ANCHO;
+non terminal GXML_Elemento ELEMENTO_BORDE;
+non terminal GXML_Elemento ELEMENTO_FUENTE;
+non terminal GXML_Elemento ELEMENTO_TAM;
+non terminal GXML_Elemento ELEMENTO_NEGRITA;
+non terminal GXML_Elemento ELEMENTO_CURSIVA;
+non terminal GXML_Elemento ELEMENTO_TEXTO;
+non terminal GXML_Elemento ELEMENTO_NUMERICO;
+non terminal GXML_Elemento ELEMENTO_TEXTOAREA;
+non terminal GXML_Elemento ELEMENTO_DESPLEGABLE;
+non terminal GXML_Elemento ELEMENTO_MAXIMO;
+non terminal GXML_Elemento ELEMENTO_MINIMO;
+non terminal GXML_Elemento ELEMENTO_ACCION;
+non terminal GXML_Elemento ELEMENTO_REFERENCIA;
+non terminal GXML_Elemento ELEMENTO_PATH;
+non terminal GXML_Elemento ELEMENTO_MUSICA;
+non terminal GXML_Elemento ELEMENTO_VIDEO;
+non terminal GXML_Elemento ELEMENTO_IMAGEN;
+non terminal GXML_Elemento ELEMENTO_AUTOREPRODUCCION;
+
+start with INICIO;
+
+INICIO ::=  CUERPO_GXML:n
+            {:
+                JOptionPane.showMessageDialog(null,"Archivo reconozido exitosamentes");
+                RESULT = new Sentencia_Inicio(n);
+                RESULT.ejecutar(null,entrada);            
+            :};
+
+CUERPO_GXML  ::=    CUERPO_GXML:n1 SENTENCIA_IMPORTAR:n2
+                    {:
+                        RESULT = n1;
+                        RESULT.add(n2);
+                    :}
+                    |CUERPO_GXML:n1 TAG_VENTANA:n2
+                    {:
+                        RESULT = n1;
+                        RESULT.add(n2);
+                    :}
+                    |SENTENCIA_IMPORTAR:n
+                    {:
+                        RESULT = new ArrayList<Instruccion>();
+                        RESULT.add(n);
+                    :}
+                    |TAG_VENTANA:n
+                    {:
+                        RESULT = new ArrayList<Instruccion>();
+                        RESULT.add(n);
+                    :}; 
+
+
+/***************************************SENTENCIA IMPORTAR***************************************************/
+SENTENCIA_IMPORTAR ::=  s_less r_importar:n1 s_greather contenido_tag:n2 s_less s_div r_importar s_greather
+                        {:
+                            RESULT = new Sentencia_Importar(n2,n1right,n1left);
+                        :};
+
+/***************************************CREAR VENTANAS***************************************************/
+TAG_VENTANA ::= s_less:n1 r_ventana LISTA_ELEMENTOS:n2  s_greather LISTA_CONTENIDO_VENTANA s_less s_div r_ventana s_greather
+                {:
+                    RESULT = new Sentencia_Ventana(n2,n1right,n1left);
+                :}
+                |s_less:n1 r_ventana LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_ventana s_greather
+                {:
+                    RESULT = new Sentencia_Ventana(n2,n1right,n1left);
+                :};
+
+/***************************************CONTENIDO VENTANAS***************************************************/
+LISTA_CONTENIDO_VENTANA  ::=    LISTA_CONTENIDO_VENTANA:n1 CONTENIDO_VENTANA:n2
+                                {:
+                                    RESULT = n1;
+                                    RESULT.add(n2);
+                                :}
+                                |CONTENIDO_VENTANA:n
+                                {:
+                                    RESULT = new ArrayList<Instruccion>();
+                                    RESULT.add(n);
+                                :};    
+
+CONTENIDO_VENTANA  ::=  TAG_CONTENEDOR:n
+                        {:
+                            RESULT = n;
+                        :};
+
+TAG_CONTENEDOR ::= s_less:n1 r_contenedor LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_contenedor s_greather
+                {:
+                    RESULT = new Sentencia_Contenedor(n2,n1right,n1left);
+                :};
+
+/***************************************ELEMENTOS DE LAS ETIQUETAS***************************************************/
+
+LISTA_ELEMENTOS ::= LISTA_ELEMENTOS:n1 ELEMENTO:n2
+                    {:
+                        RESULT = n1;
+                        RESULT.add(n2);
+                    :}
+                    |ELEMENTO:n
+                    {:
+                        RESULT = new ArrayList<GXML_Elemento>();
+                        RESULT.add(n);
+                    :};
+
+ELEMENTO   ::=  ELEMENTO_ID:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_TIPO:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_COLOR:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_ACCIONINICIAL:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_ACCIONFINAL:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_POSX:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_POSY:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_ALTO:n  
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_ANCHO:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_BORDE:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_FUENTE:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_TAM:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_NEGRITA:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_CURSIVA:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_TEXTO:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_NUMERICO:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_TEXTOAREA:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_DESPLEGABLE:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_MAXIMO:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_MINIMO:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_ACCION:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_REFERENCIA:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_PATH:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_MUSICA:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_VIDEO:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_IMAGEN:n    
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_AUTOREPRODUCCION:n
+                {:
+                    RESULT = n;
+                :};                
+
+ELEMENTO_ID ::= r_id:n1 s_equal cadena:n2
+                {:
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                :};
+
+ELEMENTO_TIPO ::= r_tipo:n1 s_equal r_principal
+                {:
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, true, n1right, n1left);
+                :}
+                |r_tipo:n1 s_equal r_secundaria
+                {:
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, false, n1right, n1left);
+                :};                
+

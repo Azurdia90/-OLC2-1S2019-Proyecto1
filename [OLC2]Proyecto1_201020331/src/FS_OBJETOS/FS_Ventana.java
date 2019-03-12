@@ -15,24 +15,37 @@ import javax.swing.JFrame;
 public class FS_Ventana extends JFrame
 {
     private String identificador;
-    
-    private int pos_x;
-    private int pos_y;
+    private boolean tipo;
+    private int alto;
+    private int ancho;
     
     private Color color;
     
-    public FS_Ventana(String p_id, Integer p_x, Integer p_y, Color p_color)
+    
+    //CONSTRUCTOR PARA FS
+    public FS_Ventana(String p_id, Integer p_alto, Integer p_ancho, Color p_color)
     {        
         this.identificador = p_id;
-        this.pos_x = p_x;
-        this.pos_y = p_y;
+        this.alto = p_alto;
+        this.ancho = p_ancho;
         this.color = p_color;
         
         this.setTitle(identificador);
-        this.setSize(pos_x, pos_y);
-        this.setLocationRelativeTo(null);       
+        this.setSize(alto, ancho);     
         this.setBackground(color);       
         this.setVisible(false);  
+    }
+    //CONSTRUCTOR PARA FS
+    public FS_Ventana(String p_id, Boolean p_tipo)
+    {
+        this.identificador = p_id;
+        this.tipo = p_tipo;
+        this.alto = 700;
+        this.ancho =700;
+        
+        this.setTitle(identificador);
+        this.setSize(alto, ancho);
+        this.setVisible(false);   
     }
 
     public String getIdentificador() {
@@ -42,5 +55,37 @@ public class FS_Ventana extends JFrame
     public void setIdentificador(String identificador) {
         this.identificador = identificador;
     }
-            
+
+    public boolean isTipo() {
+        return tipo;
+    }
+
+    public void setTipo(boolean tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getAlto() {
+        return alto;
+    }
+
+    public void setAlto(int alto) {
+        this.alto = alto;
+    }
+
+    public int getAncho() {
+        return ancho;
+    }
+
+    public void setAncho(int ancho) {
+        this.ancho = ancho;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }        
+    
 }

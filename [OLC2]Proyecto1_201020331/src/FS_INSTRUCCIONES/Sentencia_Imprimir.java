@@ -66,11 +66,11 @@ public class Sentencia_Imprimir implements Instruccion
 
                     return nuevo_simbolo;
                 }
-                                
+                
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);                
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador("10-4");
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+                nuevo_simbolo.setIdentificador("10-4");                
                 nuevo_simbolo.setValor("Impresion realizada correctamente");  
                 
                 return nuevo_simbolo;
@@ -83,10 +83,10 @@ public class Sentencia_Imprimir implements Instruccion
         catch(Exception e)
         {            
             Simbolo nuevo_simbolo = new Simbolo();
-            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador( fila + " - " + columna);
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+            nuevo_simbolo.setIdentificador( fila + " - " + columna);            
             nuevo_simbolo.setValor("Impresion no fue realizada, error: " + e.getMessage());
 
             return nuevo_simbolo;

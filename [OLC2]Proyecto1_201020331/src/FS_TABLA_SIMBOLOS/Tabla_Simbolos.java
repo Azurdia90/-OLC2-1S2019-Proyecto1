@@ -28,6 +28,8 @@ public class Tabla_Simbolos
         this.tabla_funciones = new HashMap<String,FS_Funcion>();
         this.lista_instrucciones = new ArrayList<Instruccion>();
         this.mi_Stack = new Pila_Entornos();
+        Entorno entorno_global = new Entorno();
+        this.mi_Stack.Agregar(entorno_global);
     }
     
     /***************************METODOS PARA FUNCIONES******************************/
@@ -86,6 +88,9 @@ public class Tabla_Simbolos
         this.mi_Stack.vaciar();
         this.tabla_funciones.clear();
         this.lista_instrucciones.clear();
+        
+        Entorno entorno_global = new Entorno();
+        this.mi_Stack.Agregar(entorno_global);
     }            
     
     /**********************FIN METODOS PARA MANEJO TABLA SIMBOLOS***********************/

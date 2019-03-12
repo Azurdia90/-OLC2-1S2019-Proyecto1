@@ -45,8 +45,7 @@ public class Sentencia_Crear_Contenedor implements Instruccion
         this.ancho = new Expresion(nodo_sentencia.getHijos().get(2));
         this.borde = new Expresion(nodo_sentencia.getHijos().get(3));
         this.pos_x = new Expresion(nodo_sentencia.getHijos().get(4));
-        this.pos_y = new Expresion(nodo_sentencia.getHijos().get(5));
-        
+        this.pos_y = new Expresion(nodo_sentencia.getHijos().get(5));        
     }
     
     @Override

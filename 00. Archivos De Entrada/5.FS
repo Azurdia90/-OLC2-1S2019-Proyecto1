@@ -7,6 +7,8 @@ var boton_nuevo = contenedor_nuevo.crearBoton("Arial",10,"#FFFFFF",50,100,"boton
 boton_nuevo.AlClic(metodo1());
 ventana_nueva.alcargar();
 
+inicio.alcargar();
+
 funcion metodo1()
 {
     imprimir("hola si funciona el boton :)");

@@ -26,9 +26,9 @@ public class Entorno extends HashMap<String,Simbolo>
     
     public Simbolo Obtener(String key)
     {
-        if(this.containsKey(key))
+        if(this.containsKey(key.toLowerCase()))
         {
-            return this.get(key);
+            return this.get(key.toLowerCase());
         }
         else
         {
@@ -45,9 +45,9 @@ public class Entorno extends HashMap<String,Simbolo>
     public Simbolo Crear(String key,Simbolo nuevo_sim)
     {
         Simbolo sim_aux = null;
-        if(!this.containsKey(key))
+        if(!this.containsKey(key.toLowerCase()))
         {
-            this.put(key, nuevo_sim);
+            this.put(key.toLowerCase(), nuevo_sim);
             
             sim_aux = new Simbolo();
             sim_aux.setIdentificador("10-4");         

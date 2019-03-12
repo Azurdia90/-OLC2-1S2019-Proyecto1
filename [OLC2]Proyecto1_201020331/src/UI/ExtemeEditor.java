@@ -139,12 +139,20 @@ public class ExtemeEditor extends javax.swing.JFrame {
             {
                 this.jTPConsola.setText("");
                 ERRORES.Tabla_Errores.getInstance().clear();
-                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().Limpiar();                
-                FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
+                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().Limpiar();  
+                
+                /*FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
                 FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
                 sintactico_fs.setObjetoEntrada(entrada_actual);
                 sintactico_fs.setImportar(false);
-                sintactico_fs.parse();
+                sintactico_fs.parse();*/
+                
+                GXML_ANALIZADORES.Lexico_GXML lexico_gxml = new GXML_ANALIZADORES.Lexico_GXML(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
+                GXML_ANALIZADORES.Sintactico_GXML sintactico_gxml = new GXML_ANALIZADORES.Sintactico_GXML(lexico_gxml);
+                sintactico_gxml.setObjetoEntrada(entrada_actual);
+                sintactico_gxml.setImportar(false);
+                sintactico_gxml.parse();
+                
                 if(ERRORES.Tabla_Errores.getInstance().size() > 0)
                 {
                     ERRORES.Ventana_Errores mostrar_error = new ERRORES.Ventana_Errores();

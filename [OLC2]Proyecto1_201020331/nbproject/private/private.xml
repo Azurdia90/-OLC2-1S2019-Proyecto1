@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/FS_OBJETOS/FS_Arreglo.java</file>
-            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/FS_INSTRUCCIONES/Sentencia_Declaracion.java</file>
-            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/FS_OBJETOS/FS_Objeto.java</file>
-            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/FS_INSTRUCCIONES/Sentencia_Acceso.java</file>
-            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/FS_AST/AST_FS.java</file>
+            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/GXML_INSTRUCCION/Instruccion.java</file>
+            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/GXML_INSTRUCCION/Sentencia_Importar.java</file>
+            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/GXML_ANALIZADORES/Tabla_Simbolos_GXML_CUP.java</file>
+            <file>file:/C:/Users/Cristian%20Azurdia/OneDrive/Documentos/3.%20GitHub/-OLC2-1S2019-Proyecto1/%5BOLC2%5DProyecto1_201020331/src/GXML_ANALIZADORES/Sintactico_GXML.java</file>
         </group>
     </open-files>
 </project-private>

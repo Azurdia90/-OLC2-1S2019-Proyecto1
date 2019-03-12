@@ -9,12 +9,12 @@ var Ven_Inicio = CrearVentana("#ffffff",700,700,"hola");
 var Cont1_Inicio = Ven_Inicio.CrearContenedor(200, 200, "#ffffff", falso, 10, 10);
 
 ////////////////// Valores de Nombre
-cont1_inicio.CrearTexto("Arial", 14, "#000000", 10, 20, falso, falso, "Nombre");
-cont1_inicio.CrearCajaTexto(10, 100, "Arial", 14, "#000000", 40, 20, falso, falso, "Ingrese aqui su nombre", "CTNombre");
+Cont1_Inicio.CrearTexto("Arial", 14, "#000000", 10, 20, falso, falso, "Nombre");
+Cont1_Inicio.CrearCajaTexto(10, 100, "Arial", 14, "#000000", 40, 20, falso, falso, "Ingrese aqui su nombre", "CTNombre");
 
 ////////////////// Valores de Correo
-cont1_inicio.CrearTexto("Arial", 14, "#000000", 10, 50, falso, falso, "Correo");
-cont1_inicio.CrearCajaTexto(10, 100, "Arial", 14, "#000000", 40, 50, falso, falso, "Ingrese aqui su correo", "CTCorreo");
+Cont1_inicio.CrearTexto("Arial", 14, "#000000", 10, 50, falso, falso, "Correo");
+Cont1_Inicio.CrearCajaTexto(10, 100, "Arial", 14, "#000000", 40, 50, falso, falso, "Ingrese aqui su correo", "CTCorreo");
 
 /////////////////// Contenedor ContBtn
 var ContBtn_Inicio = Ven_Inicio.CrearContenedor(100, 200, "#ffffff", falso, 10, 220);
@@ -92,5 +92,5 @@ funcion CargarVentana_Inicio(){
 	Ven_Inicio.AlCargar();
 }
 
-Ven_Inicio.AlCargar(); 
 // Traduccion ventana principal
+Ven_Inicio.AlCargar(); 
