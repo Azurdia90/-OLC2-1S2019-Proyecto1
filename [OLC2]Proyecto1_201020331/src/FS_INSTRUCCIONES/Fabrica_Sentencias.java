@@ -111,6 +111,16 @@ public class Fabrica_Sentencias
             Sentencia_Crear_Area_Texto nuevo_area_texto = new Sentencia_Crear_Area_Texto(sentencia_ejecutar);
             return nuevo_area_texto;
         }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_CONTROL_NUMERICO"))
+        {
+            Sentencia_Crear_Control_Numerico nuevo_control_numerico = new Sentencia_Crear_Control_Numerico(sentencia_ejecutar);
+            return nuevo_control_numerico;
+        }        
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_DESPLEGABLE"))
+        {
+            Sentencia_Crear_Desplegable nuevo_desplegable = new Sentencia_Crear_Desplegable(sentencia_ejecutar);
+            return nuevo_desplegable;
+        }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_BOTON"))
         {
             Sentencia_Crear_Boton nuevo_boton = new Sentencia_Crear_Boton(sentencia_ejecutar);

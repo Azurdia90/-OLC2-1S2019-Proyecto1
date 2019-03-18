@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -9,23 +9,20 @@ import FS_OBJETOS.FS_Area_Texto;
 import FS_OBJETOS.FS_Boton;
 import FS_OBJETOS.FS_Caja_Texto;
 import FS_OBJETOS.FS_ComboBox;
-import FS_OBJETOS.FS_Contenedor;
 import FS_OBJETOS.FS_Spinner;
 import FS_OBJETOS.FS_Texto;
-import FS_OBJETOS.FS_Ventana;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import UI.ObjetoEntrada;
 import java.awt.Color;
 import java.util.ArrayList;
-import javax.swing.BorderFactory;
 
 /**
  *
  * @author Cristian Azurdia
  */
-public class Sentencia_Contenedor implements Instruccion
+public class Sentencia_Boton implements Instruccion
 {
     private int fila;
     private int columna;
@@ -34,44 +31,38 @@ public class Sentencia_Contenedor implements Instruccion
     private String id;
     private int posx;
     private int posy;
-
-    //opcionales
-    private Color color;
+    private String texto;
+    
+    //opcionales    
     private int ancho;
     private int alto;
-    private boolean borde;
-    
+    private String referencia;
+        
     private ArrayList<GXML_Elemento> lista_elementos;
-    private ArrayList<Instruccion> lista_contenido;
     
-    
-    //CONSTRUCTOR PARA VENTANA SIN NADA DE CONTENIDO
-    public Sentencia_Contenedor(ArrayList<GXML_Elemento> p_lista_elementos, int p_fila, int p_columna)
+    public Sentencia_Boton(ArrayList<GXML_Elemento> p_lista_elementos, String p_texto, int p_fila, int p_columna)
     {
         this.fila = p_fila;
         this.columna = p_columna;
-                
         this.lista_elementos = p_lista_elementos;
-        this.lista_contenido = new ArrayList<Instruccion>();
-    }
+        this.texto = p_texto;
+    }            
     
-    //CONSTRUCTOR PARA VENTANA CON CONTENIDO
-    public Sentencia_Contenedor(ArrayList<GXML_Elemento> p_lista_elementos, ArrayList<Instruccion> p_lista_contenido, int p_fila, int p_columna)
+    public Sentencia_Boton(ArrayList<GXML_Elemento> p_lista_elementos, int p_fila, int p_columna)
     {
         this.fila = p_fila;
         this.columna = p_columna;
-                
         this.lista_elementos = p_lista_elementos;
-        this.lista_contenido = p_lista_contenido;        
-    }
-
+        this.texto = "";
+    }   
+    
     private boolean cargar_principales()
     {
         boolean completo = false;
         int principal = 3;
         for(int i = 0; i < lista_elementos.size(); i++)
         {
-            if(lista_elementos.get(i).IsElementOrNot("id") && principal > 0)
+            if(lista_elementos.get(i).IsElementOrNot("nombre") && principal > 0)
             {
                 this.id = lista_elementos.get(i).getValor().toString();
                 principal--;
@@ -103,35 +94,16 @@ public class Sentencia_Contenedor implements Instruccion
         return completo;
     }
     
-    private boolean cargar_opcionales(FS_Contenedor contenedor_nuevo)
+    private boolean cargar_opcionales(FS_Boton boton_nuevo)
     {
         boolean completo = true;
         int principal = 4;
         for(int i = 0; i < lista_elementos.size(); i++)
         {
-            if(lista_elementos.get(i).IsElementOrNot("color") && principal > 0)
+            
+            if(lista_elementos.get(i).IsElementOrNot("alto") && principal > 0)
             {
-                try
-                {
-                    Color color = Color.decode(lista_elementos.get(i).getValor().toString());
-                    contenedor_nuevo.setBackground(color);
-                    contenedor_nuevo.repaint();                    
-                    completo = true;
-                    principal--;
-                }
-                catch(Exception e)
-                {
-                    return false;
-                }
-                
-                if(principal == 0)
-                {
-                    return true;
-                }
-            }
-            else if(lista_elementos.get(i).IsElementOrNot("alto") && principal > 0)
-            {
-                contenedor_nuevo.setAlto((Integer) lista_elementos.get(i).getValor());
+                boton_nuevo.setAlto((Integer) lista_elementos.get(i).getValor());           
                 completo = true;
                 principal--;                
                 if(principal == 0)
@@ -141,7 +113,7 @@ public class Sentencia_Contenedor implements Instruccion
             }
             else if(lista_elementos.get(i).IsElementOrNot("ancho") && principal > 0)
             {
-                contenedor_nuevo.setAncho((Integer) lista_elementos.get(i).getValor());            
+                boton_nuevo.setAncho((Integer) lista_elementos.get(i).getValor());           
                 completo = true;
                 principal--;                
                 if(principal == 0)
@@ -149,25 +121,31 @@ public class Sentencia_Contenedor implements Instruccion
                     return true;
                 }
             }
-            else if(lista_elementos.get(i).IsElementOrNot("borde") && principal > 0)
+            else if(lista_elementos.get(i).IsElementOrNot("referencia") && principal > 0)
             {
-                if( (Boolean)(lista_elementos.get(i).getValor()))
-                {
-                    contenedor_nuevo.setBorder(BorderFactory.createRaisedBevelBorder());           
-                }                
+                boton_nuevo.setReferencia(lista_elementos.get(i).getValor().toString());
                 completo = true;
-                principal--;                
+                principal--;
+                if(principal == 0)
+                {
+                    return true;
+                }
+            }            
+            else if(lista_elementos.get(i).IsElementOrNot("accion") && principal > 0)
+            {
+                //texto_nuevo.setItalic((Boolean) lista_elementos.get(i).getValor());
+                completo = true;
+                principal--;
                 if(principal == 0)
                 {
                     return true;
                 }
             }
-            else if(!(lista_elementos.get(i).IsElementOrNot("id") || lista_elementos.get(i).IsElementOrNot("x") || lista_elementos.get(i).IsElementOrNot("y")))
+            else if(!(lista_elementos.get(i).IsElementOrNot("nombre") || lista_elementos.get(i).IsElementOrNot("x") || lista_elementos.get(i).IsElementOrNot("y")))
             {
                return false;
             }
-        }
-        
+        }        
         return completo;
     }
     
@@ -179,20 +157,19 @@ public class Sentencia_Contenedor implements Instruccion
             boolean continuar = cargar_principales();
             if(continuar)
             {
-                FS_Contenedor contenedor_nuevo;
-                contenedor_nuevo = new FS_Contenedor(id,posx,posy);
+                FS_Boton boton_nuevo;
+                boton_nuevo = new FS_Boton(id,texto,posx,posy);
                 String traduccion = "";
-                Simbolo simbolo_contenedor = new Simbolo();
+                Simbolo simbolo_texto = new Simbolo();
                 
-                if(cargar_opcionales(contenedor_nuevo))
+                if(cargar_opcionales(boton_nuevo))
                 {
-                    traduccion = contenedor_nuevo.traducirContenedor(padre); 
-                    
-                    simbolo_contenedor.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    simbolo_contenedor.setRol(Tabla_Enums.tipo_Simbolo.objeto);
-                    simbolo_contenedor.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
-                    simbolo_contenedor.setIdentificador(id);            
-                    simbolo_contenedor.setValor(contenedor_nuevo);
+                    traduccion = boton_nuevo.traducirBoton(padre);
+                    simbolo_texto.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    simbolo_texto.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                    simbolo_texto.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                    simbolo_texto.setIdentificador(id);            
+                    simbolo_texto.setValor(boton_nuevo);;
                 }
                 else
                 {
@@ -201,28 +178,15 @@ public class Sentencia_Contenedor implements Instruccion
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                     nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-                    nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: la ventana tiene elementos adicionales o los ya existentes son incorrectos.");
+                    nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: El boton tiene elementos adicionales o los ya existentes son incorrectos.");
 
                     return nuevo_simbolo;
-                }                
-                
+                } 
+                                
                 if(!entorno_local.containsKey(id))
                 {
-                    entorno_local.Crear(id, simbolo_contenedor);
-                    
-                    for(int i = 0; i < lista_contenido.size(); i++)
-                    {
-                        Simbolo contenido_aux = lista_contenido.get(i).ejecutar(entorno_local, padre + "_cont_" + id);
-                        if(contenido_aux.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
-                        {
-                            return contenido_aux;                            
-                        }
-                        else 
-                        {
-                            traduccion += contenido_aux.getValor().toString();
-                        }                        
-                    }                            
-                    
+                    entorno_local.Crear(id, simbolo_texto);
+                                                                   
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
@@ -239,7 +203,7 @@ public class Sentencia_Contenedor implements Instruccion
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                     nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-                    nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: el contenedor " + id + " ya fue creado.");
+                    nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: la etiqueta texto " + id + " ya fue creada.");
 
                     return nuevo_simbolo;
                 }                    
@@ -251,7 +215,7 @@ public class Sentencia_Contenedor implements Instruccion
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-                nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: no cuenta con los elementos principales para su creación.");
+                nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: no cuenta con los elementos principales para su creación.");
 
                 return nuevo_simbolo;
             }            
@@ -263,12 +227,12 @@ public class Sentencia_Contenedor implements Instruccion
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-            nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: " + e.getMessage());
+            nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: " + e.getMessage());
 
             return nuevo_simbolo;
         }
     }
-        
+
     @Override
     public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
     {
@@ -277,19 +241,18 @@ public class Sentencia_Contenedor implements Instruccion
             boolean continuar = cargar_principales();
             if(continuar)
             {
-                FS_Contenedor contenedor_nuevo;
-                contenedor_nuevo = new FS_Contenedor(id,posx,posy);
-                
-                Simbolo simbolo_contenedor = new Simbolo();
-                if(cargar_opcionales(contenedor_nuevo))
+                FS_Boton boton_nuevo;
+                boton_nuevo = new FS_Boton(id,texto,posx,posy);
+
+                Simbolo simbolo_texto = new Simbolo();
+                if(cargar_opcionales(boton_nuevo))
                 {
-                    contenedor_nuevo.actualizarContenedor();
-                    
-                    simbolo_contenedor.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    simbolo_contenedor.setRol(Tabla_Enums.tipo_Simbolo.objeto);
-                    simbolo_contenedor.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
-                    simbolo_contenedor.setIdentificador(id);            
-                    simbolo_contenedor.setValor(contenedor_nuevo);
+                    boton_nuevo.actualizarBoton();
+                    simbolo_texto.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    simbolo_texto.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                    simbolo_texto.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                    simbolo_texto.setIdentificador(id);            
+                    simbolo_texto.setValor(boton_nuevo);;
                 }
                 else
                 {
@@ -298,62 +261,21 @@ public class Sentencia_Contenedor implements Instruccion
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                     nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-                    nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: la ventana tiene elementos adicionales o los ya existentes son incorrectos.");
+                    nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: El boton tiene elementos adicionales o los ya existentes son incorrectos.");
 
                     return nuevo_simbolo;
-                }                
-                
+                } 
+                                
                 if(!entorno_local.containsKey(id))
                 {
-                    entorno_local.Crear(id, simbolo_contenedor);
-                    
-                    for(int i = 0; i < lista_contenido.size(); i++)
-                    {
-                        Simbolo contenido_aux = lista_contenido.get(i).ejecutar(entorno_local, salida);
-                        if(contenido_aux.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
-                        {
-                            return contenido_aux;                            
-                        }
-                        else if(contenido_aux.getValor() instanceof FS_Contenedor)
-                        {
-                            contenedor_nuevo.add((FS_Contenedor)contenido_aux.getValor());
-                        }
-                        else if(contenido_aux.getValor() instanceof FS_Texto)
-                        {
-                            contenedor_nuevo.add((FS_Texto)contenido_aux.getValor());
-                        }
-                        else if(contenido_aux.getValor() instanceof FS_Caja_Texto)
-                        {
-                            contenedor_nuevo.add((FS_Caja_Texto)contenido_aux.getValor());
-                        }
-                        else if(contenido_aux.getValor() instanceof FS_Area_Texto)
-                        {
-                            contenedor_nuevo.add((FS_Area_Texto)contenido_aux.getValor());
-                        }
-                        else if(contenido_aux.getValor() instanceof FS_Spinner)
-                        {
-                            contenedor_nuevo.add((FS_Spinner)contenido_aux.getValor());
-                        }
-                        else if(contenido_aux.getValor() instanceof FS_ComboBox)
-                        {
-                            contenedor_nuevo.add((FS_ComboBox)contenido_aux.getValor());
-                        }
-                        else if(contenido_aux.getValor() instanceof FS_Boton)
-                        {
-                            contenedor_nuevo.add((FS_Boton)contenido_aux.getValor());
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }                            
-                    
+                    entorno_local.Crear(id, simbolo_texto);
+                                                                   
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
                     nuevo_simbolo.setIdentificador("10-4");            
-                    nuevo_simbolo.setValor(contenedor_nuevo);
+                    nuevo_simbolo.setValor(boton_nuevo);
 
                     return nuevo_simbolo;
                 }   
@@ -364,7 +286,7 @@ public class Sentencia_Contenedor implements Instruccion
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                     nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-                    nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: el contenedor " + id + " ya fue creado.");
+                    nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: la etiqueta texto " + id + " ya fue creada.");
 
                     return nuevo_simbolo;
                 }                    
@@ -376,7 +298,7 @@ public class Sentencia_Contenedor implements Instruccion
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-                nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: no cuenta con los elementos principales para su creación.");
+                nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: no cuenta con los elementos principales para su creación.");
 
                 return nuevo_simbolo;
             }            
@@ -388,10 +310,10 @@ public class Sentencia_Contenedor implements Instruccion
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setIdentificador( fila + " - " + columna);            
-            nuevo_simbolo.setValor("Creación de Contenedor no fue realizada, error: " + e.getMessage());
+            nuevo_simbolo.setValor("Creación del Boton no fue realizada, error: " + e.getMessage());
 
             return nuevo_simbolo;
-        }   
+        }    
     }
     
 }

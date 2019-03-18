@@ -12,6 +12,9 @@ import javax.swing.JOptionPane;
 import UI.ObjetoEntrada;
 import GXML_INSTRUCCION.*;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
+import FS_TABLA_SIMBOLOS.Entorno;
+import FS_TABLA_SIMBOLOS.Simbolo;
+import FS_AST.Nodo_AST_FS;
 
 parser code 
 {: 
@@ -19,6 +22,9 @@ parser code
 private ObjetoEntrada entrada;
 private ArrayList<Instruccion> lista_instrucciones;
 private boolean importar;
+
+private Entorno entorno_global;
+private Simbolo salida;
 
 public void setObjetoEntrada(ObjetoEntrada p_entrada)
 {
@@ -30,16 +36,6 @@ public ObjetoEntrada getObjetoEntrada()
     return entrada;
 }
 
-//public void setRaiz(Nodo_AST_FS p_raiz)
-//{
-    //raiz = p_raiz;
-//}
-
-//public Nodo_AST_FS getRaiz()
-//{
-    //return raiz;
-//}
-
 public void setImportar(boolean p_importar)
 {
     importar = p_importar;
@@ -50,16 +46,25 @@ public boolean getImportar()
     return importar;
 }
 
-//public void ejecutar_AST()
-//{
-    //if(raiz != null)
-    //{
-        //Grafica_AST_FS grafica = new Grafica_AST_FS(raiz);
-        //grafica.graficar_AST();
-        //AST_FS ejecutar = new AST_FS(raiz,entrada,importar);
-        //ejecutar.ejecutar_AST();
-    //}    
-//}
+public void setEntornoGlobal(Entorno p_Entorno_Global)
+{
+    entorno_global = p_Entorno_Global;
+}
+
+public Entorno getEntornoGlobal()
+{
+    return entorno_global;
+}
+
+public void setSalida(Simbolo p_salida)
+{
+    salida = p_salida;
+}
+
+public Simbolo getSalida()
+{
+    return salida;
+}
 
 /**Metodo al que se llama automáticamente ante algún error sintactico.*/ 
 public void syntax_error(Symbol s)
@@ -91,9 +96,10 @@ public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception
 :}
 
 //expresiones usadas en el lenguaje
+terminal String r_nulo;
 terminal String booleano;
-terminal String entero;
 terminal String decimal;
+terminal String entero;
 terminal String caracter;
 terminal String cadena;
 terminal String identificador;
@@ -102,12 +108,8 @@ terminal String contenido_tag;
 //simbolos utilizados en el lenguaje
 terminal String s_key_open;
 terminal String s_key_close;
-terminal String s_cor_open;
-terminal String s_cor_close;
-terminal String s_dobledot;
 terminal String s_dot;
 terminal String s_coma;
-terminal String s_dotcoma;
 
 //simbolos para expresiones
 terminal String s_par_open; 
@@ -136,7 +138,6 @@ terminal String r_importar;
 terminal String r_ventana;
 terminal String r_contenedor;
 terminal String r_texto;
-terminal String r_controlador;
 terminal String r_listadatos;
 terminal String r_dato;
 terminal String r_control;
@@ -148,8 +149,6 @@ terminal String r_enviar;
 //funciones parametros
 terminal String r_id;
 terminal String r_tipo;
-terminal String r_principal;
-terminal String r_secundaria;
 terminal String r_color;
 terminal String r_accioninicial;
 terminal String r_accionfinal;
@@ -163,9 +162,6 @@ terminal String r_fuente;
 terminal String r_tamano;
 terminal String r_negrita;
 terminal String r_cursiva;
-terminal String r_numerico;
-terminal String r_textoarea;
-terminal String r_desplegable;
 terminal String r_maximo;
 terminal String r_minimo;
 terminal String r_accion;
@@ -187,10 +183,20 @@ non terminal ArrayList<Instruccion> LISTA_CONTENIDO_VENTANA;
 non terminal Instruccion CONTENIDO_VENTANA;
 
 non terminal Instruccion TAG_CONTENEDOR;
+non terminal Instruccion TAG_TEXTO;
+non terminal Instruccion TAG_CONTROL;
+non terminal ArrayList<GXML_Elemento> CONTENIDO_CONTROL;
+non terminal GXML_Elemento TAG_DEFECTO;
+non terminal ArrayList<GXML_Elemento> TAG_LISTA_DATOS;
+non terminal ArrayList<GXML_Elemento> LISTA_DATOS;
+non terminal GXML_Elemento TAG_DATO;
+non terminal Instruccion TAG_BOTON;
+non terminal Instruccion TAG_ENVIAR;
 
 non terminal ArrayList<GXML_Elemento> LISTA_ELEMENTOS;
 non terminal GXML_Elemento ELEMENTO;
 non terminal GXML_Elemento ELEMENTO_ID;
+non terminal GXML_Elemento ELEMENTO_NOMBRE;
 non terminal GXML_Elemento ELEMENTO_TIPO;
 non terminal GXML_Elemento ELEMENTO_COLOR;
 non terminal GXML_Elemento ELEMENTO_ACCIONINICIAL;
@@ -218,13 +224,45 @@ non terminal GXML_Elemento ELEMENTO_VIDEO;
 non terminal GXML_Elemento ELEMENTO_IMAGEN;
 non terminal GXML_Elemento ELEMENTO_AUTOREPRODUCCION;
 
+non terminal Nodo_AST_FS SENTENCIA_LLAMADA;
+
+non terminal Nodo_AST_FS LISTA_EXPRESIONES;
+non terminal Nodo_AST_FS EXPRESION;
+non terminal Nodo_AST_FS EXPRESION_ARITMETICA;
+non terminal Nodo_AST_FS EXPRESION_UNARIA;
+non terminal Nodo_AST_FS EXPRESION_LOGICA;
+non terminal Nodo_AST_FS EXPRESION_RELACIONAL;
+non terminal Nodo_AST_FS DATO_PRIMITIVO;
+
+precedence	right 		s_equal;
+precedence  right  		identificador;
+
+precedence	left 		s_or;
+precedence 	left 		s_and; 
+precedence  left        s_compare, s_diferent;
+precedence  left        s_greather, s_greather_equal, s_less, s_less_equal;
+precedence  left        s_plus, s_minus;
+precedence  left        s_mul, s_div;
+precedence  left        s_mod, s_to;
+
+precedence  right       s_not; 
+precedence  right       s_dot; 
+precedence  right       s_increment, s_decrement;
+
 start with INICIO;
 
 INICIO ::=  CUERPO_GXML:n
             {:
-                JOptionPane.showMessageDialog(null,"Archivo reconozido exitosamentes");
-                RESULT = new Sentencia_Inicio(n);
-                RESULT.ejecutar(null,entrada);            
+                if(importar)
+                {
+                    RESULT = new Sentencia_Inicio(n,entrada,importar);
+                    salida = RESULT.ejecutar(entorno_global,"");
+                }
+                else
+                {
+                    RESULT = new Sentencia_Inicio(n,entrada,importar);
+                    RESULT.ejecutar(null,"");
+                }
             :};
 
 CUERPO_GXML  ::=    CUERPO_GXML:n1 SENTENCIA_IMPORTAR:n2
@@ -256,9 +294,9 @@ SENTENCIA_IMPORTAR ::=  s_less r_importar:n1 s_greather contenido_tag:n2 s_less 
                         :};
 
 /***************************************CREAR VENTANAS***************************************************/
-TAG_VENTANA ::= s_less:n1 r_ventana LISTA_ELEMENTOS:n2  s_greather LISTA_CONTENIDO_VENTANA s_less s_div r_ventana s_greather
+TAG_VENTANA ::= s_less:n1 r_ventana LISTA_ELEMENTOS:n2  s_greather LISTA_CONTENIDO_VENTANA:n3 s_less s_div r_ventana s_greather
                 {:
-                    RESULT = new Sentencia_Ventana(n2,n1right,n1left);
+                    RESULT = new Sentencia_Ventana(n2,n3,n1right,n1left);
                 :}
                 |s_less:n1 r_ventana LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_ventana s_greather
                 {:
@@ -280,11 +318,126 @@ LISTA_CONTENIDO_VENTANA  ::=    LISTA_CONTENIDO_VENTANA:n1 CONTENIDO_VENTANA:n2
 CONTENIDO_VENTANA  ::=  TAG_CONTENEDOR:n
                         {:
                             RESULT = n;
+                        :}
+                        |TAG_TEXTO:n
+                        {:
+                            RESULT = n;
+                        :}
+                        |TAG_CONTROL:n
+                        {:
+                            RESULT = n;
+                        :}
+                        |TAG_BOTON:n
+                        {:
+                            RESULT = n;
+                        :}
+                        |TAG_ENVIAR:n
+                        {:
+                            RESULT = n;
                         :};
 
-TAG_CONTENEDOR ::= s_less:n1 r_contenedor LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_contenedor s_greather
+TAG_CONTENEDOR ::=  s_less:n1 r_contenedor LISTA_ELEMENTOS:n2  s_greather LISTA_CONTENIDO_VENTANA:n3 s_less s_div r_contenedor s_greather
+                    {:
+                        RESULT = new Sentencia_Contenedor(n2,n3,n1right,n1left);
+                    :}
+                    |s_less:n1 r_contenedor LISTA_ELEMENTOS:n2  s_greather s_less s_div r_contenedor s_greather
+                    {:
+                        RESULT = new Sentencia_Contenedor(n2,n1right,n1left);
+                    :};
+
+TAG_TEXTO ::=   s_less:n1 r_texto LISTA_ELEMENTOS:n2  s_greather contenido_tag:n3 s_less s_div r_texto s_greather
                 {:
-                    RESULT = new Sentencia_Contenedor(n2,n1right,n1left);
+                    RESULT = new Sentencia_Texto(n2,n3,n1right,n1left);
+                :}
+                |s_less:n1 r_texto LISTA_ELEMENTOS:n2  s_greather s_less s_div r_texto s_greather
+                {:
+                    RESULT = new Sentencia_Texto(n2,n1right,n1left);
+                :};                    
+
+TAG_CONTROL ::= s_less:n1 r_control LISTA_ELEMENTOS:n2  s_greather CONTENIDO_CONTROL:n3 s_less s_div r_control s_greather
+                {:
+                    RESULT = new Sentencia_Controlador(n2,n3,n1right,n1left);
+                :}
+                |s_less:n1 r_control LISTA_ELEMENTOS:n2  s_greather s_less s_div r_control s_greather
+                {:
+                    RESULT = new Sentencia_Controlador(n2,n1right,n1left);
+                :};
+
+TAG_BOTON   ::= s_less:n1 r_boton LISTA_ELEMENTOS:n2  s_greather contenido_tag:n3 s_less s_div r_boton s_greather
+                {:
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                :}
+                |s_less:n1 r_boton LISTA_ELEMENTOS:n2  s_greather s_less r_texto ELEMENTO_NOMBRE s_greather contenido_tag:n3 s_less s_div r_texto s_greather s_less s_div r_boton s_greather
+                {:
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                :}
+                |s_less:n1 r_boton LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_boton s_greather
+                {:
+                    RESULT = new Sentencia_Boton(n2,n1right,n1left);
+                :};  
+
+TAG_ENVIAR   ::= s_less:n1 r_enviar LISTA_ELEMENTOS:n2  s_greather contenido_tag:n3 s_less s_div r_enviar s_greather
+                {:
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                :}
+                |s_less:n1 r_enviar LISTA_ELEMENTOS:n2  s_greather s_less r_texto ELEMENTO_NOMBRE s_greather contenido_tag:n3 s_less s_div r_texto s_greather s_less s_div r_enviar s_greather
+                {:
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                :}
+                |s_less:n1 r_enviar LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_enviar s_greather
+                {:
+                    RESULT = new Sentencia_Boton(n2,n1right,n1left);
+                :};                              
+
+CONTENIDO_CONTROL   ::= CONTENIDO_CONTROL:n2 TAG_DEFECTO:n1
+                        {:
+                            RESULT = n2;
+                            RESULT.add(n1);
+                        :}
+                        |CONTENIDO_CONTROL:n1 TAG_LISTA_DATOS:n2
+                        {:
+                            RESULT = n1;
+                            RESULT.addAll(n2);
+                        :}
+                        |TAG_LISTA_DATOS:n
+                        {:
+                            RESULT = n;
+                        :}
+                        |TAG_DEFECTO:n
+                        {:
+                            RESULT = new ArrayList<GXML_Elemento>();
+                            RESULT.add(n);
+                        :};
+
+TAG_DEFECTO  ::=    s_less:n1 r_defecto s_greather contenido_tag:n2 s_less s_div r_defecto s_greather                   
+                    {:
+                        RESULT = new GXML_Elemento("defecto", Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2, n1right, n1left);
+                    :};
+
+
+TAG_LISTA_DATOS  ::=    s_less:n1 r_listadatos s_greather LISTA_DATOS:n2 s_less s_div r_listadatos s_greather                   
+                        {:
+                            RESULT = n2;
+                        :}
+                        |s_less:n1 r_listadatos s_greather s_less s_div r_listadatos s_greather                   
+                        {:
+                            RESULT = new ArrayList<GXML_Elemento>();
+                        :};
+
+LISTA_DATOS  ::=    LISTA_DATOS:n1 TAG_DATO:n2
+                    {:
+                        RESULT = n1;
+                        RESULT.add(n2);
+                    :}
+                    |TAG_DATO:n
+                    {:
+                        RESULT = new ArrayList<GXML_Elemento>();
+                        RESULT.add(n);
+                    :};                        
+
+TAG_DATO  ::=  s_less:n1 r_dato s_greather contenido_tag:n2 s_less s_div r_dato s_greather  
+                {:
+                    RESULT = new GXML_Elemento("dato", Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2, n1right, n1left);
                 :};
 
 /***************************************ELEMENTOS DE LAS ETIQUETAS***************************************************/
@@ -301,6 +454,10 @@ LISTA_ELEMENTOS ::= LISTA_ELEMENTOS:n1 ELEMENTO:n2
                     :};
 
 ELEMENTO   ::=  ELEMENTO_ID:n
+                {:
+                    RESULT = n;
+                :}
+                |ELEMENTO_NOMBRE:n
                 {:
                     RESULT = n;
                 :}
@@ -409,17 +566,459 @@ ELEMENTO   ::=  ELEMENTO_ID:n
                     RESULT = n;
                 :};                
 
+
 ELEMENTO_ID ::= r_id:n1 s_equal cadena:n2
                 {:
                     RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
                 :};
 
-ELEMENTO_TIPO ::= r_tipo:n1 s_equal r_principal
+ELEMENTO_NOMBRE ::= r_nombre:n1 s_equal cadena:n2
                 {:
-                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, true, n1right, n1left);
-                :}
-                |r_tipo:n1 s_equal r_secundaria
-                {:
-                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, false, n1right, n1left);
-                :};                
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                :};
 
+ELEMENTO_TIPO ::=   r_tipo:n1 s_equal cadena:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                    :};      
+
+ELEMENTO_POSX ::=   r_posx:n1 s_equal entero:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Integer.parseInt(n2), n1right, n1left);
+                    :}
+                    |r_posx:n1 s_equal decimal:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.decimal, Double.parseDouble(n2), n1right, n1left);
+                    :};
+
+ELEMENTO_POSY ::=   r_posy:n1 s_equal entero:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Integer.parseInt(n2), n1right, n1left);
+                    :}
+                    |r_posy:n1 s_equal decimal:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.decimal, Double.parseDouble(n2), n1right, n1left);
+                    :};                    
+
+ELEMENTO_ANCHO ::=   r_alto:n1 s_equal entero:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Integer.parseInt(n2), n1right, n1left);
+                    :}
+                    |r_alto:n1 s_equal decimal:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.decimal, Double.parseDouble(n2), n1right, n1left);
+                    :};
+
+ELEMENTO_ALTO ::=   r_ancho:n1 s_equal entero:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Integer.parseInt(n2), n1right, n1left);
+                    :}
+                    |r_ancho:n1 s_equal decimal:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.decimal, Double.parseDouble(n2), n1right, n1left);
+                    :};   
+
+ELEMENTO_BORDE ::= r_borde:n1 s_equal booleano:n2
+                {:
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2.equalsIgnoreCase("verdadero") ? true : false, n1right, n1left);
+                :};  
+
+ELEMENTO_COLOR ::= r_color:n1 s_equal cadena:n2
+                {:
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                :};
+
+ELEMENTO_FUENTE ::= r_fuente:n1 s_equal cadena:n2
+                {:
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                :}; 
+
+ELEMENTO_NEGRITA ::= r_negrita:n1 s_equal booleano:n2
+                {:
+                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2.equalsIgnoreCase("verdadero") ? true : false, n1right, n1left);
+                :};                                 
+
+ELEMENTO_CURSIVA   ::=  r_cursiva:n1 s_equal booleano:n2
+                        {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2.equalsIgnoreCase("verdadero") ? true : false, n1right, n1left);
+                        :};  
+              
+ELEMENTO_MAXIMO ::= r_maximo:n1 s_equal entero:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Integer.parseInt(n2), n1right, n1left);
+                    :}
+                    |r_maximo:n1 s_equal decimal:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Double.parseDouble(n2), n1right, n1left);
+                    :};                                 
+
+ELEMENTO_MINIMO   ::=   r_minimo:n1 s_equal entero:n2
+                        {:
+                            RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, Integer.parseInt(n2), n1right, n1left);
+                        :}
+                        |r_minimo:n1 s_equal decimal:n2
+                        {:
+                            RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, Double.parseDouble(n2), n1right, n1left);
+                        :};      
+
+ELEMENTO_REFERENCIA ::= r_referencia:n1 s_equal cadena:n2
+                        {:
+                            RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                        :};                                    
+
+ELEMENTO_ACCIONINICIAL ::=  r_accioninicial:n1 s_equal s_key_open SENTENCIA_LLAMADA:n2 s_key_close
+                            {:
+                                RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.identificador, n2, n1right, n1left);
+                            :}; 
+
+ELEMENTO_ACCIONFINAL   ::=  r_accionfinal:n1 s_equal s_key_open SENTENCIA_LLAMADA:n2  s_key_close
+                            {:
+                                RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.identificador, n2, n1right, n1left);
+                            :}; 
+
+ELEMENTO_ACCION ::= r_accion:n1 s_equal s_key_open SENTENCIA_LLAMADA:n2 s_key_close
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.identificador, n2, n1right, n1left);
+                    :};    
+
+/*******************************************EXPRESIONES*******************************************************************************/
+SENTENCIA_LLAMADA   ::=  identificador:n1 s_par_open LISTA_EXPRESIONES:n2 s_par_close
+                         {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("SENTENCIA_LLAMADA");
+                            RESULT.setValor(n1);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                            RESULT.getHijos().add(n2);
+                         :}
+                         |identificador:n1 s_par_open s_par_close
+                         {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("SENTENCIA_LLAMADA");
+                            RESULT.setValor(n1);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                         :};
+
+/*******************************************EXPRESIONES*******************************************************************************/
+
+LISTA_EXPRESIONES ::=   LISTA_EXPRESIONES:n1 s_coma EXPRESION:n2 
+                        {:
+                            Nodo_AST_FS nodo_expresion = new Nodo_AST_FS();
+                            nodo_expresion.setEtiqueta("EXPRESION");
+                            nodo_expresion.setValor("");
+                            nodo_expresion.setFila(String.valueOf(n2right));
+                            nodo_expresion.setColumna(String.valueOf(n2left));
+                            nodo_expresion.getHijos().add(n2);
+
+                            RESULT = n1;
+                            RESULT.getHijos().add(nodo_expresion);
+                        :}
+                        |EXPRESION:n
+                        {:
+                            Nodo_AST_FS nodo_expresion = new Nodo_AST_FS();
+                            nodo_expresion.setEtiqueta("EXPRESION");
+                            nodo_expresion.setValor("");
+                            nodo_expresion.setFila(String.valueOf(nright));
+                            nodo_expresion.setColumna(String.valueOf(nleft));
+                            nodo_expresion.getHijos().add(n);
+
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("LISTA_EXPRESIONES");
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(nright));
+                            RESULT.setColumna(String.valueOf(nleft));
+                            RESULT.getHijos().add(nodo_expresion);
+                        :};
+
+
+EXPRESION ::=   EXPRESION_ARITMETICA:n
+                {:
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("EXPRESION_ARITMETICA");
+                    RESULT.setValor("");
+                    RESULT.setFila(String.valueOf(nright));
+                    RESULT.setColumna(String.valueOf(nleft));
+                    RESULT.getHijos().add(n);
+                :}
+                |EXPRESION_RELACIONAL:n
+                {:
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("EXPRESION_RELACIONAL");
+                    RESULT.setValor("");
+                    RESULT.setFila(String.valueOf(nright));
+                    RESULT.setColumna(String.valueOf(nleft));
+                    RESULT.getHijos().add(n);
+                :}
+                |EXPRESION_UNARIA:n
+                {:
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("EXPRESION_UNARIA");
+                    RESULT.setValor("");
+                    RESULT.setFila(String.valueOf(nright));
+                    RESULT.setColumna(String.valueOf(nleft));
+                    RESULT.getHijos().add(n);
+                :}
+                |EXPRESION_LOGICA:n  
+                {:
+                    RESULT = new Nodo_AST_FS();
+                    RESULT.setEtiqueta("EXPRESION_LOGICA");
+                    RESULT.setValor("");
+                    RESULT.setFila(String.valueOf(nright));
+                    RESULT.setColumna(String.valueOf(nleft));
+                    RESULT.getHijos().add(n);
+                :} 
+                |s_par_open  EXPRESION:n  s_par_close
+                {:
+                    RESULT = n;
+                :}               
+                |DATO_PRIMITIVO:n 
+                {:
+                    RESULT = n;
+                :};
+
+EXPRESION_ARITMETICA ::=    EXPRESION:n1 s_plus:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_minus:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_mul:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_div:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_mod:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_to:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_increment:o
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                            :}
+                            |EXPRESION:n1 s_decrement:o
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                            :};
+
+EXPRESION_UNARIA ::=    s_minus:o EXPRESION:n1
+                        {:                                
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta(o);
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                            RESULT.getHijos().add(n1);
+                        :}
+                        |s_plus:o EXPRESION:n1
+                        {:                                
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta(o);
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                            RESULT.getHijos().add(n1);
+                        :};
+
+EXPRESION_LOGICA ::=    EXPRESION:n1 s_or:o EXPRESION:n2
+                        {:                                
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta(o);
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                            RESULT.getHijos().add(n1);
+                            RESULT.getHijos().add(n2);
+                        :}
+                        |EXPRESION:n1 s_and:o EXPRESION:n2
+                        {:                                
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta(o);
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                            RESULT.getHijos().add(n1);
+                            RESULT.getHijos().add(n2);
+                        :}
+                        |s_not:o EXPRESION:n1
+                        {:                                
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta(o);
+                            RESULT.setValor("");
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));
+                            RESULT.getHijos().add(n1);
+                        :};
+
+EXPRESION_RELACIONAL ::=    EXPRESION:n1 s_greather:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_less:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_greather_equal:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_less_equal:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_compare:o EXPRESION:n2
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :}
+                            |EXPRESION:n1 s_diferent:o EXPRESION:n2   
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta(o);
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                                RESULT.getHijos().add(n2);
+                            :};                     
+  
+DATO_PRIMITIVO ::=  r_nulo:v
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta(Tabla_Enums.tipo_primitivo_Simbolo.nulo.toString());
+                        RESULT.setValor(v);
+                        RESULT.setFila(String.valueOf(vright));
+                        RESULT.setColumna(String.valueOf(vleft));
+                    :}
+                    |booleano:v
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta(Tabla_Enums.tipo_primitivo_Simbolo.booleano.toString());
+                        RESULT.setValor(v);
+                        RESULT.setFila(String.valueOf(vright));
+                        RESULT.setColumna(String.valueOf(vleft));
+                    :}
+                    |entero:v
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta(Tabla_Enums.tipo_primitivo_Simbolo.entero.toString());
+                        RESULT.setValor(v);
+                        RESULT.setFila(String.valueOf(vright));
+                        RESULT.setColumna(String.valueOf(vleft));
+                    :}
+                    |decimal:v
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta(Tabla_Enums.tipo_primitivo_Simbolo.decimal.toString());
+                        RESULT.setValor(v);
+                        RESULT.setFila(String.valueOf(vright));
+                        RESULT.setColumna(String.valueOf(vleft));
+                    :}
+                    |caracter:v
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta(Tabla_Enums.tipo_primitivo_Simbolo.caracter.toString());
+                        RESULT.setValor(v);
+                        RESULT.setFila(String.valueOf(vright));
+                        RESULT.setColumna(String.valueOf(vleft)); 
+                    :}
+                    |cadena:v
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta(Tabla_Enums.tipo_primitivo_Simbolo.cadena.toString());
+                        RESULT.setValor(v);
+                        RESULT.setFila(String.valueOf(vright));
+                        RESULT.setColumna(String.valueOf(vleft));
+                    :}
+                    |identificador:v
+                    {:
+                        RESULT = new Nodo_AST_FS();
+                        RESULT.setEtiqueta(Tabla_Enums.tipo_primitivo_Simbolo.identificador.toString());
+                        RESULT.setValor(v);
+                        RESULT.setFila(String.valueOf(vright));
+                        RESULT.setColumna(String.valueOf(vleft));
+                    :};                         

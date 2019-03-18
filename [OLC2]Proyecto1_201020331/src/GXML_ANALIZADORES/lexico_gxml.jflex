@@ -22,25 +22,18 @@ identificador = ({letra}|("_"{letra}))({letra}|"_"|{digito})*
 
 digito  = [0-9]    
 entero  = {digito}+
-decimal = {entero}"."{entero}
+decimal = {entero} "."{entero}
 
 cadena   = "\"" [^\"]* "\""                      
 caracter = "'" [^"'"] "'"
 booleano = "verdadero"|"falso"
+r_nulo     = "nulo"
 
-texto_script =  ("{") ("\n"|[^"}"])* ("}")
+
 contenido_tag= ([^"<"])+
-
-comentario_single =   ("##"([^"\n"]))*
-comentario_multi  =  ("#$"(" "|"\n"|[^*][^$])*"$#")
-
-
 
 s_key_open  = "{"
 s_key_close = "}"
-
-s_cor_open  = "["
-s_cor_close = "]"
 
 s_par_open       = "("
 s_par_close      = ")"
@@ -63,17 +56,14 @@ s_and            = "&&"
 s_not            = "!"
 s_equal          = "="
 
-s_dobledot = ":"
 s_dot      = "."
 s_coma     = ","
-s_dotcoma  = ";"
 
 //etiquetas
 r_importar       = "importar"
 r_ventana        = "ventana"
 r_contenedor     = "contenedor"
 r_texto          = "texto"
-r_controlador    = "controlador"
 r_listadatos     = "listadatos"
 r_dato           = "dato"  
 r_control        = "control"
@@ -85,8 +75,6 @@ r_enviar         = "enviar"
 //parametros
 r_id               = "id"
 r_tipo             = "tipo"
-r_principal        = "principal"
-r_secundaria       = "secundaria"
 r_color            = "color"
 r_accioninicial    = "accioninicial"
 r_accionfinal      = "accionfinal"
@@ -100,9 +88,6 @@ r_fuente           = "fuente"
 r_tamano           = "tam"
 r_negrita          = "negrita"         
 r_cursiva          = "cursiva" 
-r_numerico         = "numerico"
-r_textoarea        = "textoarea"
-r_desplegable      = "desplegable"
 r_maximo           = "maximo"
 r_minimo           = "minimo"
 r_accion           = "accion"
@@ -113,6 +98,8 @@ r_imagen           = "imagen"
 r_path             = "path" 
 r_autoreproduccion = "autoreproduccion"
 
+comentario_single = [#][#] [^\n]* [\n]
+comentario_multi = [#]"$" [^*]* "$"[#]
 
 %{
 //codigo que se utilizara en el analizador lexico
@@ -148,44 +135,39 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 %%
 
 //simbolos de operacion
-{s_par_open}                        {return new Symbol(Tabla_Simbolos_GXML_CUP.s_par_open, yycolumn,yyline, new String(yytext()));}
-{s_par_close}                       {return new Symbol(Tabla_Simbolos_GXML_CUP.s_par_close, yycolumn,yyline, new String(yytext()));}
-{s_cor_open}                        {return new Symbol(Tabla_Simbolos_GXML_CUP.s_cor_open, yycolumn,yyline, new String(yytext()));}
-{s_cor_close}                       {return new Symbol(Tabla_Simbolos_GXML_CUP.s_cor_close, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_par_open}             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_par_open, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_par_close}            {return new Symbol(Tabla_Simbolos_GXML_CUP.s_par_close, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{s_equal}                {return new Symbol(Tabla_Simbolos_GXML_CUP.s_equal, yycolumn,yyline, new String(yytext()));}
-{s_plus}                            {return new Symbol(Tabla_Simbolos_GXML_CUP.s_plus, yycolumn,yyline, new String(yytext()));}
-{s_minus}                           {return new Symbol(Tabla_Simbolos_GXML_CUP.s_minus, yycolumn,yyline, new String(yytext()));}
-{s_mul}                             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_mul, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_plus}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.s_plus, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_minus}                {return new Symbol(Tabla_Simbolos_GXML_CUP.s_minus, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_mul}                  {return new Symbol(Tabla_Simbolos_GXML_CUP.s_mul, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{s_div}                  {return new Symbol(Tabla_Simbolos_GXML_CUP.s_div, yycolumn,yyline, new String(yytext()));}
-{s_to}                              {return new Symbol(Tabla_Simbolos_GXML_CUP.s_to, yycolumn,yyline, new String(yytext()));}
-{s_mod}                             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_mod, yycolumn,yyline, new String(yytext()));}
-{s_increment}                       {return new Symbol(Tabla_Simbolos_GXML_CUP.s_increment, yycolumn,yyline, new String(yytext()));}
-{s_decrement}                       {return new Symbol(Tabla_Simbolos_GXML_CUP.s_decrement, yycolumn,yyline, new String(yytext()));}
-{s_compare}                         {return new Symbol(Tabla_Simbolos_GXML_CUP.s_compare, yycolumn,yyline, new String(yytext()));}
-{s_diferent}                        {return new Symbol(Tabla_Simbolos_GXML_CUP.s_diferent, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_to}                   {return new Symbol(Tabla_Simbolos_GXML_CUP.s_to, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_mod}                  {return new Symbol(Tabla_Simbolos_GXML_CUP.s_mod, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_increment}            {return new Symbol(Tabla_Simbolos_GXML_CUP.s_increment, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_decrement}            {return new Symbol(Tabla_Simbolos_GXML_CUP.s_decrement, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_compare}              {return new Symbol(Tabla_Simbolos_GXML_CUP.s_compare, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_diferent}             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_diferent, yycolumn,yyline, new String(yytext()));}
 
 <YYINITIAL>{s_less}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.s_less, yycolumn,yyline, new String(yytext()));}
-{s_less_equal}                      {return new Symbol(Tabla_Simbolos_GXML_CUP.s_less_equal, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_less_equal}           {return new Symbol(Tabla_Simbolos_GXML_CUP.s_less_equal, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{s_greather}             {texto_contenido = ""; yybegin(CA); return new Symbol(Tabla_Simbolos_GXML_CUP.s_greather, yycolumn,yyline, new String(yytext()));}
-{s_greather_equal}                  {return new Symbol(Tabla_Simbolos_GXML_CUP.s_greather_equal, yycolumn,yyline, new String(yytext()));}
-{s_or}                              {return new Symbol(Tabla_Simbolos_GXML_CUP.s_or, yycolumn,yyline, new String(yytext()));}
-{s_and}                             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_and, yycolumn,yyline, new String(yytext()));}
-{s_not}                             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_not, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_greather_equal}       {return new Symbol(Tabla_Simbolos_GXML_CUP.s_greather_equal, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_or}                   {return new Symbol(Tabla_Simbolos_GXML_CUP.s_or, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_and}                  {return new Symbol(Tabla_Simbolos_GXML_CUP.s_and, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_not}                  {return new Symbol(Tabla_Simbolos_GXML_CUP.s_not, yycolumn,yyline, new String(yytext()));}
 
 //simbolos del lenguaje
-{s_key_open}                        {return new Symbol(Tabla_Simbolos_GXML_CUP.s_key_open, yycolumn,yyline, new String(yytext()));}
-{s_key_close}                       {return new Symbol(Tabla_Simbolos_GXML_CUP.s_key_close, yycolumn,yyline, new String(yytext()));}
-{s_dobledot}                        {return new Symbol(Tabla_Simbolos_GXML_CUP.s_dobledot, yycolumn,yyline, new String(yytext()));}
-{s_dot}                             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_dot, yycolumn,yyline, new String(yytext()));}
-{s_coma}                            {return new Symbol(Tabla_Simbolos_GXML_CUP.s_coma, yycolumn,yyline, new String(yytext()));}
-{s_dotcoma}                         {return new Symbol(Tabla_Simbolos_GXML_CUP.s_dotcoma, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_key_open}             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_key_open, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_key_close}            {return new Symbol(Tabla_Simbolos_GXML_CUP.s_key_close, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_dot}                  {return new Symbol(Tabla_Simbolos_GXML_CUP.s_dot, yycolumn,yyline, new String(yytext()));}
+<YYINITIAL>{s_coma}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.s_coma, yycolumn,yyline, new String(yytext()));}
 
 //palabras reservadas etiquetas
 <YYINITIAL>{r_importar}             {return new Symbol(Tabla_Simbolos_GXML_CUP.r_importar, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_ventana}              {return new Symbol(Tabla_Simbolos_GXML_CUP.r_ventana, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_contenedor}           {return new Symbol(Tabla_Simbolos_GXML_CUP.r_contenedor, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_texto}                {return new Symbol(Tabla_Simbolos_GXML_CUP.r_texto, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_controlador}          {return new Symbol(Tabla_Simbolos_GXML_CUP.r_controlador, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_listadatos}           {return new Symbol(Tabla_Simbolos_GXML_CUP.r_listadatos, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_dato}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.r_dato, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_control}              {return new Symbol(Tabla_Simbolos_GXML_CUP.r_control, yycolumn,yyline, new String(yytext()));}
@@ -197,8 +179,6 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 //palabras reservadas de gxml
 <YYINITIAL>{r_id}                   {return new Symbol(Tabla_Simbolos_GXML_CUP.r_id, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_tipo}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.r_tipo, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_principal}            {return new Symbol(Tabla_Simbolos_GXML_CUP.r_principal, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_secundaria}           {return new Symbol(Tabla_Simbolos_GXML_CUP.r_secundaria, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_color}                {return new Symbol(Tabla_Simbolos_GXML_CUP.r_color, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_accioninicial}        {return new Symbol(Tabla_Simbolos_GXML_CUP.r_accioninicial, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_accionfinal}          {return new Symbol(Tabla_Simbolos_GXML_CUP.r_accionfinal, yycolumn,yyline, new String(yytext()));}
@@ -212,9 +192,6 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 <YYINITIAL>{r_tamano}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_tamano, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_negrita}              {return new Symbol(Tabla_Simbolos_GXML_CUP.r_negrita, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_cursiva}              {return new Symbol(Tabla_Simbolos_GXML_CUP.r_cursiva, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_numerico}             {return new Symbol(Tabla_Simbolos_GXML_CUP.r_numerico, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_textoarea}            {return new Symbol(Tabla_Simbolos_GXML_CUP.r_textoarea, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_desplegable}          {return new Symbol(Tabla_Simbolos_GXML_CUP.r_desplegable, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_maximo}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_maximo, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_minimo}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_minimo, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_accion}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_accion, yycolumn,yyline, new String(yytext()));}
@@ -226,6 +203,7 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 <YYINITIAL>{r_autoreproduccion}     {return new Symbol(Tabla_Simbolos_GXML_CUP.r_autoreproduccion, yycolumn,yyline, new String(yytext()));}
 
 //expresiones regulares tipo datos
+<YYINITIAL>{r_nulo}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.r_nulo, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{booleano}               {return new Symbol(Tabla_Simbolos_GXML_CUP.booleano, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{entero}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.entero, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{decimal}                {return new Symbol(Tabla_Simbolos_GXML_CUP.decimal, yycolumn,yyline, new String(yytext()));}

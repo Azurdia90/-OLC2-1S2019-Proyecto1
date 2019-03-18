@@ -55,6 +55,6 @@ public class GXML_Elemento
     //METODO QUE PERMITE VERIFICAR SI EL ELEMENTO CORRESPONDE O NO 
     public boolean IsElementOrNot(String p_nombre)
     {
-        return this.identificador.equals(p_nombre);
+        return this.identificador.equalsIgnoreCase(p_nombre);
     }//private boolean IsNodoOrNot(String p_nombre)      
 }

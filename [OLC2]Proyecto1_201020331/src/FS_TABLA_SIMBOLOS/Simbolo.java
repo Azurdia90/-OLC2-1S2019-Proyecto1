@@ -69,4 +69,9 @@ public class Simbolo
         this.rol = rol;
     }   
     
+    @Override
+    public String toString()
+    {
+        return this.valor.toString();
+    }
 }

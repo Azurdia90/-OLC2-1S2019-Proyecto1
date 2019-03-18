@@ -28,28 +28,18 @@ public class AST_FS
         this.entrada = p_entrada;
         this.raiz = p_raiz;
         this.importar = p_importar;
-        
-        if(p_importar)
-        {
-            entorno_global = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().peek();
-        }
-        else
-        {
-            entorno_global = new Entorno();     
-        }        
+        entorno_global = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().peek();      
     }    
     
     public void ejecutar_AST()
     {
         if(raiz.IsNodoOrNot("AST") && importar == false)
         {
-            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Agregar(entorno_global);
             this.primer_recorrido_AST(raiz.getHijos().get(0));
             this.segundo_recorrido_AST(raiz.getHijos().get(0));
             this.tercer_recorrido_AST(raiz.getHijos().get(0));
             this.cuarto_recorrido_AST(raiz.getHijos().get(0));
-            this.ejecutar_FS();
-            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+            this.ejecutar_FS();            
         }
         else if(raiz.IsNodoOrNot("AST") && importar == true)
         {

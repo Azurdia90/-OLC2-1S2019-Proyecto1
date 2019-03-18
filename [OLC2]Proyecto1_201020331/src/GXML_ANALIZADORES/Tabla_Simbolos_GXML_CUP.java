@@ -8,102 +8,90 @@ package GXML_ANALIZADORES;
 /** CUP generated class containing symbol constants. */
 public class Tabla_Simbolos_GXML_CUP {
   /* terminals */
-  public static final int r_accionfinal = 55;
-  public static final int s_cor_open = 11;
-  public static final int s_div = 22;
-  public static final int r_posy = 57;
-  public static final int r_posx = 56;
-  public static final int r_dato = 43;
-  public static final int s_dot = 14;
-  public static final int identificador = 7;
-  public static final int s_dobledot = 13;
-  public static final int r_texto = 40;
-  public static final int booleano = 2;
-  public static final int r_nombre = 61;
-  public static final int s_compare = 27;
-  public static final int cadena = 6;
-  public static final int s_equal = 36;
-  public static final int decimal = 4;
-  public static final int r_numerico = 66;
-  public static final int r_musica = 73;
-  public static final int r_ventana = 38;
-  public static final int s_greather = 30;
-  public static final int r_accion = 71;
-  public static final int s_and = 34;
-  public static final int r_imagen = 75;
-  public static final int r_path = 76;
-  public static final int r_desplegable = 68;
-  public static final int s_less_equal = 31;
-  public static final int caracter = 5;
-  public static final int s_or = 33;
-  public static final int r_tamano = 63;
-  public static final int s_greather_equal = 32;
-  public static final int s_par_close = 18;
-  public static final int s_less = 29;
-  public static final int r_id = 49;
-  public static final int contenido_tag = 8;
-  public static final int s_increment = 25;
-  public static final int s_minus = 20;
-  public static final int r_ancho = 59;
-  public static final int s_diferent = 28;
-  public static final int r_maximo = 69;
-  public static final int s_par_open = 17;
-  public static final int r_textoarea = 67;
-  public static final int r_control = 44;
-  public static final int r_borde = 60;
-  public static final int r_principal = 51;
-  public static final int s_to = 23;
-  public static final int r_defecto = 45;
-  public static final int r_alto = 58;
-  public static final int s_key_close = 10;
+  public static final int r_nulo = 2;
+  public static final int r_multimedia = 42;
+  public static final int r_texto = 37;
+  public static final int r_musica = 64;
+  public static final int r_alto = 52;
+  public static final int r_accionfinal = 49;
+  public static final int r_contenedor = 36;
+  public static final int r_posy = 51;
+  public static final int r_borde = 54;
+  public static final int r_posx = 50;
+  public static final int s_to = 20;
+  public static final int r_accion = 62;
+  public static final int r_maximo = 60;
+  public static final int identificador = 8;
+  public static final int r_boton = 43;
+  public static final int s_less = 26;
+  public static final int r_accioninicial = 48;
+  public static final int contenido_tag = 9;
+  public static final int r_imagen = 66;
+  public static final int caracter = 6;
+  public static final int s_not = 32;
+  public static final int s_and = 31;
+  public static final int r_ancho = 53;
+  public static final int s_par_close = 15;
+  public static final int r_video = 65;
+  public static final int r_defecto = 41;
+  public static final int s_plus = 16;
+  public static final int s_diferent = 25;
+  public static final int s_div = 19;
+  public static final int s_greather_equal = 29;
+  public static final int s_minus = 17;
+  public static final int r_referencia = 63;
+  public static final int r_id = 45;
+  public static final int r_control = 40;
   public static final int EOF = 0;
-  public static final int r_autoreproduccion = 77;
-  public static final int r_listadatos = 42;
-  public static final int s_key_open = 9;
-  public static final int r_boton = 47;
-  public static final int r_enviar = 48;
-  public static final int r_contenedor = 39;
-  public static final int s_dotcoma = 16;
-  public static final int r_color = 53;
-  public static final int s_not = 35;
-  public static final int r_controlador = 41;
-  public static final int r_minimo = 70;
+  public static final int s_dot = 12;
   public static final int error = 1;
-  public static final int r_negrita = 64;
-  public static final int s_cor_close = 12;
-  public static final int entero = 3;
-  public static final int r_multimedia = 46;
-  public static final int r_accioninicial = 54;
-  public static final int s_mul = 21;
-  public static final int s_mod = 24;
-  public static final int r_video = 74;
-  public static final int r_tipo = 50;
-  public static final int r_referencia = 72;
-  public static final int r_importar = 37;
-  public static final int r_fuente = 62;
-  public static final int r_secundaria = 52;
-  public static final int r_cursiva = 65;
-  public static final int s_decrement = 26;
-  public static final int s_coma = 15;
-  public static final int s_plus = 19;
+  public static final int s_coma = 13;
+  public static final int r_tipo = 46;
+  public static final int entero = 5;
+  public static final int r_importar = 34;
+  public static final int s_key_close = 11;
+  public static final int s_mul = 18;
+  public static final int r_fuente = 56;
+  public static final int s_compare = 24;
+  public static final int r_enviar = 44;
+  public static final int s_less_equal = 28;
+  public static final int r_path = 67;
+  public static final int r_dato = 39;
+  public static final int s_mod = 21;
+  public static final int s_increment = 22;
+  public static final int r_autoreproduccion = 68;
+  public static final int r_nombre = 55;
+  public static final int s_greather = 27;
+  public static final int s_par_open = 14;
+  public static final int s_equal = 33;
+  public static final int s_or = 30;
+  public static final int r_ventana = 35;
+  public static final int booleano = 3;
+  public static final int s_decrement = 23;
+  public static final int r_color = 47;
+  public static final int s_key_open = 10;
+  public static final int r_tamano = 57;
+  public static final int r_minimo = 61;
+  public static final int r_cursiva = 59;
+  public static final int decimal = 4;
+  public static final int cadena = 7;
+  public static final int r_negrita = 58;
+  public static final int r_listadatos = 38;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
+  "r_nulo",
   "booleano",
-  "entero",
   "decimal",
+  "entero",
   "caracter",
   "cadena",
   "identificador",
   "contenido_tag",
   "s_key_open",
   "s_key_close",
-  "s_cor_open",
-  "s_cor_close",
-  "s_dobledot",
   "s_dot",
   "s_coma",
-  "s_dotcoma",
   "s_par_open",
   "s_par_close",
   "s_plus",
@@ -128,7 +116,6 @@ public class Tabla_Simbolos_GXML_CUP {
   "r_ventana",
   "r_contenedor",
   "r_texto",
-  "r_controlador",
   "r_listadatos",
   "r_dato",
   "r_control",
@@ -138,8 +125,6 @@ public class Tabla_Simbolos_GXML_CUP {
   "r_enviar",
   "r_id",
   "r_tipo",
-  "r_principal",
-  "r_secundaria",
   "r_color",
   "r_accioninicial",
   "r_accionfinal",
@@ -153,9 +138,6 @@ public class Tabla_Simbolos_GXML_CUP {
   "r_tamano",
   "r_negrita",
   "r_cursiva",
-  "r_numerico",
-  "r_textoarea",
-  "r_desplegable",
   "r_maximo",
   "r_minimo",
   "r_accion",

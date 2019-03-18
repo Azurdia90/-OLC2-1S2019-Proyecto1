@@ -1,7 +1,7 @@
 <Importar>
-/Funciones.fs
+C:\Users\Cristian Azurdia\OneDrive\Documentos\3. GitHub\-OLC2-1S2019-Proyecto1\00. Archivos De Entrada\Funciones.fs
 </Importar>
-<Ventana id = "Registrar" tipo = "Secundaria" AccionInicial = {MensajeBienvenida("Julio ")} AccionFinal = {MensajeDespedida("Julio" + " Arango")}>
+<Ventana id = "Registrar" tipo = "Secundaria" AccionInicial = {MensajeBienvenida("Julio ") } AccionFinal = {MensajeDespedida("Julio" + " Arango")}>
 	<Contenedor id = "ContRegistro"  x = 10 y = 10 Alto = 300 Ancho = 200>
 		<Texto Nombre = "lblNombre" X = 10 Y = 20>
 			Nombre:

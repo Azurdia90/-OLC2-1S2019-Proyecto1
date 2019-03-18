@@ -7,8 +7,10 @@ package FS_INSTRUCCIONES;
 
 import FS_AST.Nodo_AST_FS;
 import FS_EXPRESION.Expresion;
+import FS_OBJETOS.FS_Arreglo;
+import FS_OBJETOS.FS_ComboBox;
 import FS_OBJETOS.FS_Contenedor;
-import FS_OBJETOS.FS_Texto;
+import FS_OBJETOS.FS_Spinner;
 import FS_OBJETOS.FS_Ventana;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
@@ -20,79 +22,87 @@ import java.awt.Color;
  *
  * @author Cristian Azurdia
  */
-public class Sentencia_Crear_Texto implements Instruccion
+public class Sentencia_Crear_Desplegable implements Instruccion
 {
-    private int fila;
+        private int fila;
     private int columna;
     
     private String identificador;
-    private String cadena_color;
     
-    private Expresion fuente;
-    private Expresion tamaño;   
+    private Expresion alto;
+    private Expresion ancho;
+    private Expresion lista;
     private Expresion pos_x;
     private Expresion pos_y;
-    private Expresion bold;
-    private Expresion italic;
-    private Expresion valor_pre;
+    private Expresion defecto;
+    private Expresion nombre;
     
-    public Sentencia_Crear_Texto(Nodo_AST_FS nodo_sentencia)
+    public Sentencia_Crear_Desplegable(Nodo_AST_FS nodo_sentencia)
     {
         this.fila = Integer.parseInt(nodo_sentencia.getFila());
-        this.columna = Integer.parseInt(nodo_sentencia.getColumna());
+        this.columna =Integer.parseInt(nodo_sentencia.getColumna());
         
         this.identificador = nodo_sentencia.getValor();
         
-        this.cadena_color = nodo_sentencia.getHijos().get(0).getValor().substring(1,nodo_sentencia.getHijos().get(0).getValor().length()-1);
-        this.fuente =  new Expresion(nodo_sentencia.getHijos().get(1));
-        this.tamaño = new Expresion(nodo_sentencia.getHijos().get(2));
+        this.alto =  new Expresion(nodo_sentencia.getHijos().get(0));
+        this.ancho = new Expresion(nodo_sentencia.getHijos().get(1));                
+        this.lista = new Expresion(nodo_sentencia.getHijos().get(2));
         this.pos_x = new Expresion(nodo_sentencia.getHijos().get(3));
-        this.pos_y = new Expresion(nodo_sentencia.getHijos().get(4));
-        this.bold = new Expresion(nodo_sentencia.getHijos().get(5));
-        this.italic = new Expresion(nodo_sentencia.getHijos().get(6));
-        this.valor_pre = new Expresion(nodo_sentencia.getHijos().get(7));        
+        this.pos_y = new Expresion(nodo_sentencia.getHijos().get(4));        
+        this.defecto = new Expresion(nodo_sentencia.getHijos().get(5));     
+        this.nombre = new Expresion(nodo_sentencia.getHijos().get(6));
     }
-
+    
     @Override
     public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
     {
         try
         {
-            Simbolo contenedor;
-            
-            Color color = Color.decode(cadena_color);
+            Simbolo ventana;
                         
-            Simbolo fuente_r = fuente.ejecutar(entorno_local, salida);
-            Simbolo tamaño_r = tamaño.ejecutar(entorno_local, salida);
+            Simbolo alto_r = alto.ejecutar(entorno_local, salida);
+            Simbolo ancho_r = ancho.ejecutar(entorno_local, salida);
+            Simbolo lista_r = lista.ejecutar(entorno_local, salida);
             Simbolo pos_x_r = pos_x.ejecutar(entorno_local, salida);
             Simbolo pos_y_r = pos_y.ejecutar(entorno_local, salida);
-            Simbolo bold_r = bold.ejecutar(entorno_local, salida);
-            Simbolo italic_r = italic.ejecutar(entorno_local, salida);
-            Simbolo valor_pre_r = valor_pre.ejecutar(entorno_local, salida);
+            Simbolo defecto_r = defecto.ejecutar(entorno_local, salida);
+            Simbolo nombre_r = nombre.ejecutar(entorno_local, salida);            
             
-            if(fuente_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.cadena)
+            if(!(alto_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || alto_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, el tipo de fuente debe ser una cadena.");
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizada, la altura debe ser un valor numerico.");
 
                 return nuevo_simbolo;
             }
             
-            if(!(tamaño_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || tamaño_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
+            if(!(ancho_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || ancho_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, el tamaño de la fuente debe ser un valor numerico.");
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizada, el ancho debe ser un valor numerico.");
 
                 return nuevo_simbolo;
             }
+            
+            if(!(lista_r.getRol() == Tabla_Enums.tipo_Simbolo.arreglo &&  ((FS_Arreglo) lista_r.getValor()).getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.cadena))
+            {
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizada, la lista debe ser un arreglo de tipo cadana.");
+
+                return nuevo_simbolo;
+            }            
             
             if(!(pos_x_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || pos_x_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
@@ -101,7 +111,7 @@ public class Sentencia_Crear_Texto implements Instruccion
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, la posicion en x debe ser un valor numerico.");
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizada, la posicion en x debe ser un valor numerico.");
 
                 return nuevo_simbolo;
             }
@@ -113,81 +123,69 @@ public class Sentencia_Crear_Texto implements Instruccion
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, la posicion en y debe ser un valor numerico.");
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizada, la posicion en y debe ser un valor numerico.");
 
                 return nuevo_simbolo;
             }
-            
-            if(bold_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.booleano)
+                        
+            if(!(defecto_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.cadena))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, el parametro negrita debe ser tipo booleano.");
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizada, el valor por defecto debe ser una cadena.");
 
                 return nuevo_simbolo;
             }
             
-            if(italic_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.booleano)
+            if(!(nombre_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.cadena))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, el parametro cursiva debe ser tipo booleano.");
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizada, el nombre debe ser una cadena.");
 
                 return nuevo_simbolo;
             }
             
-            if(valor_pre_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.cadena)
+            FS_ComboBox nuevo_combobox = new FS_ComboBox(Integer.parseInt(alto_r.getValor().toString()), Integer.parseInt(ancho_r.getValor().toString()), ((FS_Arreglo) lista_r.getValor()), Integer.parseInt(pos_x_r.getValor().toString()), Integer.parseInt(pos_y_r.getValor().toString()), defecto_r.getValor().toString(), nombre_r.getValor().toString());
+            
+            
+            ventana = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,identificador);
+            
+            if(ventana.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
             {
-                Simbolo nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
-                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador( fila + " - " + columna);
-                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, el valor predeterminado debe ser tipo cadena.");
-
-                return nuevo_simbolo;
-            }
-            
-            FS_Texto nuevo_texto = new FS_Texto(fuente_r.getValor().toString(), Integer.parseInt(tamaño_r.getValor().toString()), color, Integer.parseInt(pos_x_r.getValor().toString()), Integer.parseInt(pos_y_r.getValor().toString()), bold_r.getValor().toString().equals("verdadero") ? true : false, italic_r.getValor().toString().equals("verdadero") ? true : false, valor_pre_r.getValor().toString());
-            
-            
-            contenedor = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,identificador);
-            
-            if(contenedor.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
-            {
-                return contenedor;
+                return ventana;
             }
             else
             {
-                if(contenedor.getRol() != Tabla_Enums.tipo_Simbolo.objeto)
+                if(ventana.getRol() != Tabla_Enums.tipo_Simbolo.objeto)
                 {
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                     nuevo_simbolo.setIdentificador( fila + " - " + columna);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                    nuevo_simbolo.setValor("Este evento es compatible únicamente con Objetos Contenedor.");    
+                    nuevo_simbolo.setValor("Este evento es compatible únicamente con Objetos Ventana o Contenedor.");    
                     return nuevo_simbolo;
                 }
                 else
                 {
-                    if(contenedor.getValor() instanceof FS_Ventana)
+                    if(ventana.getValor() instanceof FS_Ventana)
                     {
-                        FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
-                        contenedor_modificar.add(nuevo_texto);
-                        contenedor_modificar.repaint();
+                        FS_Ventana ventana_modificar = (FS_Ventana) ventana.getValor();
+                        ventana_modificar.add(nuevo_combobox);
+                        ventana_modificar.repaint();
                     }
-                    else if(contenedor.getValor() instanceof FS_Contenedor)
+                    else if(ventana.getValor() instanceof FS_Contenedor)
                     {
-                        FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
-                        contenedor_modificar.add(nuevo_texto);
-                        contenedor_modificar.repaint();                    
+                        FS_Contenedor contenedor_modificar = (FS_Contenedor) ventana.getValor();
+                        contenedor_modificar.add(nuevo_combobox);
+                        contenedor_modificar.repaint();
                     }
                     else
                     {
@@ -199,13 +197,13 @@ public class Sentencia_Crear_Texto implements Instruccion
                         nuevo_simbolo.setValor("Este evento es compatible únicamente con Objetos Ventana o Contenedor.");    
                         return nuevo_simbolo;
                     }
-                    
+                                        
                     Simbolo nuevo_simbolo = new Simbolo();
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                     nuevo_simbolo.setIdentificador("10-4");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                    nuevo_simbolo.setValor("El texto fue agregado correctamente");  
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                    nuevo_simbolo.setValor(nuevo_combobox);  
 
                     return nuevo_simbolo;
                 }                        
@@ -220,14 +218,10 @@ public class Sentencia_Crear_Texto implements Instruccion
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             if(e.getMessage().substring(0,17).equals("For input string:"))
             {
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, debe ingresar un color en hexadecimal.");
-            }
-            else
-            {
-                nuevo_simbolo.setValor("La Creación del Texto no fue realizada, error: " + e.getMessage());
+                nuevo_simbolo.setValor("La Creación del Desplegable no fue realizado, error: " + e.getMessage());
             }
 
             return nuevo_simbolo;
         }
-    }   
+    }
 }

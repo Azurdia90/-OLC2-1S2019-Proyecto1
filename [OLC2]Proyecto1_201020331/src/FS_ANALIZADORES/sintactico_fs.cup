@@ -225,6 +225,8 @@ non terminal Nodo_AST_FS SENTENCIA_CREAR_CONTENEDOR;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_TEXTO;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_AREA_TEXTO;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_CAJA_TEXTO;
+non terminal Nodo_AST_FS SENTENCIA_CREAR_CONTROL_NUMERICO;
+non terminal Nodo_AST_FS SENTENCIA_CREAR_DESPLEGABLE;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_BOTON;
 non terminal Nodo_AST_FS SENTENCIA_EVENTO_ALCLIC;
 non terminal Nodo_AST_FS SENTENCIA_EVENTO_ALCARGAR;
@@ -418,6 +420,14 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
                         RESULT = n;
                     :}
                     |SENTENCIA_CREAR_AREA_TEXTO:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_CREAR_CONTROL_NUMERICO:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_CREAR_DESPLEGABLE:n s_dotcoma
                     {:
                         RESULT = n;
                     :}
@@ -986,29 +996,85 @@ SENTENCIA_CREAR_AREA_TEXTO  ::= identificador:n1 s_dot r_crearareatexto s_par_op
                                 RESULT.getHijos().add(n12);
                             :};
 
+SENTENCIA_CREAR_CONTROL_NUMERICO  ::=   identificador:n1 s_dot r_crearcontrolnumerico s_par_open EXPRESION:n2 s_coma EXPRESION:n3 s_coma EXPRESION:n4 s_coma EXPRESION:n5 s_coma EXPRESION:n6 s_coma EXPRESION:n7 s_coma EXPRESION:n8 s_coma EXPRESION:n9 s_par_close
+                                        {:                                            
+                                            RESULT = new Nodo_AST_FS();
+                                            RESULT.setEtiqueta("SENTENCIA_CREAR_CONTROL_NUMERICO");
+                                            RESULT.setValor(n1);
+                                            RESULT.setFila(String.valueOf(n1right));
+                                            RESULT.setColumna(String.valueOf(n1left));
+                                            RESULT.getHijos().add(n2);
+                                            RESULT.getHijos().add(n3);
+                                            RESULT.getHijos().add(n4);
+                                            RESULT.getHijos().add(n5);
+                                            RESULT.getHijos().add(n6);
+                                            RESULT.getHijos().add(n7);
+                                            RESULT.getHijos().add(n8);
+                                            RESULT.getHijos().add(n9);
+                                            
+                                        :};    
+
+SENTENCIA_CREAR_DESPLEGABLE  ::=    identificador:n1 s_dot r_creardesplegable s_par_open EXPRESION:n2 s_coma EXPRESION:n3 s_coma EXPRESION:n4 s_coma EXPRESION:n5 s_coma EXPRESION:n6 s_coma EXPRESION:n7 s_coma EXPRESION:n8 s_par_close
+                                    {:                                            
+                                        RESULT = new Nodo_AST_FS();
+                                        RESULT.setEtiqueta("SENTENCIA_CREAR_DESPLEGABLE");
+                                        RESULT.setValor(n1);
+                                        RESULT.setFila(String.valueOf(n1right));
+                                        RESULT.setColumna(String.valueOf(n1left));
+                                        RESULT.getHijos().add(n2);
+                                        RESULT.getHijos().add(n3);
+                                        RESULT.getHijos().add(n4);
+                                        RESULT.getHijos().add(n5);
+                                        RESULT.getHijos().add(n6);
+                                        RESULT.getHijos().add(n7);
+                                        RESULT.getHijos().add(n8);
+                                    :};                                                                    
+
 SENTENCIA_CREAR_BOTON   ::= identificador:n1 s_dot r_crearboton s_par_open EXPRESION:n2 s_coma EXPRESION:n3 s_coma cadena:n4 s_coma EXPRESION:n5 s_coma EXPRESION:n6 s_coma EXPRESION:n7 s_coma EXPRESION:n8 s_coma EXPRESION:n9 s_coma EXPRESION:n10 s_par_close
-                        {:
-                            Nodo_AST_FS nodo_color = new Nodo_AST_FS();
-                            nodo_color.setEtiqueta("COLOR");
-                            nodo_color.setValor(n4);
-                            nodo_color.setFila(String.valueOf(n4right));
-                            nodo_color.setColumna(String.valueOf(n4left));
-                            
-                            RESULT = new Nodo_AST_FS();
-                            RESULT.setEtiqueta("SENTENCIA_CREAR_BOTON");
-                            RESULT.setValor(n1);
-                            RESULT.setFila(String.valueOf(n1right));
-                            RESULT.setColumna(String.valueOf(n1left));
-                            RESULT.getHijos().add(nodo_color);
-                            RESULT.getHijos().add(n2);
-                            RESULT.getHijos().add(n3);                                
-                            RESULT.getHijos().add(n5);
-                            RESULT.getHijos().add(n6);
-                            RESULT.getHijos().add(n7);
-                            RESULT.getHijos().add(n8);
-                            RESULT.getHijos().add(n9);
-                            RESULT.getHijos().add(n10);
-                        :};  
+                            {:  
+                                Nodo_AST_FS nodo_color = new Nodo_AST_FS();
+                                nodo_color.setEtiqueta("COLOR");
+                                nodo_color.setValor(n4);
+                                nodo_color.setFila(String.valueOf(n4right));
+                                nodo_color.setColumna(String.valueOf(n4left));                              
+                                RESULT = new Nodo_AST_FS();
+
+                                RESULT.setEtiqueta("SENTENCIA_CREAR_BOTON");
+                                RESULT.setValor(n1);
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(nodo_color);
+                                RESULT.getHijos().add(n2);
+                                RESULT.getHijos().add(n3);                                
+                                RESULT.getHijos().add(n5);
+                                RESULT.getHijos().add(n6);
+                                RESULT.getHijos().add(n7);
+                                RESULT.getHijos().add(n8);
+                                RESULT.getHijos().add(n9);
+                                RESULT.getHijos().add(n10);
+                            :}
+                            |identificador:n1 s_dot r_crearboton s_par_open EXPRESION:n2 s_coma EXPRESION:n3 s_coma cadena:n4 s_coma EXPRESION:n5 s_coma EXPRESION:n6 s_coma EXPRESION:n7 s_coma EXPRESION:n8 s_coma EXPRESION:n9 s_par_close
+                            {:
+                                Nodo_AST_FS nodo_color = new Nodo_AST_FS();
+                                nodo_color.setEtiqueta("COLOR");
+                                nodo_color.setValor(n4);
+                                nodo_color.setFila(String.valueOf(n4right));
+                                nodo_color.setColumna(String.valueOf(n4left));
+                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_CREAR_BOTON");
+                                RESULT.setValor(n1);
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(nodo_color);
+                                RESULT.getHijos().add(n2);
+                                RESULT.getHijos().add(n3);                                                                
+                                RESULT.getHijos().add(n5);
+                                RESULT.getHijos().add(n6);
+                                RESULT.getHijos().add(n7);
+                                RESULT.getHijos().add(n8);
+                                RESULT.getHijos().add(n9);
+                            :};  
 
 SENTENCIA_EVENTO_ALCLIC     ::= identificador:n1 s_dot r_clic s_par_open SENTENCIA_LLAMADA:n2  s_par_close
                             {:
@@ -1020,23 +1086,41 @@ SENTENCIA_EVENTO_ALCLIC     ::= identificador:n1 s_dot r_clic s_par_open SENTENC
                                 RESULT.getHijos().add(n2);
                             :};                                                                                                                                                             
 
-SENTENCIA_EVENTO_ALCARGAR   ::= identificador:n s_dot r_cargar s_par_open s_par_close
-                            {:
-                                RESULT = new Nodo_AST_FS();
-                                RESULT.setEtiqueta("SENTENCIA_EVENTO_ALCARGAR");
-                                RESULT.setValor(n);
-                                RESULT.setFila(String.valueOf(nright));
-                                RESULT.setColumna(String.valueOf(nleft));
-                            :};    
+SENTENCIA_EVENTO_ALCARGAR  ::=  identificador:n s_dot r_cargar s_par_open s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("SENTENCIA_EVENTO_ALCARGAR");
+                                    RESULT.setValor(n);
+                                    RESULT.setFila(String.valueOf(nright));
+                                    RESULT.setColumna(String.valueOf(nleft));
+                                :}
+                                | identificador:n1 s_dot r_cargar s_par_open SENTENCIA_LLAMADA:n2 s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("SENTENCIA_EVENTO_ALCARGAR");
+                                    RESULT.setValor(n1);
+                                    RESULT.setFila(String.valueOf(n1right));
+                                    RESULT.setColumna(String.valueOf(n1left));
+                                    RESULT.getHijos().add(n2);
+                                :};    
 
-SENTENCIA_EVENTO_ALCERRAR   ::= identificador:n s_dot r_cerrar s_par_open s_par_close
-                            {:
-                                RESULT = new Nodo_AST_FS();
-                                RESULT.setEtiqueta("SENTENCIA_EVENTO_ALCERRAR");
-                                RESULT.setValor(n);
-                                RESULT.setFila(String.valueOf(nright));
-                                RESULT.setColumna(String.valueOf(nleft));
-                            :};                                                    
+SENTENCIA_EVENTO_ALCERRAR  ::=  identificador:n s_dot r_cerrar s_par_open s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("SENTENCIA_EVENTO_ALCERRAR");
+                                    RESULT.setValor(n);
+                                    RESULT.setFila(String.valueOf(nright));
+                                    RESULT.setColumna(String.valueOf(nleft));
+                                :}
+                                |identificador:n1 s_dot r_cerrar s_par_open SENTENCIA_LLAMADA:n2 s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("SENTENCIA_EVENTO_ALCERRAR");
+                                    RESULT.setValor(n1);
+                                    RESULT.setFila(String.valueOf(n1right));
+                                    RESULT.setColumna(String.valueOf(n1left));
+                                    RESULT.getHijos().add(n2);
+                                :};                                                    
 
 //PRODUCCIONES AUXILIARES
 

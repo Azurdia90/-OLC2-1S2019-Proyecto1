@@ -10,6 +10,7 @@ import FS_EXPRESION.Expresion;
 import FS_OBJETOS.FS_Area_Texto;
 import FS_OBJETOS.FS_Caja_Texto;
 import FS_OBJETOS.FS_Contenedor;
+import FS_OBJETOS.FS_Ventana;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
@@ -222,10 +223,29 @@ public class Sentencia_Crear_Area_Texto implements Instruccion
                 }
                 else
                 {
-                    FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
-                    contenedor_modificar.add(nueva_area_texto);
-                    contenedor_modificar.repaint();
-                    
+                    if(contenedor.getValor() instanceof FS_Ventana)
+                    {
+                        FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
+                        contenedor_modificar.add(nueva_area_texto);
+                        contenedor_modificar.repaint();
+                    }
+                    else if(contenedor.getValor() instanceof FS_Contenedor)
+                    {
+                        FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
+                        contenedor_modificar.add(nueva_area_texto);
+                        contenedor_modificar.repaint();
+                    }
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setValor("Este evento es compatible únicamente con Objetos Ventana o Contenedor.");    
+                        return nuevo_simbolo;
+                    }
+                        
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);

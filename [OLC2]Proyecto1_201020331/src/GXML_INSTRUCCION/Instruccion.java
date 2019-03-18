@@ -5,6 +5,7 @@
  */
 package GXML_INSTRUCCION;
 
+import FS_OBJETOS.FS_Arreglo;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
 import UI.ObjetoEntrada;
@@ -15,6 +16,8 @@ import UI.ObjetoEntrada;
  */
 public interface Instruccion 
 {
+    //metodo que se implementaria en las traducciones
+    public Simbolo ejecutar(Entorno entorno_local,String padre);
     //metodo que se implementaria en las declaraciones, asignaciones, impresiones
     public Simbolo ejecutar(Entorno entorno_local,ObjetoEntrada salida);
 }
