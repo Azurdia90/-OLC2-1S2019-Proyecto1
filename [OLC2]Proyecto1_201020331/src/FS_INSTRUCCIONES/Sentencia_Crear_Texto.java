@@ -155,8 +155,7 @@ public class Sentencia_Crear_Texto implements Instruccion
             }
             
             FS_Texto nuevo_texto = new FS_Texto(fuente_r.getValor().toString(), Integer.parseInt(tamaño_r.getValor().toString()), color, Integer.parseInt(pos_x_r.getValor().toString()), Integer.parseInt(pos_y_r.getValor().toString()), bold_r.getValor().toString().equals("verdadero") ? true : false, italic_r.getValor().toString().equals("verdadero") ? true : false, valor_pre_r.getValor().toString());
-            
-            
+                        
             contenedor = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,identificador);
             
             if(contenedor.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
@@ -179,13 +178,15 @@ public class Sentencia_Crear_Texto implements Instruccion
                 {
                     if(contenedor.getValor() instanceof FS_Ventana)
                     {
-                        FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
-                        contenedor_modificar.add(nuevo_texto);
-                        contenedor_modificar.repaint();
+                        FS_Ventana ventana_modificar = (FS_Ventana) contenedor.getValor();
+                        ventana_modificar.getLista_componentes().add(nuevo_texto);
+                        ventana_modificar.add(nuevo_texto);
+                        ventana_modificar.repaint();
                     }
                     else if(contenedor.getValor() instanceof FS_Contenedor)
                     {
                         FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
+                        contenedor_modificar.getLista_componentes().add(nuevo_texto);
                         contenedor_modificar.add(nuevo_texto);
                         contenedor_modificar.repaint();                    
                     }

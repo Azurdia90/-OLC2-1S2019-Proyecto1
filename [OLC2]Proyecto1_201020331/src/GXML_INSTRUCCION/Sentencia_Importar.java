@@ -5,6 +5,7 @@
  */
 package GXML_INSTRUCCION;
 
+import FS_OBJETOS.FS_Arreglo;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
@@ -31,8 +32,7 @@ public class Sentencia_Importar implements Instruccion
     private File archivo_entrada;
     private BufferedReader bufer_lectura;
     private StringBuffer bufer_cadena;
-    
-    
+        
     public Sentencia_Importar(String p_path, int p_fila, int p_columna)
     {
         this.fila = p_fila;
@@ -58,8 +58,9 @@ public class Sentencia_Importar implements Instruccion
 
                 return nuevo_simbolo;                
             }
-            
-            archivo_entrada = new File(path);
+
+            archivo_entrada = new File(entrada.getPath_archivo() + path);
+                        
             if(archivo_entrada.exists())
             {
                 bufer_lectura = new BufferedReader(new FileReader(archivo_entrada));
@@ -92,7 +93,7 @@ public class Sentencia_Importar implements Instruccion
                 {
                     
                     if(path.substring(path.length() - 2, path.length()).equalsIgnoreCase("fs"))
-                    {                      
+                    {                                                                      
                         Simbolo nuevo_simbolo = new Simbolo();
                         nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
                         nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
@@ -104,11 +105,18 @@ public class Sentencia_Importar implements Instruccion
                     }
                     else if(path.substring(path.length() - 4, path.length()).equalsIgnoreCase("gxml"))
                     {
+                        ObjetoEntrada salida_importar = new ObjetoEntrada();
+                        salida_importar.setJTEntrada(entrada.getJTEntrada());
+                        salida_importar.setPath_archivo(entrada.getPath_archivo());
+                        salida_importar.setNombre_archivo(path.substring(path.length() - 2, path.length()));
+                        salida_importar.setExtesion_archivo("gxml");
+                        
                         GXML_ANALIZADORES.Lexico_GXML lexico_gxml = new GXML_ANALIZADORES.Lexico_GXML(new BufferedReader( new StringReader(cadena_analizar)));
                         GXML_ANALIZADORES.Sintactico_GXML sintactico_gxml = new GXML_ANALIZADORES.Sintactico_GXML(lexico_gxml);
-                        sintactico_gxml.setObjetoEntrada(entrada);                        
+                        sintactico_gxml.setObjetoEntrada(salida_importar);                        
                         sintactico_gxml.setEntornoGlobal(entorno_local);
                         sintactico_gxml.setImportar(true);
+                        sintactico_gxml.setTraducir(true);
                         sintactico_gxml.parse();   
                         
                         padre += sintactico_gxml.getSalida();
@@ -146,7 +154,7 @@ public class Sentencia_Importar implements Instruccion
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Importación no fue realizada, el archivo no existe");
+                nuevo_simbolo.setValor("La Importación no fue realizada, el archivo \"" + path + "\"  no existe");
 
                 return nuevo_simbolo; 
             }            
@@ -165,7 +173,7 @@ public class Sentencia_Importar implements Instruccion
     }
     
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) 
     {
         try
         {
@@ -181,7 +189,7 @@ public class Sentencia_Importar implements Instruccion
                 return nuevo_simbolo;                
             }
             
-            archivo_entrada = new File(path);
+            archivo_entrada = new File(salida.getPath_archivo() + path);
             if(archivo_entrada.exists())
             {
                 bufer_lectura = new BufferedReader(new FileReader(archivo_entrada));
@@ -215,29 +223,79 @@ public class Sentencia_Importar implements Instruccion
                     
                     if(path.substring(path.length() - 2, path.length()).equalsIgnoreCase("fs"))
                     {
+                        ObjetoEntrada salida_importar = new ObjetoEntrada();
+                        salida_importar.setJTEntrada(salida.getJTEntrada());
+                        salida_importar.setPath_archivo(salida.getPath_archivo());
+                        salida_importar.setNombre_archivo(path.substring(path.length() - 2, path.length()));
+                        salida_importar.setExtesion_archivo("fs");
+                        /*
                         FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader( new StringReader(cadena_analizar)));
                         FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
-                        sintactico_fs.setObjetoEntrada(salida);
+                        sintactico_fs.setObjetoEntrada(salida_importar);
                         sintactico_fs.setImportar(true);
-                        sintactico_fs.parse();   
+                        sintactico_fs.parse();
+                        */
+                        
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.arreglo);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setIdentificador("10-4");                        
+                        nuevo_simbolo.setValor(new FS_Arreglo());
+                    
+                        return nuevo_simbolo;
                     }
                     else if(path.substring(path.length() - 4, path.length()).equalsIgnoreCase("gxml"))
                     {
+                        ObjetoEntrada salida_importar = new ObjetoEntrada();
+                        salida_importar.setJTEntrada(salida.getJTEntrada());
+                        salida_importar.setPath_archivo(salida.getPath_archivo());
+                        salida_importar.setNombre_archivo(path.substring(path.length() - 4, path.length()));
+                        salida_importar.setExtesion_archivo("gxml");
+                        
                         GXML_ANALIZADORES.Lexico_GXML lexico_gxml = new GXML_ANALIZADORES.Lexico_GXML(new BufferedReader( new StringReader(cadena_analizar)));
                         GXML_ANALIZADORES.Sintactico_GXML sintactico_gxml = new GXML_ANALIZADORES.Sintactico_GXML(lexico_gxml);
-                        sintactico_gxml.setObjetoEntrada(salida);
+                        sintactico_gxml.setObjetoEntrada(salida_importar);
                         sintactico_gxml.setImportar(true);
+                        sintactico_gxml.setTraducir(false);
                         sintactico_gxml.parse();   
-                    }
-                                        
-                    Simbolo nuevo_simbolo = new Simbolo();
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("10-4");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                    nuevo_simbolo.setValor("La Importación fue realizada.");
+                        
+                        if(sintactico_gxml.getSalida().getValor() instanceof FS_Arreglo)
+                        {
+                            lista_componentes.addAll( (FS_Arreglo) sintactico_gxml.getSalida().getValor());
+                        }
+                        else
+                        {
+                            Simbolo nuevo_simbolo = new Simbolo();
+                            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                            nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                            nuevo_simbolo.setValor("Sentencia importar no fue realizada, error: existio un error durante la lectura.");
+                                
+                            return nuevo_simbolo;
+                        }
+                        
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.arreglo);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setIdentificador("10-4");                        
+                        nuevo_simbolo.setValor(lista_componentes);
                     
-                    return nuevo_simbolo; 
+                        return nuevo_simbolo;
+                    }
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                        nuevo_simbolo.setValor("Sentencia importar no fue realizada, error: extesión de archivo no reconocida.");
+
+                        return nuevo_simbolo;
+                    }
                 }
                 else
                 {
@@ -249,7 +307,7 @@ public class Sentencia_Importar implements Instruccion
                     nuevo_simbolo.setValor("La Importación no fue realizada, el archivo no tiene contenido.");
 
                     return nuevo_simbolo;
-                }
+                }                
             }
             else
             {
@@ -258,7 +316,7 @@ public class Sentencia_Importar implements Instruccion
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
                 nuevo_simbolo.setIdentificador( fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-                nuevo_simbolo.setValor("La Importación no fue realizada, el archivo no existe");
+                nuevo_simbolo.setValor("La Importación no fue realizada, el archivo \"" + path + "\"  no existe");
 
                 return nuevo_simbolo; 
             }            

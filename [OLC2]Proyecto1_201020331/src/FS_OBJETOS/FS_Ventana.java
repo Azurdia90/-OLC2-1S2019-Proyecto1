@@ -8,6 +8,7 @@ package FS_OBJETOS;
 import FS_AST.Nodo_AST_FS;
 import FS_INSTRUCCIONES.Instruccion;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 
 /**
@@ -29,6 +30,10 @@ public class FS_Ventana extends JFrame
     private Instruccion alcargar;
     private Instruccion alcerrar;
     
+    //PERMITIRA ALMACENAR TODOS LOS COMPONENTES QUE LE SON AGREGADOS PARA OBTENER
+    //INFORMACION QUE LUEGO SE IMPRIMIRA EN GFACE
+    private ArrayList<Object> lista_componentes;
+    
     //CONSTRUCTOR PARA FS
     public FS_Ventana(String p_id, Integer p_alto, Integer p_ancho, Color p_color)
     {        
@@ -40,6 +45,8 @@ public class FS_Ventana extends JFrame
         
         this.nodo_alcargar = null;
         this.nodo_alcerrar = null;
+        
+        this.lista_componentes = new ArrayList<Object>();
         
         this.setTitle(identificador);
         this.setSize(alto, ancho);     
@@ -58,6 +65,8 @@ public class FS_Ventana extends JFrame
         
         this.nodo_alcargar = null;
         this.nodo_alcerrar = null;
+        
+        this.lista_componentes = new ArrayList<Object>();
         
         this.setTitle(identificador);
         this.setSize(alto, ancho);
@@ -135,7 +144,15 @@ public class FS_Ventana extends JFrame
 
     public void setAlcerrar(Instruccion alcerrar) {
         this.alcerrar = alcerrar;
-    }       
+    }
+
+    public ArrayList<Object> getLista_componentes() {
+        return lista_componentes;
+    }
+
+    public void setLista_componentes(ArrayList<Object> lista_componentes) {
+        this.lista_componentes = lista_componentes;
+    }          
     
     public void actualizarVentana()
     {

@@ -742,7 +742,7 @@ public class Sentencia_Controlador implements Instruccion
     }
     
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) 
     {
         try
         {
@@ -873,9 +873,9 @@ public class Sentencia_Controlador implements Instruccion
 
                         Simbolo nuevo_simbolo = new Simbolo();
                         nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                        nuevo_simbolo.setIdentificador("10-4");            
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setIdentificador(id);            
                         nuevo_simbolo.setValor(textoarea_nueva);
 
                         return nuevo_simbolo;
@@ -939,9 +939,9 @@ public class Sentencia_Controlador implements Instruccion
 
                         Simbolo nuevo_simbolo = new Simbolo();
                         nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                        nuevo_simbolo.setIdentificador("10-4");            
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setIdentificador(id);            
                         nuevo_simbolo.setValor(spinner_nuevo);
 
                         return nuevo_simbolo;
@@ -983,9 +983,7 @@ public class Sentencia_Controlador implements Instruccion
                             simbolo_lista.setIdentificador("10-4");            
                             simbolo_lista.setValor(lista_contenido.get(i).getValor());
                             arreglo_aux.add(simbolo_lista);
-                        }
-                        
-
+                        }                        
                     }
                     
                     if(cargar_opcionales(combo_nuevo))
@@ -1019,9 +1017,9 @@ public class Sentencia_Controlador implements Instruccion
 
                         Simbolo nuevo_simbolo = new Simbolo();
                         nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                        nuevo_simbolo.setIdentificador("10-4");            
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setIdentificador(id);            
                         nuevo_simbolo.setValor(combo_nuevo);
 
                         return nuevo_simbolo;

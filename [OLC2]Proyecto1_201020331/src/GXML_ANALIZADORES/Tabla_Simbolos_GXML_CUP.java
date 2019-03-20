@@ -11,7 +11,6 @@ public class Tabla_Simbolos_GXML_CUP {
   public static final int r_nulo = 2;
   public static final int r_multimedia = 42;
   public static final int r_texto = 37;
-  public static final int r_musica = 64;
   public static final int r_alto = 52;
   public static final int r_accionfinal = 49;
   public static final int r_contenedor = 36;
@@ -26,13 +25,11 @@ public class Tabla_Simbolos_GXML_CUP {
   public static final int s_less = 26;
   public static final int r_accioninicial = 48;
   public static final int contenido_tag = 9;
-  public static final int r_imagen = 66;
   public static final int caracter = 6;
   public static final int s_not = 32;
   public static final int s_and = 31;
   public static final int r_ancho = 53;
   public static final int s_par_close = 15;
-  public static final int r_video = 65;
   public static final int r_defecto = 41;
   public static final int s_plus = 16;
   public static final int s_diferent = 25;
@@ -55,11 +52,11 @@ public class Tabla_Simbolos_GXML_CUP {
   public static final int s_compare = 24;
   public static final int r_enviar = 44;
   public static final int s_less_equal = 28;
-  public static final int r_path = 67;
+  public static final int r_path = 64;
   public static final int r_dato = 39;
   public static final int s_mod = 21;
   public static final int s_increment = 22;
-  public static final int r_autoreproduccion = 68;
+  public static final int r_autoreproduccion = 65;
   public static final int r_nombre = 55;
   public static final int s_greather = 27;
   public static final int s_par_open = 14;
@@ -142,9 +139,6 @@ public class Tabla_Simbolos_GXML_CUP {
   "r_minimo",
   "r_accion",
   "r_referencia",
-  "r_musica",
-  "r_video",
-  "r_imagen",
   "r_path",
   "r_autoreproduccion"
   };

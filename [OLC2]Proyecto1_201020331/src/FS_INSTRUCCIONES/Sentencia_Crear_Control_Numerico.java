@@ -202,12 +202,14 @@ public class Sentencia_Crear_Control_Numerico implements Instruccion
                     if(ventana.getValor() instanceof FS_Ventana)
                     {
                         FS_Ventana ventana_modificar = (FS_Ventana) ventana.getValor();
+                        ventana_modificar.getLista_componentes().add(nuevo_spinner);
                         ventana_modificar.add(nuevo_spinner);
                         ventana_modificar.repaint();
                     }
                     else if(ventana.getValor() instanceof FS_Contenedor)
                     {
                         FS_Contenedor contenedor_modificar = (FS_Contenedor) ventana.getValor();
+                        contenedor_modificar.getLista_componentes().add(nuevo_spinner);
                         contenedor_modificar.add(nuevo_spinner);
                         contenedor_modificar.repaint();
                     }

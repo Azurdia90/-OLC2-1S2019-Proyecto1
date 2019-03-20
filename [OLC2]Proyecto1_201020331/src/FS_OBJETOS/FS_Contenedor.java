@@ -6,8 +6,10 @@
 package FS_OBJETOS;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import jdk.nashorn.internal.runtime.ListAdapter;
 
 /**
  *
@@ -24,6 +26,10 @@ public class FS_Contenedor extends JPanel
     
     private boolean borde;
     
+    //PERMITIRA ALMACENAR TODOS LOS COMPONENTES QUE LE SON AGREGADOS PARA OBTENER
+    //INFORMACION QUE LUEGO SE IMPRIMIRA EN GFACE
+    private ArrayList<Object> lista_componentes;    
+    
     //CONSTRUCTOR PARA FS
     public FS_Contenedor(int p_alto, int p_ancho, Color p_color, boolean p_borde, int p_pos_x, int p_pos_y)
     {
@@ -35,15 +41,17 @@ public class FS_Contenedor extends JPanel
                                 
         this.color = p_color;
                 
+        this.lista_componentes = new ArrayList<Object>();
+        
         this.setBounds(pos_x,pos_y,ancho,alto);
-        this.setBackground(color);        
+        this.setBackground(color);                                
+        this.setVisible(true);
         
         if(borde)
         {
             this.setBorder(BorderFactory.createRaisedBevelBorder());
         }        
         
-        this.setVisible(true);
         this.repaint();
     }
     
@@ -57,10 +65,18 @@ public class FS_Contenedor extends JPanel
         this.ancho = 300;
         
         this.color = Color.WHITE;
-         
+        
+        this.lista_componentes = new ArrayList<Object>();
+        
         this.setBounds(pos_x,pos_y,ancho,alto);
         this.setBackground(color);
         this.setVisible(true);
+        
+        if(borde)
+        {
+            this.setBorder(BorderFactory.createRaisedBevelBorder());
+        }
+        
         this.repaint();
     }
 
@@ -112,13 +128,21 @@ public class FS_Contenedor extends JPanel
         this.pos_y = pos_y;
     }
 
-    public boolean isBorde() {
+    public boolean getBorde() {
         return borde;
     }
 
     public void setBorde(boolean borde) {
         this.borde = borde;
     }
+
+    public ArrayList<Object> getLista_componentes() {
+        return lista_componentes;
+    }
+
+    public void setLista_componentes(ArrayList<Object> lista_componentes) {
+        this.lista_componentes = lista_componentes;
+    }            
     
     public void actualizarContenedor()
     {

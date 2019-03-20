@@ -1,6 +1,6 @@
-importar("C:\Users\Cristian Azurdia\OneDrive\Documentos\3. GitHub\-OLC2-1S2019-Proyecto1\00. Archivos De Entrada\1.fs");
-importar("C:\Users\Cristian Azurdia\OneDrive\Documentos\3. GitHub\-OLC2-1S2019-Proyecto1\00. Archivos De Entrada\2.fs");
-importar("C:\Users\Cristian Azurdia\OneDrive\Documentos\3. GitHub\-OLC2-1S2019-Proyecto1\00. Archivos De Entrada\3.fs");
+importar("1.fs");
+importar("2.fs");
+importar("3.fs");
 
 imprimir(fibonacci (1));
 

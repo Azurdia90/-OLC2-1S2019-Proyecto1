@@ -24,7 +24,7 @@ import java.awt.Color;
  */
 public class Sentencia_Crear_Desplegable implements Instruccion
 {
-        private int fila;
+    private int fila;
     private int columna;
     
     private String identificador;
@@ -152,8 +152,7 @@ public class Sentencia_Crear_Desplegable implements Instruccion
                 return nuevo_simbolo;
             }
             
-            FS_ComboBox nuevo_combobox = new FS_ComboBox(Integer.parseInt(alto_r.getValor().toString()), Integer.parseInt(ancho_r.getValor().toString()), ((FS_Arreglo) lista_r.getValor()), Integer.parseInt(pos_x_r.getValor().toString()), Integer.parseInt(pos_y_r.getValor().toString()), defecto_r.getValor().toString(), nombre_r.getValor().toString());
-            
+            FS_ComboBox nuevo_combobox = new FS_ComboBox(Integer.parseInt(alto_r.getValor().toString()), Integer.parseInt(ancho_r.getValor().toString()), ((FS_Arreglo) lista_r.getValor()), Integer.parseInt(pos_x_r.getValor().toString()), Integer.parseInt(pos_y_r.getValor().toString()), defecto_r.getValor().toString(), nombre_r.getValor().toString());            
             
             ventana = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,identificador);
             
@@ -178,12 +177,14 @@ public class Sentencia_Crear_Desplegable implements Instruccion
                     if(ventana.getValor() instanceof FS_Ventana)
                     {
                         FS_Ventana ventana_modificar = (FS_Ventana) ventana.getValor();
+                        ventana_modificar.getLista_componentes().add(nuevo_combobox);
                         ventana_modificar.add(nuevo_combobox);
                         ventana_modificar.repaint();
                     }
                     else if(ventana.getValor() instanceof FS_Contenedor)
                     {
                         FS_Contenedor contenedor_modificar = (FS_Contenedor) ventana.getValor();
+                        contenedor_modificar.getLista_componentes().add(nuevo_combobox);
                         contenedor_modificar.add(nuevo_combobox);
                         contenedor_modificar.repaint();
                     }

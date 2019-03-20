@@ -7,6 +7,7 @@ package GXML_INSTRUCCION;
 
 import FS_AST.Nodo_AST_FS;
 import FS_OBJETOS.FS_Area_Texto;
+import FS_OBJETOS.FS_Arreglo;
 import FS_OBJETOS.FS_Boton;
 import FS_OBJETOS.FS_Caja_Texto;
 import FS_OBJETOS.FS_ComboBox;
@@ -279,7 +280,7 @@ public class Sentencia_Ventana implements Instruccion
     }
     
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) 
     {
         try
         {
@@ -318,51 +319,73 @@ public class Sentencia_Ventana implements Instruccion
                     
                     for(int i = 0; i < lista_contenido.size(); i++)
                     {
-                        Simbolo contenido_aux = lista_contenido.get(i).ejecutar(entorno_local, salida);
+                        Simbolo contenido_aux = lista_contenido.get(i).ejecutar(entorno_local, lista_componentes, salida);
                         if(contenido_aux.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
                         {
                             return contenido_aux;                            
                         }
                         else if(contenido_aux.getValor() instanceof FS_Contenedor)
                         {
+                            lista_componentes.add(contenido_aux);
+                            ventana_nueva.getLista_componentes().add(contenido_aux.getValor());
+                            ventana_nueva.getLista_componentes().addAll(((FS_Contenedor) contenido_aux.getValor()).getLista_componentes());
                             ventana_nueva.add((FS_Contenedor)contenido_aux.getValor());
                         }
                         else if(contenido_aux.getValor() instanceof FS_Texto)
                         {
+                            lista_componentes.add(contenido_aux);
+                            ventana_nueva.getLista_componentes().add(contenido_aux.getValor());
                             ventana_nueva.add((FS_Texto)contenido_aux.getValor());
                         }
                         else if(contenido_aux.getValor() instanceof FS_Caja_Texto)
                         {
+                            lista_componentes.add(contenido_aux);
+                            ventana_nueva.getLista_componentes().add(contenido_aux.getValor());
                             ventana_nueva.add((FS_Caja_Texto)contenido_aux.getValor());
                         }
                         else if(contenido_aux.getValor() instanceof FS_Area_Texto)
                         {
+                            lista_componentes.add(contenido_aux);
+                            ventana_nueva.getLista_componentes().add(contenido_aux.getValor());
                             ventana_nueva.add((FS_Area_Texto)contenido_aux.getValor());
                         }
                         else if(contenido_aux.getValor() instanceof FS_Spinner)
                         {
+                            lista_componentes.add(contenido_aux);
+                            ventana_nueva.getLista_componentes().add(contenido_aux.getValor());
                             ventana_nueva.add((FS_Spinner)contenido_aux.getValor());
                         }
                         else if(contenido_aux.getValor() instanceof FS_ComboBox)
                         {
+                            lista_componentes.add(contenido_aux);
+                            ventana_nueva.getLista_componentes().add(contenido_aux.getValor());
                             ventana_nueva.add((FS_ComboBox)contenido_aux.getValor());
                         }
                         else if(contenido_aux.getValor() instanceof FS_Boton)
                         {
+                            lista_componentes.add(contenido_aux);
+                            ventana_nueva.getLista_componentes().add(contenido_aux.getValor());
                             ventana_nueva.add((FS_Boton)contenido_aux.getValor());
                         }
                         else
                         {
-                            return null;
+                            Simbolo nuevo_simbolo = new Simbolo();
+                            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                            nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                            nuevo_simbolo.setValor("Creación de Ventana no fue realizada, error: Al la Ventana se le intentan agregar componentes adicionales o incorrectos.");
+
+                            return nuevo_simbolo;
                         }
                     }                            
                     
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                    nuevo_simbolo.setIdentificador("10-4");            
-                    nuevo_simbolo.setValor("Creación de Ventana fue realizada exitosamente.");
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                    nuevo_simbolo.setIdentificador(id);            
+                    nuevo_simbolo.setValor(ventana_nueva);
 
                     return nuevo_simbolo;
                 }   

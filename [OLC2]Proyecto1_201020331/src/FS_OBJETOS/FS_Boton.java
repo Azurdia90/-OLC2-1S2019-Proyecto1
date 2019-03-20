@@ -31,10 +31,12 @@ public class FS_Boton extends JButton
     private String texto;
     private String referencia;
     
+    private boolean enviar;
     private Sentencia_LLamada referencia_final;    
     
-    Font nueva_fuente;
-            
+    private Font nueva_fuente;    
+    
+    //CONSTRUCTOR PARA FS
     public FS_Boton(String p_fuente, int p_tamaño, Color p_color, int p_pos_x, int p_pos_y, Sentencia_LLamada p_referencia, String p_texto, int p_alto, int p_ancho, Entorno entorno_local, ObjetoEntrada salida)
     {
         this.id = "";
@@ -49,7 +51,8 @@ public class FS_Boton extends JButton
         this.referencia = "";
         this.referencia_final = p_referencia;
                
-        nueva_fuente = new Font(fuente, Font.PLAIN, tamaño);
+        this.enviar = false;
+        this.nueva_fuente = new Font(fuente, Font.PLAIN, tamaño);
         
         this.setFont(nueva_fuente);
         this.setText(texto);  
@@ -59,16 +62,23 @@ public class FS_Boton extends JButton
         
         this.addActionListener(new ActionListener() {
                                 public void actionPerformed(ActionEvent e) 
-                                {
+                                {                                    
+                                    // lista_fncions
+                                    // lista_ventanas ()
+                                    // lista_simbolos.obetner(id);
+                                    // .show()
+                                    //nodo_sentencia_llamada
+                                    //llamar_reccorrer_AST(nodo_sentencia_llamada);
                                     referencia_final.ejecutar(entorno_local, salida);  		
                                 }	
                                 });                                         
         this.repaint();
     }
     
-    public FS_Boton(String p_id, String p_texto, int p_posx, int p_posy)
+    //CONSTRUCTOR PARA GXML
+    public FS_Boton(String p_id, String p_texto, int p_posx, int p_posy , boolean p_enviar)
     {
-        this.id = "";
+        this.id = p_id;
         this.pos_x = p_posx;
         this.pos_y = p_posy;
         
@@ -80,6 +90,7 @@ public class FS_Boton extends JButton
         this.tamaño = 10;
         this.texto = p_texto;
         
+        this.enviar = p_enviar;
         this.referencia = "";
         this.referencia_final = null;
         
@@ -188,17 +199,39 @@ public class FS_Boton extends JButton
     public String traducirBoton(String padre)
     {
         String traduccion = "";
-        if(!referencia.equalsIgnoreCase(""))
+        if(enviar)
         {
-            traduccion += "Funcion Cargar_Ventana_" + referencia+"()\n{\n   vent_" + referencia + ".AlCargar(); \n}\n";
-            traduccion += padre + ".CrearBoton(\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() +"\", " + pos_x + ", " + pos_y  + ", Cargar_Ventana_" + referencia + "() , \"" + texto.trim() + "\", " +  alto + ", " + ancho + "); \n";
-            return traduccion;
-        }
+            if(!referencia.equalsIgnoreCase(""))
+            {
+                traduccion += "Funcion Cargar_Ventana_" + referencia+"()\n{\n   vent_" + referencia + ".AlCargar(); \n}\n";
+                traduccion += "var " + padre + "_btn_" + id + " = " + padre + ".CrearBoton(\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() +"\", " + pos_x + ", " + pos_y  + ", Cargar_Ventana_" + referencia + "() , \"" + texto.trim() + "\", " +  alto + ", " + ancho + "); \n";
+                traduccion += "Funcion Guardar_" + padre +"()\n{\n  " + padre + ".CrearArrayDesdeArchivo();\n}\n";
+                traduccion +=  padre + "_btn_" + id + ".AlClic( Guardar_" + padre + "() );\n";
+                return traduccion;
+            }
+            else
+            {
+                traduccion += "var " + padre + "_btn_" + id + " = " + padre + ".CrearBoton(\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() +"\", " + pos_x + ", " + pos_y  + ", \""  + texto.trim() + "\", " +  alto + ", " + ancho + "); \n";
+                traduccion += "Funcion Guardar_" + padre +"()\n{\n  " + padre + ".CrearArrayDesdeArchivo();\n}\n";
+                traduccion +=  padre + "_btn_" + id + ".AlClic( Guardar_" + padre + "() );\n";
+                return traduccion;
+            }
+        }    
         else
         {
-            traduccion += padre + ".CrearBoton(\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() +"\", " + pos_x + ", " + pos_y  + ", \""  + texto.trim() + "\", " +  alto + ", " + ancho + "); \n";
-            return traduccion;
+            if(!referencia.equalsIgnoreCase(""))
+            {
+                traduccion += "Funcion Cargar_Ventana_" + referencia+"()\n{\n   vent_" + referencia + ".AlCargar(); \n}\n";
+                traduccion += padre + ".CrearBoton(\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() +"\", " + pos_x + ", " + pos_y  + ", Cargar_Ventana_" + referencia + "() , \"" + texto.trim() + "\", " +  alto + ", " + ancho + "); \n";
+                return traduccion;
+            }
+            else
+            {
+                traduccion += padre + ".CrearBoton(\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() +"\", " + pos_x + ", " + pos_y  + ", \""  + texto.trim() + "\", " +  alto + ", " + ancho + "); \n";
+                return traduccion;
+            }
         }
+        
     }
     
     private String traducirColor()

@@ -92,9 +92,6 @@ r_maximo           = "maximo"
 r_minimo           = "minimo"
 r_accion           = "accion"
 r_referencia       = "referencia" 
-r_musica           = "musica"
-r_video            = "video"
-r_imagen           = "imagen"
 r_path             = "path" 
 r_autoreproduccion = "autoreproduccion"
 
@@ -196,9 +193,6 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 <YYINITIAL>{r_minimo}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_minimo, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_accion}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_accion, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_referencia}           {return new Symbol(Tabla_Simbolos_GXML_CUP.r_referencia, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_musica}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_musica, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_video}                {return new Symbol(Tabla_Simbolos_GXML_CUP.r_video, yycolumn,yyline, new String(yytext()));}
-<YYINITIAL>{r_imagen}               {return new Symbol(Tabla_Simbolos_GXML_CUP.r_imagen, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_path}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.r_path, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{r_autoreproduccion}     {return new Symbol(Tabla_Simbolos_GXML_CUP.r_autoreproduccion, yycolumn,yyline, new String(yytext()));}
 

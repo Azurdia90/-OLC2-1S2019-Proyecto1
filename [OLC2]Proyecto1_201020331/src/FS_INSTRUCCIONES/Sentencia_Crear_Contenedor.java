@@ -66,10 +66,10 @@ public class Sentencia_Crear_Contenedor implements Instruccion
             if(!(alto_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || alto_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);                
                 nuevo_simbolo.setValor("La Creación del Contenedor no fue realizada, la altura debe ser un valor numerico.");
 
                 return nuevo_simbolo;
@@ -78,22 +78,22 @@ public class Sentencia_Crear_Contenedor implements Instruccion
             if(!(ancho_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || ancho_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);                
                 nuevo_simbolo.setValor("La Creación del Contenedor no fue realizada, el ancho debe ser un valor numerico.");
-
+                
                 return nuevo_simbolo;
             }
             
             if(borde_r.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.booleano)
             {
                 Simbolo nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);                
                 nuevo_simbolo.setValor("La Creación del Contenedor no fue realizada, el borde debe ser un valor booleano.");
 
                 return nuevo_simbolo;
@@ -102,10 +102,10 @@ public class Sentencia_Crear_Contenedor implements Instruccion
             if(!(pos_x_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || pos_x_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);                
                 nuevo_simbolo.setValor("La Creación del Contenedor no fue realizada, la posicion en x debe ser un valor numerico.");
 
                 return nuevo_simbolo;
@@ -114,19 +114,17 @@ public class Sentencia_Crear_Contenedor implements Instruccion
             if(!(pos_y_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.entero || pos_y_r.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.decimal))
             {
                 Simbolo nuevo_simbolo = new Simbolo();
-                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);                
                 nuevo_simbolo.setValor("La Creación del Contenedor no fue realizada, la posicion en y debe ser un valor numerico.");
 
                 return nuevo_simbolo;
-            }
-            
+            }            
             
             FS_Contenedor nuevo_contenedor = new FS_Contenedor(Integer.parseInt(alto_r.getValor().toString()), Integer.parseInt(ancho_r.getValor().toString()), color, borde_r.getValor().toString().equals("verdadero") ? true : false, Integer.parseInt(pos_x_r.getValor().toString()), Integer.parseInt(pos_y_r.getValor().toString()));
-            
-            
+                        
             ventana = FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().obtener_Simbolo(entorno_local,identificador);
             
             if(ventana.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.error)
@@ -138,24 +136,25 @@ public class Sentencia_Crear_Contenedor implements Instruccion
                 if(ventana.getRol() != Tabla_Enums.tipo_Simbolo.objeto)
                 {
                     Simbolo nuevo_simbolo = new Simbolo();
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                    nuevo_simbolo.setIdentificador( fila + " - " + columna);                    
                     nuevo_simbolo.setValor("Este evento es compatible únicamente con Objetos Ventana.");    
                     return nuevo_simbolo;
                 }
                 else
                 {
                     FS_Ventana ventana_modificar = (FS_Ventana) ventana.getValor();
+                    ventana_modificar.getLista_componentes().add(nuevo_contenedor);
                     ventana_modificar.add(nuevo_contenedor);
                     ventana_modificar.repaint();
                     
                     Simbolo nuevo_simbolo = new Simbolo();
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("10-4");
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);                    
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                    nuevo_simbolo.setIdentificador("10-4");                    
                     nuevo_simbolo.setValor(nuevo_contenedor);  
 
                     return nuevo_simbolo;
@@ -165,10 +164,10 @@ public class Sentencia_Crear_Contenedor implements Instruccion
         catch(Exception e)
         {
             Simbolo nuevo_simbolo = new Simbolo();
-            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador( fila + " - " + columna);
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+            nuevo_simbolo.setIdentificador( fila + " - " + columna);            
             if(e.getMessage().substring(0,17).equals("For input string:"))
             {
                 nuevo_simbolo.setValor("La Creación del Contenedor no fue realizado, debe ingresar un color en hexadecimal.");

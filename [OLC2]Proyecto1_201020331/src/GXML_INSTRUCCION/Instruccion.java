@@ -19,5 +19,5 @@ public interface Instruccion
     //metodo que se implementaria en las traducciones
     public Simbolo ejecutar(Entorno entorno_local,String padre);
     //metodo que se implementaria en las declaraciones, asignaciones, impresiones
-    public Simbolo ejecutar(Entorno entorno_local,ObjetoEntrada salida);
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida);
 }

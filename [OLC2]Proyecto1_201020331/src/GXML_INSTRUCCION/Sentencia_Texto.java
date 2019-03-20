@@ -5,6 +5,7 @@
  */
 package GXML_INSTRUCCION;
 
+import FS_OBJETOS.FS_Arreglo;
 import FS_OBJETOS.FS_Contenedor;
 import FS_OBJETOS.FS_Texto;
 import FS_TABLA_SIMBOLOS.Entorno;
@@ -247,7 +248,7 @@ public class Sentencia_Texto implements Instruccion
     }
     
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) 
     {
         try
         {
@@ -286,9 +287,9 @@ public class Sentencia_Texto implements Instruccion
                                                                    
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                    nuevo_simbolo.setIdentificador("10-4");            
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                    nuevo_simbolo.setIdentificador(id);            
                     nuevo_simbolo.setValor(texto_nuevo);
 
                     return nuevo_simbolo;

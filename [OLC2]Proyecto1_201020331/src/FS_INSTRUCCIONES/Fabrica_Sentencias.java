@@ -86,6 +86,11 @@ public class Fabrica_Sentencias
             Sentencia_LLamada_Funciones_Arreglo nueva_llamada = new Sentencia_LLamada_Funciones_Arreglo(sentencia_ejecutar);
             return nueva_llamada;
         }    
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_LEER_GXML"))
+        {
+            Sentencia_Leer_GXML nuevo_leer_GXML = new Sentencia_Leer_GXML(sentencia_ejecutar);
+            return nuevo_leer_GXML;
+        }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_VENTANA"))
         {
             Sentencia_Crear_Ventana nuevo_crear_ventana = new Sentencia_Crear_Ventana(sentencia_ejecutar);
@@ -125,6 +130,18 @@ public class Fabrica_Sentencias
         {
             Sentencia_Crear_Boton nuevo_boton = new Sentencia_Crear_Boton(sentencia_ejecutar);
             return nuevo_boton;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_IMAGEN"))
+        {            
+            return null;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_REPRODUCTOR"))
+        {           
+            return null;
+        }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_VIDEO"))
+        {
+            return null;
         }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_EVENTO_ALCLIC"))
         {

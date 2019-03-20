@@ -181,7 +181,7 @@ public class AST_FS
         {
             String[] pos = simbolo_resultado.getIdentificador().split("-");
             ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
-            error_encontrado.setArchivo(entrada.getNombre_archivo());
+            error_encontrado.setArchivo(entrada.getNombre_archivo() + "." + entrada.getExtesion_archivo());
             error_encontrado.setIdentificador("Análisis Semantico FuncionScript");
             error_encontrado.setDescripcion(simbolo_resultado.getValor().toString());
             error_encontrado.setLinea(pos[0]);

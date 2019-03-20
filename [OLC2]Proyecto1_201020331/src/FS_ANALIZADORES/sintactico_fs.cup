@@ -210,7 +210,6 @@ non terminal Nodo_AST_FS LISTA_LLAMADAS_FUNCIONES_ARREGLO;
 non terminal Nodo_AST_FS FUNCION_ARREGLO;
 non terminal Nodo_AST_FS FUNCION_DESCENDENTE;
 non terminal Nodo_AST_FS FUNCION_ASCENDENTE;
-non terminal Nodo_AST_FS FUNCION_CREAR_DESDE_ARCHIVO;
 non terminal Nodo_AST_FS FUNCION_INVERTIR;
 non terminal Nodo_AST_FS FUNCION_MAXIMO;
 non terminal Nodo_AST_FS FUNCION_MINIMO;
@@ -220,6 +219,7 @@ non terminal Nodo_AST_FS FUNCION_MAP;
 non terminal Nodo_AST_FS FUNCION_REDUCE;
 non terminal Nodo_AST_FS FUNCION_TODOS;
 non terminal Nodo_AST_FS FUNCION_ALGUNO;
+non terminal Nodo_AST_FS SENTENCIA_LEER_GXML;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_VENTANA;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_CONTENEDOR;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_TEXTO;
@@ -228,9 +228,18 @@ non terminal Nodo_AST_FS SENTENCIA_CREAR_CAJA_TEXTO;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_CONTROL_NUMERICO;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_DESPLEGABLE;
 non terminal Nodo_AST_FS SENTENCIA_CREAR_BOTON;
+non terminal Nodo_AST_FS SENTENCIA_CREAR_IMAGEN;
+non terminal Nodo_AST_FS SENTENCIA_CREAR_REPRODUCTOR;
+non terminal Nodo_AST_FS SENTENCIA_CREAR_VIDEO;
+non terminal Nodo_AST_FS FUNCION_OBTENER_POR_ETIQUETA;
+non terminal Nodo_AST_FS FUNCION_OBTENER_POR_ID;
+non terminal Nodo_AST_FS FUNCION_OBTENER_POR_NOMBRE;
 non terminal Nodo_AST_FS SENTENCIA_EVENTO_ALCLIC;
 non terminal Nodo_AST_FS SENTENCIA_EVENTO_ALCARGAR;
 non terminal Nodo_AST_FS SENTENCIA_EVENTO_ALCERRAR;
+non terminal Nodo_AST_FS SENTENCIA_CREAR_DESDE_ARCHIVO;
+non terminal Nodo_AST_FS SENTENCIA_INCREMENTO;
+non terminal Nodo_AST_FS SENTENCIA_DECREMENTO;
 
 non terminal Nodo_AST_FS LISTA_PARAMETROS;
 non terminal Nodo_AST_FS LISTA_IDENTIFICADORES;
@@ -407,6 +416,10 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
                     {:
                         RESULT = n;
                     :}
+                    |SENTENCIA_LEER_GXML:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
                     |SENTENCIA_CREAR_CONTENEDOR:n s_dotcoma
                     {:
                         RESULT = n;
@@ -435,6 +448,18 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
                     {:
                         RESULT = n;
                     :}
+                    |SENTENCIA_CREAR_IMAGEN:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_CREAR_REPRODUCTOR:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_CREAR_VIDEO:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}                    
                     |SENTENCIA_EVENTO_ALCLIC:n s_dotcoma
                     {:
                         RESULT = n;
@@ -446,8 +471,19 @@ SENTENCIA   ::=     SENTENCIA_DECLARACION:n s_dotcoma
                     |SENTENCIA_EVENTO_ALCERRAR:n s_dotcoma
                     {:
                         RESULT = n;
+                    :}
+                    |SENTENCIA_CREAR_DESDE_ARCHIVO:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_INCREMENTO:n s_dotcoma
+                    {:
+                        RESULT = n;
+                    :}
+                    |SENTENCIA_DECREMENTO:n s_dotcoma 
+                    {:
+                        RESULT = n;
                     :};
-
 
 /*******************************************INSTRUCCCIONES****************************************************************************/
 
@@ -738,10 +774,6 @@ FUNCION_ARREGLO  ::= FUNCION_DESCENDENTE:n
                     {:
                         RESULT = n;
                     :}
-                    |FUNCION_CREAR_DESDE_ARCHIVO:n
-                    {:
-                        RESULT = n;
-                    :}
                     |FUNCION_INVERTIR:n
                     {:
                         RESULT = n;
@@ -777,6 +809,18 @@ FUNCION_ARREGLO  ::= FUNCION_DESCENDENTE:n
                     |FUNCION_ALGUNO:n
                     {:
                         RESULT = n;
+                    :}
+                    |FUNCION_OBTENER_POR_ETIQUETA:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_OBTENER_POR_ID:n
+                    {:
+                        RESULT = n;
+                    :}
+                    |FUNCION_OBTENER_POR_NOMBRE:n
+                    {:
+                        RESULT = n;
                     :};
 
 FUNCION_DESCENDENTE ::= r_descendente:n s_par_open s_par_close
@@ -796,15 +840,6 @@ FUNCION_ASCENDENTE ::= r_ascendente:n s_par_open s_par_close
                             RESULT.setFila(String.valueOf(nright));
                             RESULT.setColumna(String.valueOf(nleft));
                         :};
-
-FUNCION_CREAR_DESDE_ARCHIVO ::= r_creararray:n s_par_open cadena:n1 s_par_close
-                                {:
-                                    RESULT = new Nodo_AST_FS();
-                                    RESULT.setEtiqueta("FUNCION_CREAR_DESDE_ARCHIVO");
-                                    RESULT.setValor(n1);
-                                    RESULT.setFila(String.valueOf(nright));
-                                    RESULT.setColumna(String.valueOf(nleft));
-                                :};
 
 FUNCION_INVERTIR ::=    r_invertir:n s_par_open s_par_close
                         {:
@@ -885,8 +920,43 @@ FUNCION_ALGUNO ::=      r_alguno:n1 s_par_open identificador:n2 s_par_close
                             RESULT.setValor(n2);
                             RESULT.setFila(String.valueOf(n1right));
                             RESULT.setColumna(String.valueOf(n1left));
-                        :};                        
+                        :};     
 
+FUNCION_OBTENER_POR_ETIQUETA   ::=  r_obteneretiqueta:n1 s_par_open cadena:n2 s_par_close
+                                    {:
+                                        RESULT = new Nodo_AST_FS();
+                                        RESULT.setEtiqueta("FUNCION_OBTENER_POR_ETIQUETA");
+                                        RESULT.setValor(n2);
+                                        RESULT.setFila(String.valueOf(n1right));
+                                        RESULT.setColumna(String.valueOf(n1left));
+                                    :};
+
+FUNCION_OBTENER_POR_ID ::=  r_obtenerid:n1 s_par_open cadena:n2 s_par_close
+                            {:
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("FUNCION_OBTENER_POR_ID");
+                                RESULT.setValor(n2);
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                            :};
+
+FUNCION_OBTENER_POR_NOMBRE ::=  r_obtenernombre:n1 s_par_open cadena:n2 s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("FUNCION_OBTENER_POR_NOMBRE");
+                                    RESULT.setValor(n2);
+                                    RESULT.setFila(String.valueOf(n1right));
+                                    RESULT.setColumna(String.valueOf(n1left));
+                                :};
+
+SENTENCIA_LEER_GXML ::= r_leergxml:n1 s_par_open cadena:n2 s_par_close
+                        {:
+                            RESULT = new Nodo_AST_FS();
+                            RESULT.setEtiqueta("SENTENCIA_LEER_GXML");
+                            RESULT.setValor(n2);
+                            RESULT.setFila(String.valueOf(n1right));
+                            RESULT.setColumna(String.valueOf(n1left));                   
+                        :};
 
 SENTENCIA_CREAR_VENTANA    ::= r_crearventana:n1 s_par_open cadena:n2 s_coma EXPRESION:n3 s_coma EXPRESION:n4 s_coma EXPRESION:n5 s_par_close
                             {:
@@ -1076,6 +1146,47 @@ SENTENCIA_CREAR_BOTON   ::= identificador:n1 s_dot r_crearboton s_par_open EXPRE
                                 RESULT.getHijos().add(n9);
                             :};  
 
+SENTENCIA_CREAR_IMAGEN  ::= identificador:n1 s_dot r_crearimagen s_par_open EXPRESION:n2 s_coma EXPRESION:n3 s_coma EXPRESION:n4 s_coma EXPRESION:n5 s_coma EXPRESION:n6 s_par_close
+                            {:  
+                                RESULT.setEtiqueta("SENTENCIA_CREAR_IMAGEN");
+                                RESULT.setValor(n1);
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n2);
+                                RESULT.getHijos().add(n3);                                
+                                RESULT.getHijos().add(n4);
+                                RESULT.getHijos().add(n5);
+                                RESULT.getHijos().add(n6);
+                            :};
+
+SENTENCIA_CREAR_REPRODUCTOR    ::=  identificador:n1 s_dot r_crearreproductor s_par_open EXPRESION:n2 s_coma EXPRESION:n3 s_coma EXPRESION:n4 s_coma EXPRESION:n5 s_coma EXPRESION:n6 s_coma EXPRESION:n7 s_par_close
+                                    {:  
+                                        RESULT.setEtiqueta("SENTENCIA_CREAR_REPRODUCTOR");
+                                        RESULT.setValor(n1);
+                                        RESULT.setFila(String.valueOf(n1right));
+                                        RESULT.setColumna(String.valueOf(n1left));
+                                        RESULT.getHijos().add(n2);
+                                        RESULT.getHijos().add(n3);                                
+                                        RESULT.getHijos().add(n4);
+                                        RESULT.getHijos().add(n5);
+                                        RESULT.getHijos().add(n6);
+                                        RESULT.getHijos().add(n7);
+                                    :};                            
+
+SENTENCIA_CREAR_VIDEO  ::=  identificador:n1 s_dot r_crearvideo s_par_open EXPRESION:n2 s_coma EXPRESION:n3 s_coma EXPRESION:n4 s_coma EXPRESION:n5 s_coma EXPRESION:n6 s_coma EXPRESION:n7 s_par_close
+                            {:  
+                                RESULT.setEtiqueta("SENTENCIA_CREAR_VIDEO");
+                                RESULT.setValor(n1);
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n2);
+                                RESULT.getHijos().add(n3);                                
+                                RESULT.getHijos().add(n4);
+                                RESULT.getHijos().add(n5);
+                                RESULT.getHijos().add(n6);
+                                RESULT.getHijos().add(n7);
+                            :};                                            
+
 SENTENCIA_EVENTO_ALCLIC     ::= identificador:n1 s_dot r_clic s_par_open SENTENCIA_LLAMADA:n2  s_par_close
                             {:
                                 RESULT = new Nodo_AST_FS();
@@ -1120,7 +1231,24 @@ SENTENCIA_EVENTO_ALCERRAR  ::=  identificador:n s_dot r_cerrar s_par_open s_par_
                                     RESULT.setFila(String.valueOf(n1right));
                                     RESULT.setColumna(String.valueOf(n1left));
                                     RESULT.getHijos().add(n2);
-                                :};                                                    
+                                :};          
+
+SENTENCIA_CREAR_DESDE_ARCHIVO ::= identificador:n1 s_dot r_creararray:n s_par_open cadena s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("SENTENCIA_CREAR_DESDE_ARCHIVO");
+                                    RESULT.setValor(n1);
+                                    RESULT.setFila(String.valueOf(nright));
+                                    RESULT.setColumna(String.valueOf(nleft));
+                                :}
+                                |identificador:n1 s_dot r_creararray:n s_par_open s_par_close
+                                {:
+                                    RESULT = new Nodo_AST_FS();
+                                    RESULT.setEtiqueta("SENTENCIA_CREAR_DESDE_ARCHIVO");
+                                    RESULT.setValor(n1);
+                                    RESULT.setFila(String.valueOf(nright));
+                                    RESULT.setColumna(String.valueOf(nleft));
+                                :};                                                                          
 
 //PRODUCCIONES AUXILIARES
 
@@ -1207,6 +1335,42 @@ LISTA_SENTENCIAS_CASOS ::=   LISTA_SENTENCIAS_CASOS:n1 SENTENCIA_CASO:n2
                                     RESULT.setColumna(String.valueOf(nleft));
                                     RESULT.getHijos().add(n);
                                 :};                                                                 
+
+SENTENCIA_INCREMENTO   ::=  identificador:n1 s_increment 
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_INCREMENTO");
+                                RESULT.setValor(n1);
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                            :}
+                            |SENTENCIA_ACCESO:n1 s_increment
+                            {:
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_INCREMENTO");
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                            :};
+
+SENTENCIA_DECREMENTO  ::=   identificador:n1 s_decrement 
+                            {:                                
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_DECREMENTO");
+                                RESULT.setValor(n1);
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));   
+                            :}
+                            |SENTENCIA_ACCESO:n1 s_decrement
+                            {:
+                                RESULT = new Nodo_AST_FS();
+                                RESULT.setEtiqueta("SENTENCIA_DECREMENTO");
+                                RESULT.setValor("");
+                                RESULT.setFila(String.valueOf(n1right));
+                                RESULT.setColumna(String.valueOf(n1left));
+                                RESULT.getHijos().add(n1);
+                            :};
 
 /*******************************************EXPRESIONES*******************************************************************************/
 
@@ -1297,6 +1461,10 @@ EXPRESION ::=    EXPRESION_ARITMETICA:n
                     RESULT = n;
                 :}
                 |SENTENCIA_LLAMADA_FUNCIONES_ARREGLO:n
+                {:
+                    RESULT = n;
+                :}                
+                |SENTENCIA_LEER_GXML:n
                 {:
                     RESULT = n;
                 :}

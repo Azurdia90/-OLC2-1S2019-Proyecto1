@@ -6,10 +6,16 @@
 package UI;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -68,6 +74,11 @@ public class ExtemeEditor extends javax.swing.JFrame {
 
         jMIAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         jMIAbrir.setText("Abrir");
+        jMIAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIAbrirActionPerformed(evt);
+            }
+        });
         jMArchivo.add(jMIAbrir);
 
         jMIGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
@@ -132,43 +143,20 @@ public class ExtemeEditor extends javax.swing.JFrame {
     }//GEN-LAST:event_jMEjecutarMenuSelected
 
     private void jMEjecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMEjecutarMouseClicked
-        //JOptionPane.showMessageDialog(rootPane, "Holis!!");
-        
-        if(!entrada_actual.getJTEntrada().getText().equalsIgnoreCase("")){
-            try
-            {
-                this.jTPConsola.setText("");
-                ERRORES.Tabla_Errores.getInstance().clear();
-                FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().Limpiar();  
                 
-                /*FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
-                FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
-                sintactico_fs.setObjetoEntrada(entrada_actual);
-                sintactico_fs.setImportar(false);
-                sintactico_fs.parse();*/
-                
-                GXML_ANALIZADORES.Lexico_GXML lexico_gxml = new GXML_ANALIZADORES.Lexico_GXML(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
-                GXML_ANALIZADORES.Sintactico_GXML sintactico_gxml = new GXML_ANALIZADORES.Sintactico_GXML(lexico_gxml);
-                sintactico_gxml.setObjetoEntrada(entrada_actual);
-                sintactico_gxml.setImportar(false);
-                sintactico_gxml.parse();
-                
-                if(ERRORES.Tabla_Errores.getInstance().size() > 0)
-                {
-                    ERRORES.Ventana_Errores mostrar_error = new ERRORES.Ventana_Errores();
-                    mostrar_error.show();
-                }                  
-            }
-            catch(Exception e)
-            {
-                JOptionPane.showMessageDialog(this,"error: " + e.getMessage());
-            }
+        if(!entrada_actual.getJTEntrada().getText().equalsIgnoreCase(""))
+        {
+            compilar_entrada();
         }
         else
         {
             JOptionPane.showMessageDialog(this,"Ingrese un texto");
         }
     }//GEN-LAST:event_jMEjecutarMouseClicked
+
+    private void jMIAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIAbrirActionPerformed
+        abrir_archivo();
+    }//GEN-LAST:event_jMIAbrirActionPerformed
 
     public void agregar_pestaña()
     {
@@ -177,25 +165,118 @@ public class ExtemeEditor extends javax.swing.JFrame {
         lista_objetos_entrada.add(entrada_actual);
         
         entrada_actual.setConsola(jTPConsola);
-        //entrada_actual.setConsola_dasm(jEPConsola_Dasm);
-        //entrada_actual.setPath_archivo(System.getProperty("user.dir"));
-        //entrada_actual.setNombre_archivo("Nuevo_archivo_" + jTPEntrada.getComponentCount());
-        //int seleccion = JOptionPane.showOptionDialog(this,"Seleccione opcion", "Selector de tipo de archivo",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null, new Object[] { "D++ dpp", "DracoSrcrip djs"}, "opcion 1");
-        //if (seleccion == 0)
-        //{
-            //entrada_actual.setExtesion_archivo("dpp");
-        //}
-        //else if(seleccion == 1)
-        //{
-            //entrada_actual.setExtesion_archivo("djs");
-        //}
-        //else
-        //{
-            //entrada_actual.setExtesion_archivo("dpp");
-        //}
-        //entrada_actual.reiniciar_archivo_dasm();
+        entrada_actual.setPath_archivo(System.getProperty("user.dir"));
+        entrada_actual.setNombre_archivo("Nuevo_archivo_" + jTPEntrada.getComponentCount());
+        int seleccion = JOptionPane.showOptionDialog(this,"Seleccione opcion", "Selector de tipo de archivo",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null, new Object[] { "GXML gxml", "FunctionScript fs"}, "opcion 1");
+        if (seleccion == 0)
+        {
+            entrada_actual.setExtesion_archivo("gxml");
+        }
+        else if(seleccion == 1)
+        {
+            entrada_actual.setExtesion_archivo("fs");
+        }
+        else
+        {
+            entrada_actual.setExtesion_archivo("fs");
+        }
         jTPEntrada.addTab("Nuevo_Archivo_" + jTPEntrada.getComponentCount() , new JScrollPane(entrada_actual.getJTEntrada()));
         jTPEntrada.setSelectedIndex(jTPEntrada.getComponentCount()- 1);        
+    }
+    
+    private void abrir_archivo()
+    { 
+        String aux="";   
+        String texto="";
+        try
+        {
+            /**llamamos el metodo que permite cargar la ventana*/
+            JFileChooser selectorArchivos = new JFileChooser();
+            selectorArchivos.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+            FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos CREATOR XML (gxml,fs)", "gxml" ,"fs");
+            selectorArchivos.setFileFilter(filtro);
+            selectorArchivos.showOpenDialog(this);
+            
+            /**abrimos el archivo seleccionado*/
+            File archivo = selectorArchivos.getSelectedFile();            
+            /**recorremos el archivo, lo leemos para plasmarlo
+            *en el area de texto*/
+            if(archivo!=null)
+            {     
+                entrada_actual.setPath_archivo(archivo.getAbsolutePath().substring(0, archivo.getAbsolutePath().length() - archivo.getName().length()));                     
+                
+                if(archivo.getName().substring(archivo.getName().length() - 2, archivo.getName().length()).equalsIgnoreCase("fs"))
+                {
+                    entrada_actual.setNombre_archivo(archivo.getName().substring(0, archivo.getName().length() - 3));                
+                    entrada_actual.setExtesion_archivo(archivo.getName().substring(archivo.getName().length() - 2, archivo.getName().length()));   
+                }
+                else if(archivo.getName().substring(archivo.getName().length() - 4, archivo.getName().length()).equalsIgnoreCase("gxml"))
+                {
+                    entrada_actual.setNombre_archivo(archivo.getName().substring(0, archivo.getName().length() - 5));                
+                    entrada_actual.setExtesion_archivo(archivo.getName().substring(archivo.getName().length() - 4, archivo.getName().length()));   
+                }
+                
+                jTPEntrada.setTitleAt(jTPEntrada.getSelectedIndex(),archivo.getName());
+                
+                FileReader archivo_leido = new FileReader(archivo);
+                BufferedReader lee=new BufferedReader(archivo_leido);
+                while((aux=lee.readLine())!=null)
+                {
+                    texto+= aux+ "\n";
+                }
+                lee.close();
+                entrada_actual.getJTEntrada().setText(texto);
+            }    
+        }
+        catch(IOException ex)
+        {
+           JOptionPane.showMessageDialog(null,ex+"" +
+                 "\nNo se ha encontrado el archivo",
+                       "ADVERTENCIA!!!",JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void compilar_entrada()
+    {
+        try
+        {
+            this.jTPConsola.setText("");
+            ERRORES.Tabla_Errores.getInstance().clear();
+            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().Limpiar();  
+            
+            if(entrada_actual.getExtesion_archivo().equalsIgnoreCase("fs"))
+            {
+                FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
+                FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
+                sintactico_fs.setObjetoEntrada(entrada_actual);
+                sintactico_fs.setImportar(false);
+                sintactico_fs.parse();
+            }
+            else if(entrada_actual.getExtesion_archivo().equalsIgnoreCase("gxml"))
+            {
+                GXML_ANALIZADORES.Lexico_GXML lexico_gxml = new GXML_ANALIZADORES.Lexico_GXML(new BufferedReader(new StringReader(entrada_actual.getJTEntrada().getText().toString())));
+                GXML_ANALIZADORES.Sintactico_GXML sintactico_gxml = new GXML_ANALIZADORES.Sintactico_GXML(lexico_gxml);
+                sintactico_gxml.setObjetoEntrada(entrada_actual);
+                sintactico_gxml.setImportar(false);
+                sintactico_gxml.setTraducir(true);
+                sintactico_gxml.parse();                
+            }
+            else
+            {
+                //JOptionPane.showMessageDialog(rootPane, "Holis!!");
+                JOptionPane.showMessageDialog(this,"EXTESION DE ARCHIVO NO RECONOCIDA");
+            }
+
+            if(ERRORES.Tabla_Errores.getInstance().size() > 0)
+            {
+                ERRORES.Ventana_Errores mostrar_error = new ERRORES.Ventana_Errores();
+                mostrar_error.show();
+            }                  
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(this,"error: " + e.getMessage());
+        }
     }
     
     /**

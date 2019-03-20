@@ -45,12 +45,6 @@ public class Fabrica_Funciones_Arreglo
             resultado = nueva_funcion.ejecutar(entorno_local, salida);
             return resultado;
         }
-        else if(funcion_ejecutar.IsNodoOrNot("FUNCION_CREAR_DESDE_ARCHIVO"))
-        {
-            Funcion_Crear_Desde_Archivo nueva_funcion = new Funcion_Crear_Desde_Archivo(funcion_ejecutar,p_arreglo);
-            resultado = nueva_funcion.ejecutar(entorno_local, salida);
-            return resultado;
-        }
         else if(funcion_ejecutar.IsNodoOrNot("FUNCION_INVERTIR"))
         {
             Funcion_Invertir nueva_funcion = new Funcion_Invertir(funcion_ejecutar,p_arreglo);
@@ -102,6 +96,24 @@ public class Fabrica_Funciones_Arreglo
         else if(funcion_ejecutar.IsNodoOrNot("FUNCION_ALGUNO"))
         {
             Funcion_Alguno nueva_funcion = new Funcion_Alguno(funcion_ejecutar,p_arreglo);
+            resultado = nueva_funcion.ejecutar(entorno_local, salida);
+            return resultado;
+        }
+        else if(funcion_ejecutar.IsNodoOrNot("FUNCION_OBTENER_POR_ETIQUETA"))
+        {
+            Funcion_Obtener_Por_Etiqueta nueva_funcion = new Funcion_Obtener_Por_Etiqueta(funcion_ejecutar,p_arreglo);
+            resultado = nueva_funcion.ejecutar(entorno_local, salida);
+            return resultado;
+        }
+        else if(funcion_ejecutar.IsNodoOrNot("FUNCION_OBTENER_POR_ID"))
+        {
+            Funcion_Obtener_Por_Id nueva_funcion = new Funcion_Obtener_Por_Id(funcion_ejecutar,p_arreglo);
+            resultado = nueva_funcion.ejecutar(entorno_local, salida);
+            return resultado;
+        }
+        else if(funcion_ejecutar.IsNodoOrNot("FUNCION_OBTENER_POR_NOMBRE"))
+        {
+            Funcion_Obtener_Por_Nombre nueva_funcion = new Funcion_Obtener_Por_Nombre(funcion_ejecutar,p_arreglo);
             resultado = nueva_funcion.ejecutar(entorno_local, salida);
             return resultado;
         }

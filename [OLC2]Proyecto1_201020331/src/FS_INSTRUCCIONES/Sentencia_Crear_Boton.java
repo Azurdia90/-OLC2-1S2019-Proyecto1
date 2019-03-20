@@ -223,12 +223,14 @@ public class Sentencia_Crear_Boton implements Instruccion
                     if(contenedor.getValor() instanceof FS_Ventana)
                     {
                         FS_Ventana ventana_modificar = (FS_Ventana) contenedor.getValor();
+                        ventana_modificar.getLista_componentes().add(nuevo_boton);
                         ventana_modificar.add(nuevo_boton);
                         ventana_modificar.repaint();
                     }
                     else if(contenedor.getValor() instanceof FS_Contenedor)
                     {
                         FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
+                        contenedor_modificar.getLista_componentes().add(nuevo_boton);
                         contenedor_modificar.add(nuevo_boton);
                         contenedor_modificar.repaint();
                     }

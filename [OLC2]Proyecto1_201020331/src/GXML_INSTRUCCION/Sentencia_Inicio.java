@@ -125,7 +125,8 @@ public class Sentencia_Inicio implements Instruccion
         {
             if(lista_instrucciones.get(i) instanceof Sentencia_Importar)
             {
-                simbolo_importar = lista_instrucciones.get(i).ejecutar(entorno_local,"");
+                ((Sentencia_Importar) lista_instrucciones.get(i)).setEntrada(entrada);
+                simbolo_importar = lista_instrucciones.get(i).ejecutar(entorno_local,"");                
                 if(simbolo_importar.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
                 {
                     traduccion += simbolo_importar.getValor();
@@ -187,12 +188,18 @@ public class Sentencia_Inicio implements Instruccion
             {          
                 System.out.flush();
                 System.out.println(traduccion);
+                
+                ObjetoEntrada salida_importar = new ObjetoEntrada();
+                salida_importar.setJTEntrada(entrada.getJTEntrada());
+                salida_importar.setPath_archivo(entrada.getPath_archivo());
+                salida_importar.setNombre_archivo(entrada.getNombre_archivo());
+                salida_importar.setExtesion_archivo("fs");
+                
                 FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(traduccion)));
                 FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
                 sintactico_fs.setObjetoEntrada(entrada);
                 sintactico_fs.setImportar(false);
-                sintactico_fs.parse();                
-               
+                sintactico_fs.parse();                               
             }
             catch(Exception e)
             {
@@ -201,7 +208,7 @@ public class Sentencia_Inicio implements Instruccion
                 nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setIdentificador( 0 + " - " + 0);            
-                nuevo_simbolo.setValor("Creación de Ventana no fue realizada, error: " + e.getMessage());
+                nuevo_simbolo.setValor("La tradcuccion del archivo \"" + entrada.getNombre_archivo() + ".fs\" no fue realizada, error: " + e.getMessage());
                 manejoErrorEjecucion(nuevo_simbolo);
             }
         }
@@ -212,7 +219,7 @@ public class Sentencia_Inicio implements Instruccion
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
             nuevo_simbolo.setIdentificador( 0 + " - " + 0);            
-            nuevo_simbolo.setValor("Creación de Ventana no fue realizada, error: no fue generado una salida a traducir.");
+            nuevo_simbolo.setValor("La tradcuccion del archivo \"" + entrada.getNombre_archivo() + ".fs\" no fue realizada.");
             manejoErrorEjecucion(nuevo_simbolo);
         }
     }
@@ -220,22 +227,36 @@ public class Sentencia_Inicio implements Instruccion
     /*************************METODOS PARA LEER EL GMXL****************************************/
     
     @Override
-    public Simbolo ejecutar(Entorno entorno_local,ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) 
     {
         try
         {
             if(importar)
             {
-                this.primer_recorrido_ejecucion(salida);
-                this.segundo_recorrido_ejecucion(salida);
-                return null;
+                this.primer_recorrido_ejecucion(lista_componentes, salida);
+                this.segundo_recorrido_ejecucion(lista_componentes, salida);
+                
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.arreglo);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                nuevo_simbolo.setIdentificador("10-4");            
+                nuevo_simbolo.setValor(lista_componentes);
+                return nuevo_simbolo;                
             }
             else
             {
-                this.primer_recorrido_ejecucion(salida);
-                this.segundo_recorrido_ejecucion(salida);
-                this.ejecutar_gxml();
-                return null;
+                this.primer_recorrido_ejecucion(lista_componentes, salida);
+                this.segundo_recorrido_ejecucion(lista_componentes, salida);
+                //this.ejecutar_gxml();
+                
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.arreglo);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                nuevo_simbolo.setIdentificador("10-4");            
+                nuevo_simbolo.setValor(lista_componentes);
+                return nuevo_simbolo;  
             }                        
         }
         catch(Exception e)
@@ -246,29 +267,43 @@ public class Sentencia_Inicio implements Instruccion
     }
     
     //SE EJECUTARAN UNICAMENTE LAS VENTANAS Y SE ALMACENARAN
-    private void primer_recorrido_ejecucion(ObjetoEntrada salida)
+    private void primer_recorrido_ejecucion(FS_Arreglo lista_componentes, ObjetoEntrada salida)
     {
         Simbolo simbolo_ventana;
         for(int i = 0; i < lista_instrucciones.size(); i++)
         {
             if(lista_instrucciones.get(i) instanceof Sentencia_Ventana)
             {
-                simbolo_ventana = lista_instrucciones.get(i).ejecutar(entorno_global, salida);
-                manejoErrorEjecucion(simbolo_ventana);
+                simbolo_ventana = lista_instrucciones.get(i).ejecutar(entorno_global, lista_componentes, salida);
+                if(simbolo_ventana.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    lista_componentes.add(simbolo_ventana);
+                }
+                else
+                {
+                    manejoErrorEjecucion(simbolo_ventana);
+                }
             }
         }
     }
     
     //SE EJECUTARAN UNICAMENTE LOS IMPORT DE LOS OTROS ARCHIVOS
-    private void segundo_recorrido_ejecucion(ObjetoEntrada salida)
+    private void segundo_recorrido_ejecucion(FS_Arreglo lista_componentes, ObjetoEntrada salida)
     {
         Simbolo simbolo_importar;
         for(int i = 0; i < lista_instrucciones.size(); i++)
         {
             if(lista_instrucciones.get(i) instanceof Sentencia_Importar)
             {
-                simbolo_importar = lista_instrucciones.get(i).ejecutar(entorno_global, salida);
-                manejoErrorEjecucion(simbolo_importar);
+                simbolo_importar = lista_instrucciones.get(i).ejecutar(entorno_global, lista_componentes, salida);
+                if(simbolo_importar.getTipo() != Tabla_Enums.tipo_primitivo_Simbolo.error)
+                {
+                    lista_componentes.addAll(((FS_Arreglo) simbolo_importar.getValor()));
+                }
+                else
+                {
+                    manejoErrorEjecucion(simbolo_importar);
+                }                
             }
         }        
     }
@@ -299,7 +334,7 @@ public class Sentencia_Inicio implements Instruccion
         {
             String[] pos = simbolo_resultado.getIdentificador().split("-");
             ERRORES.Nodo_Error error_encontrado = new ERRORES.Nodo_Error();
-            error_encontrado.setArchivo(entrada.getNombre_archivo());
+            error_encontrado.setArchivo(entrada.getNombre_archivo() + "." + entrada.getExtesion_archivo());
             error_encontrado.setIdentificador("Análisis Semantico FuncionScript");
             error_encontrado.setDescripcion(simbolo_resultado.getValor().toString());
             error_encontrado.setLinea(pos[0]);

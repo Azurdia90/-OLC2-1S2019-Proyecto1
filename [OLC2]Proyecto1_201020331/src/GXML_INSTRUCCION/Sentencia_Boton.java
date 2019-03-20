@@ -6,6 +6,7 @@
 package GXML_INSTRUCCION;
 
 import FS_OBJETOS.FS_Area_Texto;
+import FS_OBJETOS.FS_Arreglo;
 import FS_OBJETOS.FS_Boton;
 import FS_OBJETOS.FS_Caja_Texto;
 import FS_OBJETOS.FS_ComboBox;
@@ -38,22 +39,25 @@ public class Sentencia_Boton implements Instruccion
     private int alto;
     private String referencia;
         
+    private boolean enviar;
     private ArrayList<GXML_Elemento> lista_elementos;
     
-    public Sentencia_Boton(ArrayList<GXML_Elemento> p_lista_elementos, String p_texto, int p_fila, int p_columna)
+    public Sentencia_Boton(ArrayList<GXML_Elemento> p_lista_elementos, String p_texto, int p_fila, int p_columna, boolean p_enviar)
     {
         this.fila = p_fila;
         this.columna = p_columna;
         this.lista_elementos = p_lista_elementos;
         this.texto = p_texto;
+        this.enviar = p_enviar;       
     }            
     
-    public Sentencia_Boton(ArrayList<GXML_Elemento> p_lista_elementos, int p_fila, int p_columna)
+    public Sentencia_Boton(ArrayList<GXML_Elemento> p_lista_elementos, int p_fila, int p_columna, boolean p_enviar)
     {
         this.fila = p_fila;
         this.columna = p_columna;
         this.lista_elementos = p_lista_elementos;
         this.texto = "";
+        this.enviar = p_enviar;
     }   
     
     private boolean cargar_principales()
@@ -158,7 +162,7 @@ public class Sentencia_Boton implements Instruccion
             if(continuar)
             {
                 FS_Boton boton_nuevo;
-                boton_nuevo = new FS_Boton(id,texto,posx,posy);
+                boton_nuevo = new FS_Boton(id,texto,posx,posy,enviar);
                 String traduccion = "";
                 Simbolo simbolo_texto = new Simbolo();
                 
@@ -234,7 +238,7 @@ public class Sentencia_Boton implements Instruccion
     }
 
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, ObjetoEntrada salida) 
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) 
     {
         try
         {
@@ -242,7 +246,7 @@ public class Sentencia_Boton implements Instruccion
             if(continuar)
             {
                 FS_Boton boton_nuevo;
-                boton_nuevo = new FS_Boton(id,texto,posx,posy);
+                boton_nuevo = new FS_Boton(id,texto,posx,posy,enviar);
 
                 Simbolo simbolo_texto = new Simbolo();
                 if(cargar_opcionales(boton_nuevo))
@@ -272,9 +276,9 @@ public class Sentencia_Boton implements Instruccion
                                                                    
                     Simbolo nuevo_simbolo = new Simbolo();
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                    nuevo_simbolo.setIdentificador("10-4");            
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                    nuevo_simbolo.setIdentificador(id);            
                     nuevo_simbolo.setValor(boton_nuevo);
 
                     return nuevo_simbolo;

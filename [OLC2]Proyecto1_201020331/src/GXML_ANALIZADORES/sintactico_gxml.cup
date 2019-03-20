@@ -14,6 +14,7 @@ import GXML_INSTRUCCION.*;
 import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import FS_TABLA_SIMBOLOS.Entorno;
 import FS_TABLA_SIMBOLOS.Simbolo;
+import FS_OBJETOS.FS_Arreglo;
 import FS_AST.Nodo_AST_FS;
 
 parser code 
@@ -21,6 +22,7 @@ parser code
 
 private ObjetoEntrada entrada;
 private ArrayList<Instruccion> lista_instrucciones;
+private boolean traducir;
 private boolean importar;
 
 private Entorno entorno_global;
@@ -34,6 +36,16 @@ public void setObjetoEntrada(ObjetoEntrada p_entrada)
 public ObjetoEntrada getObjetoEntrada()
 {
     return entrada;
+}
+
+public void setTraducir(boolean p_traducir)
+{
+    traducir = p_traducir;
+}
+
+public boolean getTraducir()
+{
+    return traducir;
 }
 
 public void setImportar(boolean p_importar)
@@ -166,9 +178,6 @@ terminal String r_maximo;
 terminal String r_minimo;
 terminal String r_accion;
 terminal String r_referencia;
-terminal String r_musica;
-terminal String r_video;
-terminal String r_imagen;
 terminal String r_path;
 terminal String r_autoreproduccion;
 
@@ -192,6 +201,7 @@ non terminal ArrayList<GXML_Elemento> LISTA_DATOS;
 non terminal GXML_Elemento TAG_DATO;
 non terminal Instruccion TAG_BOTON;
 non terminal Instruccion TAG_ENVIAR;
+non terminal Instruccion TAG_MULTIMEDIA;
 
 non terminal ArrayList<GXML_Elemento> LISTA_ELEMENTOS;
 non terminal GXML_Elemento ELEMENTO;
@@ -219,9 +229,6 @@ non terminal GXML_Elemento ELEMENTO_MINIMO;
 non terminal GXML_Elemento ELEMENTO_ACCION;
 non terminal GXML_Elemento ELEMENTO_REFERENCIA;
 non terminal GXML_Elemento ELEMENTO_PATH;
-non terminal GXML_Elemento ELEMENTO_MUSICA;
-non terminal GXML_Elemento ELEMENTO_VIDEO;
-non terminal GXML_Elemento ELEMENTO_IMAGEN;
 non terminal GXML_Elemento ELEMENTO_AUTOREPRODUCCION;
 
 non terminal Nodo_AST_FS SENTENCIA_LLAMADA;
@@ -253,15 +260,25 @@ start with INICIO;
 
 INICIO ::=  CUERPO_GXML:n
             {:
-                if(importar)
+                if(importar == true && traducir == true)
                 {
                     RESULT = new Sentencia_Inicio(n,entrada,importar);
                     salida = RESULT.ejecutar(entorno_global,"");
                 }
-                else
+                else if(importar == true && traducir == false)
                 {
                     RESULT = new Sentencia_Inicio(n,entrada,importar);
-                    RESULT.ejecutar(null,"");
+                    salida = RESULT.ejecutar(entorno_global, new FS_Arreglo(), entrada);
+                }
+                else if( importar == false && traducir == true)
+                {
+                    RESULT = new Sentencia_Inicio(n,entrada,importar);
+                    salida = RESULT.ejecutar(null,"");
+                }
+                else if( importar == false && traducir == false)
+                {
+                    RESULT = new Sentencia_Inicio(n,entrada,importar);
+                    salida = RESULT.ejecutar(null, new FS_Arreglo(), entrada);
                 }
             :};
 
@@ -334,6 +351,10 @@ CONTENIDO_VENTANA  ::=  TAG_CONTENEDOR:n
                         |TAG_ENVIAR:n
                         {:
                             RESULT = n;
+                        :}
+                        |TAG_MULTIMEDIA:n
+                        {:
+                            RESULT = n;
                         :};
 
 TAG_CONTENEDOR ::=  s_less:n1 r_contenedor LISTA_ELEMENTOS:n2  s_greather LISTA_CONTENIDO_VENTANA:n3 s_less s_div r_contenedor s_greather
@@ -365,29 +386,35 @@ TAG_CONTROL ::= s_less:n1 r_control LISTA_ELEMENTOS:n2  s_greather CONTENIDO_CON
 
 TAG_BOTON   ::= s_less:n1 r_boton LISTA_ELEMENTOS:n2  s_greather contenido_tag:n3 s_less s_div r_boton s_greather
                 {:
-                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left,false);
                 :}
                 |s_less:n1 r_boton LISTA_ELEMENTOS:n2  s_greather s_less r_texto ELEMENTO_NOMBRE s_greather contenido_tag:n3 s_less s_div r_texto s_greather s_less s_div r_boton s_greather
                 {:
-                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left,false);
                 :}
                 |s_less:n1 r_boton LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_boton s_greather
                 {:
-                    RESULT = new Sentencia_Boton(n2,n1right,n1left);
+                    RESULT = new Sentencia_Boton(n2,n1right,n1left,false);
                 :};  
 
 TAG_ENVIAR   ::= s_less:n1 r_enviar LISTA_ELEMENTOS:n2  s_greather contenido_tag:n3 s_less s_div r_enviar s_greather
                 {:
-                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left,true);
                 :}
                 |s_less:n1 r_enviar LISTA_ELEMENTOS:n2  s_greather s_less r_texto ELEMENTO_NOMBRE s_greather contenido_tag:n3 s_less s_div r_texto s_greather s_less s_div r_enviar s_greather
                 {:
-                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left);
+                    RESULT = new Sentencia_Boton(n2,n3,n1right,n1left,true);
                 :}
                 |s_less:n1 r_enviar LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_enviar s_greather
                 {:
-                    RESULT = new Sentencia_Boton(n2,n1right,n1left);
-                :};                              
+                    RESULT = new Sentencia_Boton(n2,n1right,n1left,true);
+                :};     
+
+TAG_MULTIMEDIA ::=  s_less:n1 r_multimedia LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_multimedia s_greather
+                    {:
+                        RESULT = null;
+                    :};                
+
 
 CONTENIDO_CONTROL   ::= CONTENIDO_CONTROL:n2 TAG_DEFECTO:n1
                         {:
@@ -549,18 +576,6 @@ ELEMENTO   ::=  ELEMENTO_ID:n
                 {:
                     RESULT = n;
                 :}
-                |ELEMENTO_MUSICA:n
-                {:
-                    RESULT = n;
-                :}
-                |ELEMENTO_VIDEO:n
-                {:
-                    RESULT = n;
-                :}
-                |ELEMENTO_IMAGEN:n    
-                {:
-                    RESULT = n;
-                :}
                 |ELEMENTO_AUTOREPRODUCCION:n
                 {:
                     RESULT = n;
@@ -573,9 +588,9 @@ ELEMENTO_ID ::= r_id:n1 s_equal cadena:n2
                 :};
 
 ELEMENTO_NOMBRE ::= r_nombre:n1 s_equal cadena:n2
-                {:
-                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
-                :};
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                    :};
 
 ELEMENTO_TIPO ::=   r_tipo:n1 s_equal cadena:n2
                     {:
@@ -618,25 +633,34 @@ ELEMENTO_ALTO ::=   r_ancho:n1 s_equal entero:n2
                         RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.decimal, Double.parseDouble(n2), n1right, n1left);
                     :};   
 
-ELEMENTO_BORDE ::= r_borde:n1 s_equal booleano:n2
-                {:
-                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2.equalsIgnoreCase("verdadero") ? true : false, n1right, n1left);
-                :};  
+ELEMENTO_BORDE ::=  r_borde:n1 s_equal booleano:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2.equalsIgnoreCase("verdadero") ? true : false, n1right, n1left);
+                    :};  
 
-ELEMENTO_COLOR ::= r_color:n1 s_equal cadena:n2
-                {:
-                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
-                :};
+ELEMENTO_COLOR ::=  r_color:n1 s_equal cadena:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                    :};
 
 ELEMENTO_FUENTE ::= r_fuente:n1 s_equal cadena:n2
-                {:
-                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
-                :}; 
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
+                    :}; 
 
-ELEMENTO_NEGRITA ::= r_negrita:n1 s_equal booleano:n2
-                {:
-                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2.equalsIgnoreCase("verdadero") ? true : false, n1right, n1left);
-                :};                                 
+ELEMENTO_TAM   ::=  r_tamano:n1 s_equal entero:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Integer.parseInt(n2), n1right, n1left);
+                    :}
+                    |r_tamano:n1 s_equal decimal:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.entero, Double.parseDouble(n2), n1right, n1left);
+                    :};
+
+ELEMENTO_NEGRITA   ::=  r_negrita:n1 s_equal booleano:n2
+                        {:
+                            RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2.equalsIgnoreCase("verdadero") ? true : false, n1right, n1left);
+                        :};                                 
 
 ELEMENTO_CURSIVA   ::=  r_cursiva:n1 s_equal booleano:n2
                         {:
@@ -680,6 +704,16 @@ ELEMENTO_ACCION ::= r_accion:n1 s_equal s_key_open SENTENCIA_LLAMADA:n2 s_key_cl
                     {:
                         RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.identificador, n2, n1right, n1left);
                     :};    
+
+ELEMENTO_PATH  ::=  r_path:n1 s_equal cadena:n2
+                    {:
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2, n1right, n1left);
+                    :};
+
+ELEMENTO_AUTOREPRODUCCION  ::=  r_autoreproduccion:n1 s_equal booleano:n2
+                                {:
+                                    RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.booleano, n2, n1right, n1left);
+                                :};
 
 /*******************************************EXPRESIONES*******************************************************************************/
 SENTENCIA_LLAMADA   ::=  identificador:n1 s_par_open LISTA_EXPRESIONES:n2 s_par_close

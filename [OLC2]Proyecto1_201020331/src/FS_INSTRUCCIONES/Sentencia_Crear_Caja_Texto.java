@@ -226,12 +226,14 @@ public class Sentencia_Crear_Caja_Texto implements Instruccion
                     if(contenedor.getValor() instanceof FS_Ventana)
                     {
                         FS_Ventana ventana_modificar = (FS_Ventana) contenedor.getValor();
+                        ventana_modificar.getLista_componentes().add(nueva_caja_texto);
                         ventana_modificar.add(nueva_caja_texto);
                         ventana_modificar.repaint();
                     }
                     else if(contenedor.getValor() instanceof FS_Contenedor)
                     {
                         FS_Contenedor contenedor_modificar = (FS_Contenedor) contenedor.getValor();
+                        contenedor_modificar.getLista_componentes().add(nueva_caja_texto);
                         contenedor_modificar.add(nueva_caja_texto);
                         contenedor_modificar.repaint();
                     }
