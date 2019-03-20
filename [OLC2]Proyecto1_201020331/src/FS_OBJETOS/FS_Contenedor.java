@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import jdk.nashorn.internal.runtime.ListAdapter;
 
 /**
@@ -44,12 +45,13 @@ public class FS_Contenedor extends JPanel
         this.lista_componentes = new ArrayList<Object>();
         
         this.setBounds(pos_x,pos_y,ancho,alto);
-        this.setBackground(color);                                
+        this.setBackground(color);
+        //this.setLayout(null);
         this.setVisible(true);
         
         if(borde)
         {
-            this.setBorder(BorderFactory.createRaisedBevelBorder());
+            this.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         }        
         
         this.repaint();
@@ -70,11 +72,12 @@ public class FS_Contenedor extends JPanel
         
         this.setBounds(pos_x,pos_y,ancho,alto);
         this.setBackground(color);
+        //this.setLayout(null);
         this.setVisible(true);
         
         if(borde)
         {
-            this.setBorder(BorderFactory.createRaisedBevelBorder());
+            this.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         }
         
         this.repaint();
@@ -151,7 +154,7 @@ public class FS_Contenedor extends JPanel
         
         if(borde)
         {
-            this.setBorder(BorderFactory.createRaisedBevelBorder());
+           this.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         }        
         
         this.setVisible(true);

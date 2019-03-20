@@ -36,17 +36,17 @@ public class Tabla_Simbolos
     
     public boolean existe_metodo(String p_id)
     {
-        return tabla_funciones.containsKey(p_id);
+        return tabla_funciones.containsKey(p_id.toLowerCase());
     }
     
     public FS_Funcion obtener_Metodo(String p_id)
     {
-        return tabla_funciones.get(p_id);
+        return tabla_funciones.get(p_id.toLowerCase());
     }
     
     public void agregar_metodo(String p_id, FS_Funcion p_funcion)
     {
-        this.tabla_funciones.put(p_id, p_funcion);
+        this.tabla_funciones.put(p_id.toLowerCase(), p_funcion);
     }
     /*************************FIN METODOS PARA FUNCIONES******************************/
     

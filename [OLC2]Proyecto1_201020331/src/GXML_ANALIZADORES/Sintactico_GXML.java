@@ -1451,7 +1451,7 @@ class CUP$Sintactico_GXML$actions {
 		int n2right = ((java_cup.runtime.Symbol)CUP$Sintactico_GXML$stack.elementAt(CUP$Sintactico_GXML$top-5)).right;
 		ArrayList<GXML_Elemento> n2 = (ArrayList<GXML_Elemento>)((java_cup.runtime.Symbol) CUP$Sintactico_GXML$stack.elementAt(CUP$Sintactico_GXML$top-5)).value;
 		
-                        RESULT = null;
+                        RESULT = new Sentencia_Multimedia(n2,n1right,n1left,entrada);
                     
               CUP$Sintactico_GXML$result = parser.getSymbolFactory().newSymbol("TAG_MULTIMEDIA",16, ((java_cup.runtime.Symbol)CUP$Sintactico_GXML$stack.elementAt(CUP$Sintactico_GXML$top-7)), ((java_cup.runtime.Symbol)CUP$Sintactico_GXML$stack.peek()), RESULT);
             }
@@ -2456,7 +2456,7 @@ class CUP$Sintactico_GXML$actions {
 		int n2right = ((java_cup.runtime.Symbol)CUP$Sintactico_GXML$stack.peek()).right;
 		String n2 = (String)((java_cup.runtime.Symbol) CUP$Sintactico_GXML$stack.peek()).value;
 		
-                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2, n1right, n1left);
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
                     
               CUP$Sintactico_GXML$result = parser.getSymbolFactory().newSymbol("ELEMENTO_PATH",42, ((java_cup.runtime.Symbol)CUP$Sintactico_GXML$stack.elementAt(CUP$Sintactico_GXML$top-2)), ((java_cup.runtime.Symbol)CUP$Sintactico_GXML$stack.peek()), RESULT);
             }

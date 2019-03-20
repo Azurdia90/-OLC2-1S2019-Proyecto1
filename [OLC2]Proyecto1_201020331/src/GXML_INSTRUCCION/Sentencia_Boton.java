@@ -5,6 +5,7 @@
  */
 package GXML_INSTRUCCION;
 
+import FS_AST.Nodo_AST_FS;
 import FS_OBJETOS.FS_Area_Texto;
 import FS_OBJETOS.FS_Arreglo;
 import FS_OBJETOS.FS_Boton;
@@ -137,7 +138,7 @@ public class Sentencia_Boton implements Instruccion
             }            
             else if(lista_elementos.get(i).IsElementOrNot("accion") && principal > 0)
             {
-                //texto_nuevo.setItalic((Boolean) lista_elementos.get(i).getValor());
+                boton_nuevo.setNodo_accion((Nodo_AST_FS) lista_elementos.get(i).getValor());
                 completo = true;
                 principal--;
                 if(principal == 0)

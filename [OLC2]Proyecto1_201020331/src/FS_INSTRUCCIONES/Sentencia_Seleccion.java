@@ -45,6 +45,30 @@ public class Sentencia_Seleccion implements Instruccion
         try
         {
             expresion = (expresion_condicion == null) ? null : expresion_condicion.ejecutar(entorno_local, salida);
+            
+            if(expresion != null && expresion.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
+            {
+                if(expresion.getValor().toString().equalsIgnoreCase("verdadero"))
+                {                    
+                    return (expresion1 == null) ? null : expresion1.ejecutar(entorno_local, salida);
+                }
+                else
+                {
+                    return (expresion2 == null) ? null : expresion2.ejecutar(entorno_local, salida);
+                }
+            }
+            else
+            {                
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setIdentificador(fila + " - " + columna);                
+                nuevo_simbolo.setValor("No es posible que la condicion de la sentencia seleccion de como resultado un valor tipo  " + expresion.getTipo() + ".");
+                return nuevo_simbolo;
+            }
+            
+            /*            
             valor1 = (expresion1 == null) ? null : expresion1.ejecutar(entorno_local, salida);
             valor2 = (expresion2 == null) ? null : expresion2.ejecutar(entorno_local, salida);
             
@@ -66,6 +90,7 @@ public class Sentencia_Seleccion implements Instruccion
             }           
             
             Simbolo nuevo_simbolo = new Simbolo();
+            
             if(expresion.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.booleano)
             {
                 if(expresion.getValor().equals("verdadero") ? true : false)
@@ -84,9 +109,8 @@ public class Sentencia_Seleccion implements Instruccion
                 nuevo_simbolo.setIdentificador(fila + " - " + columna);
                 nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
                 nuevo_simbolo.setValor("No es posible que la condicion de la sentencia seleccion de como resultado un valor tipo  " + expresion.getTipo() + ".");
-            }                               
-            
-            return nuevo_simbolo;
+            } */                              
+                       
         }
         catch(Exception e)
         {

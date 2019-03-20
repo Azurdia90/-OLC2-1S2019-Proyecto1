@@ -81,6 +81,11 @@ public class Fabrica_Sentencias
             Sentencia_LLamada nueva_llamada = new Sentencia_LLamada(sentencia_ejecutar);
             return nueva_llamada;
         }
+        else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_ARRAY_DESDE_ARCHIVO"))
+        {
+            Sentencia_Crear_Array_Desde_Archivo nuevo_crear_array_desde_archivo = new Sentencia_Crear_Array_Desde_Archivo(sentencia_ejecutar);
+            return nuevo_crear_array_desde_archivo;
+        }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_LLAMADA_FUNCIONES_ARREGLO"))
         {
             Sentencia_LLamada_Funciones_Arreglo nueva_llamada = new Sentencia_LLamada_Funciones_Arreglo(sentencia_ejecutar);
@@ -133,11 +138,13 @@ public class Fabrica_Sentencias
         }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_IMAGEN"))
         {            
-            return null;
+            Sentencia_Crear_Imagen nueva_imagen = new Sentencia_Crear_Imagen(sentencia_ejecutar);
+            return nueva_imagen;
         }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_REPRODUCTOR"))
         {           
-            return null;
+            Sentencia_Crear_Musica nueva_musica = new Sentencia_Crear_Musica(sentencia_ejecutar);
+            return nueva_musica;
         }
         else if(sentencia_ejecutar.IsNodoOrNot("SENTENCIA_CREAR_VIDEO"))
         {

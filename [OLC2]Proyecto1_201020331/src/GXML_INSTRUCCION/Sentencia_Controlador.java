@@ -150,7 +150,7 @@ public class Sentencia_Controlador implements Instruccion
         }
         else if(controlador_nuevo instanceof FS_Spinner)
         {
-            principal = 5;
+            principal = 4;
         }
         else if(controlador_nuevo instanceof FS_ComboBox)
         {
@@ -209,31 +209,6 @@ public class Sentencia_Controlador implements Instruccion
                     return true;
                 }
             }
-            else if(lista_elementos.get(i).IsElementOrNot("ancho") && principal > 0)
-            {
-                if(controlador_nuevo instanceof FS_Caja_Texto)
-                {
-                   ((FS_Caja_Texto) controlador_nuevo).setAncho((Integer) lista_elementos.get(i).getValor());
-                }
-                else if(controlador_nuevo instanceof FS_Area_Texto)
-                {
-                   ((FS_Area_Texto) controlador_nuevo).setAncho((Integer) lista_elementos.get(i).getValor());
-                }
-                else if(controlador_nuevo instanceof FS_Spinner)
-                {
-                   ((FS_Spinner) controlador_nuevo).setAncho((Integer) lista_elementos.get(i).getValor());
-                }
-                else if(controlador_nuevo instanceof FS_ComboBox)
-                {
-                   ((FS_ComboBox) controlador_nuevo).setAncho((Integer) lista_elementos.get(i).getValor());
-                }           
-                completo = true;
-                principal--;                
-                if(principal == 0)
-                {
-                    return true;
-                }
-            } 
             else if(lista_elementos.get(i).IsElementOrNot("minimo") && principal > 0)
             {
                 if(controlador_nuevo instanceof FS_Caja_Texto)
@@ -318,6 +293,36 @@ public class Sentencia_Controlador implements Instruccion
                     return true;
                 }
             }
+            else if(lista_elementos.get(i).IsElementOrNot("fuente") && principal > 0)
+            {
+                if(controlador_nuevo instanceof FS_Caja_Texto)
+                {
+                   ((FS_Caja_Texto) controlador_nuevo).setFuente(lista_elementos.get(i).getValor().toString());
+                }
+                else if(controlador_nuevo instanceof FS_Area_Texto)
+                {
+                   ((FS_Area_Texto) controlador_nuevo).setFuente(lista_elementos.get(i).getValor().toString());
+                }
+                else if(controlador_nuevo instanceof FS_Spinner)
+                {
+                   return false;
+                }
+                else if(controlador_nuevo instanceof FS_ComboBox)
+                {
+                   return false;
+                }           
+                completo = true;
+                principal--;                
+                if(principal == 0)
+                {
+                    return true;
+                }
+                principal--;
+                if(principal == 0)
+                {
+                    return true;
+                }
+            }
             else if(lista_elementos.get(i).IsElementOrNot("tam") && principal > 0)
             {
                 if(controlador_nuevo instanceof FS_Caja_Texto)
@@ -342,12 +347,7 @@ public class Sentencia_Controlador implements Instruccion
                 {
                     return true;
                 }
-                principal--;
-                if(principal == 0)
-                {
-                    return true;
-                }
-            }
+            } 
             else if(lista_elementos.get(i).IsElementOrNot("negrita") && principal > 0)
             {
                 if(controlador_nuevo instanceof FS_Caja_Texto)

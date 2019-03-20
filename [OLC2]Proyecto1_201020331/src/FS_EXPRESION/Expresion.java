@@ -9,6 +9,7 @@ import FS_AST.Nodo_AST_FS;
 import UI.ObjetoEntrada;
 import FS_INSTRUCCIONES.Instruccion;
 import FS_INSTRUCCIONES.Sentencia_Acceso;
+import FS_INSTRUCCIONES.Sentencia_Crear_Array_Desde_Archivo;
 import FS_INSTRUCCIONES.Sentencia_Crear_Boton;
 import FS_INSTRUCCIONES.Sentencia_Crear_Contenedor;
 import FS_INSTRUCCIONES.Sentencia_Crear_Ventana;
@@ -79,6 +80,13 @@ public class Expresion implements Instruccion
             tipo_expresion = p_expresion.getEtiqueta();
         }
         else if(p_expresion.IsNodoOrNot("SENTENCIA_ACCESO"))
+        {
+            op_izq = p_expresion;
+            operador = null;
+            op_der = null;  
+            tipo_expresion = p_expresion.getEtiqueta();
+        }
+        else if(p_expresion.IsNodoOrNot("SENTENCIA_CREAR_ARRAY_DESDE_ARCHIVO"))
         {
             op_izq = p_expresion;
             operador = null;
@@ -195,6 +203,12 @@ public class Expresion implements Instruccion
             {
                 Sentencia_Acceso sentencia_acceso = new Sentencia_Acceso(op_izq);
                 nuevo_simbolo = sentencia_acceso.ejecutar(entorno_local, salida);
+                return nuevo_simbolo;
+            }
+            else if(tipo_expresion.equals("SENTENCIA_CREAR_ARRAY_DESDE_ARCHIVO"))
+            {
+                Sentencia_Crear_Array_Desde_Archivo sentencia_crear_array_desde_archivo = new Sentencia_Crear_Array_Desde_Archivo(op_izq);
+                nuevo_simbolo = sentencia_crear_array_desde_archivo.ejecutar(entorno_local, salida);
                 return nuevo_simbolo;
             }
             else if(tipo_expresion.equals("SENTENCIA_LLAMADA_FUNCIONES_ARREGLO"))

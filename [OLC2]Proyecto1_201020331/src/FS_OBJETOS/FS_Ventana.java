@@ -50,7 +50,8 @@ public class FS_Ventana extends JFrame
         
         this.setTitle(identificador);
         this.setSize(alto, ancho);     
-        this.setBackground(color);       
+        this.setBackground(color); 
+        this.setLayout(null);
         this.setVisible(false);  
     }
     
@@ -71,6 +72,7 @@ public class FS_Ventana extends JFrame
         this.setTitle(identificador);
         this.setSize(alto, ancho);
         this.setBackground(color);
+        this.setLayout(null);
         this.setVisible(false);   
     }
 

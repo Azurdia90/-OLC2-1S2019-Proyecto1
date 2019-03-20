@@ -60,40 +60,54 @@ public class Sentencia_Evento_AlClic implements Instruccion
                 }
                 else
                 {
-                    FS_Boton boton_cargar = (FS_Boton) boton.getValor();
-                    boton_cargar.addActionListener(new ActionListener() {
+                    if(boton.getValor() instanceof FS_Boton)
+                    {
+                        FS_Boton boton_cargar = (FS_Boton) boton.getValor();
+                        Sentencia_LLamada llamada_referencia = boton_cargar.getReferencia_final();
+                        boton_cargar.addActionListener(new ActionListener() {
                                 public void actionPerformed(ActionEvent e) 
                                 {
-                                    sentencia_llamada.ejecutar(entorno_local, salida);  		
+                                    Entorno entorno_aux = entorno_local;
+                                    ObjetoEntrada salida_aux = salida;
+                                    
+                                    if(llamada_referencia != null)
+                                    {
+                                        llamada_referencia.ejecutar(entorno_aux, salida_aux);
+                                    }                                    
+                                    sentencia_llamada.ejecutar(entorno_aux, salida_aux);  		
                                 }	
                                 });
                                       
-                    Simbolo nuevo_simbolo = new Simbolo();
-                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
-                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-                    nuevo_simbolo.setIdentificador("10-4");
-                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
-                    nuevo_simbolo.setValor("Carga del evento fue realizada correctamente");  
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setIdentificador("10-4");
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+                        nuevo_simbolo.setValor("Carga del evento fue realizada correctamente");  
 
-                    return nuevo_simbolo;
+                        return nuevo_simbolo;
+                    }
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setValor("Este evento es compatible únicamente con Objetos Botón.");    
+                        return nuevo_simbolo;                        
+                    }
                 }                        
             }                                    
         }
         catch(Exception e)
         {
             Simbolo nuevo_simbolo = new Simbolo();
-            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
-            nuevo_simbolo.setIdentificador( fila + " - " + columna);
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
-            if(e.getMessage().substring(0,17).equals("For input string:"))
-            {
-                nuevo_simbolo.setValor("El Evento del Botón no fue realizado, debe ingresar un color en hexadecimal.");
-            }
-            else
-            {
-                nuevo_simbolo.setValor("El Evento del Botón no fue realizado, error: " + e.getMessage());
-            }
+            nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+            nuevo_simbolo.setValor("El Evento del Botón no fue realizado, error: " + e.getMessage());
 
             return nuevo_simbolo;
         }

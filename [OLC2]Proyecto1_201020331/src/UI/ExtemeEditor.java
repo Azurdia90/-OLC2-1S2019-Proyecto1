@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
@@ -57,9 +58,20 @@ public class ExtemeEditor extends javax.swing.JFrame {
         jMErrores = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         jSplitPane2.setDividerLocation(250);
         jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
+
+        jTPEntrada.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTPEntradaMouseClicked(evt);
+            }
+        });
         jSplitPane2.setLeftComponent(jTPEntrada);
 
         jTPConsola.setBackground(new java.awt.Color(0, 0, 0));
@@ -83,9 +95,20 @@ public class ExtemeEditor extends javax.swing.JFrame {
 
         jMIGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         jMIGuardar.setText("Guardar");
+        jMIGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIGuardarActionPerformed(evt);
+            }
+        });
         jMArchivo.add(jMIGuardar);
 
+        jMIGuardarComo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
         jMIGuardarComo.setText("Guardar Como...");
+        jMIGuardarComo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIGuardarComoActionPerformed(evt);
+            }
+        });
         jMArchivo.add(jMIGuardarComo);
 
         jMenuBar1.add(jMArchivo);
@@ -94,6 +117,11 @@ public class ExtemeEditor extends javax.swing.JFrame {
 
         jMINuevaPestaña.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         jMINuevaPestaña.setText("Nueva Pestaña");
+        jMINuevaPestaña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMINuevaPestañaActionPerformed(evt);
+            }
+        });
         jMPestañas.add(jMINuevaPestaña);
 
         jMICerrarPestaña.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
@@ -139,7 +167,7 @@ public class ExtemeEditor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMEjecutarMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jMEjecutarMenuSelected
-        
+        actualizar_entrada();
     }//GEN-LAST:event_jMEjecutarMenuSelected
 
     private void jMEjecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMEjecutarMouseClicked
@@ -158,6 +186,39 @@ public class ExtemeEditor extends javax.swing.JFrame {
         abrir_archivo();
     }//GEN-LAST:event_jMIAbrirActionPerformed
 
+    private void jMIGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIGuardarActionPerformed
+        if(entrada_actual.getGuardar_como())
+        {
+            guardar_como_archivo();            
+        }
+        else
+        {
+            guardar_archivo();
+        }
+    }//GEN-LAST:event_jMIGuardarActionPerformed
+
+    private void jMIGuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIGuardarComoActionPerformed
+        guardar_como_archivo();
+    }//GEN-LAST:event_jMIGuardarComoActionPerformed
+
+    private void jMINuevaPestañaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMINuevaPestañaActionPerformed
+        agregar_pestaña();
+    }//GEN-LAST:event_jMINuevaPestañaActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        actualizar_entrada();
+    }//GEN-LAST:event_formMouseClicked
+
+    private void jTPEntradaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTPEntradaMouseClicked
+        actualizar_entrada();
+    }//GEN-LAST:event_jTPEntradaMouseClicked
+    
+    public void actualizar_entrada()
+    {
+        int pos_actual = this.jTPEntrada.getSelectedIndex();
+        entrada_actual = lista_objetos_entrada.get(pos_actual);
+    }
+    
     public void agregar_pestaña()
     {
         //agregar el nuevo panel a la pestaña
@@ -217,7 +278,7 @@ public class ExtemeEditor extends javax.swing.JFrame {
                 }
                 
                 jTPEntrada.setTitleAt(jTPEntrada.getSelectedIndex(),archivo.getName());
-                
+                entrada_actual.setGuardar_como(false);
                 FileReader archivo_leido = new FileReader(archivo);
                 BufferedReader lee=new BufferedReader(archivo_leido);
                 while((aux=lee.readLine())!=null)
@@ -234,6 +295,62 @@ public class ExtemeEditor extends javax.swing.JFrame {
                  "\nNo se ha encontrado el archivo",
                        "ADVERTENCIA!!!",JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    public void guardar_archivo()
+    {
+        FileWriter archivo_dasm = null;
+        PrintWriter escritor_dasm = null;
+        try
+        {            
+            archivo_dasm = new FileWriter(entrada_actual.getPath_archivo() + entrada_actual.getNombre_archivo() + "." + entrada_actual.getExtesion_archivo());
+            escritor_dasm = new PrintWriter(archivo_dasm);
+        }
+        catch(Exception e)
+        {            
+            JOptionPane.showMessageDialog(null,"error al generar archivo: " + e.getMessage());
+            try
+            {
+                if(archivo_dasm != null)
+                {
+                    archivo_dasm.close();
+                }
+            }            
+            catch(Exception e2)
+            {
+                JOptionPane.showMessageDialog(null,"error al cerrar archivo: " + e2.getMessage());
+            }            
+        }
+    }
+    
+    public void guardar_como_archivo()
+    {
+        try
+        {
+         String nombre="";
+         JFileChooser file=new JFileChooser();
+         file.showSaveDialog(this);
+         File guarda =file.getSelectedFile();
+
+         if(guarda !=null)
+         {
+          /*guardamos el archivo y le damos el formato directamente,
+           * si queremos que se guarde en formato doc lo definimos como .doc*/
+           FileWriter  save = new FileWriter(guarda + "." + entrada_actual.getExtesion_archivo());
+           save.write(entrada_actual.getJTEntrada().getText());
+           save.close();
+           entrada_actual.setGuardar_como(false);
+           JOptionPane.showMessageDialog(null,
+                "El archivo se a guardado Exitosamente",
+                    "Información",JOptionPane.INFORMATION_MESSAGE);
+           }
+        }
+        catch(IOException ex)
+        {
+          JOptionPane.showMessageDialog(null,
+               "Su archivo no se ha guardado",
+                  "Advertencia",JOptionPane.WARNING_MESSAGE);
+        }        
     }
     
     public void compilar_entrada()

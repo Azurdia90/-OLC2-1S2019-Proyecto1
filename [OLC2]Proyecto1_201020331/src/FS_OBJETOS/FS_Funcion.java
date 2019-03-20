@@ -124,6 +124,8 @@ public class FS_Funcion implements Instruccion
         }
         catch(Exception e)
         {
+            FS_TABLA_SIMBOLOS.Tabla_Simbolos.getInstance().getMi_Stack().Desapilar();
+            
             Simbolo nuevo_simbolo = new Simbolo();
             nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
             nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);

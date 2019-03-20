@@ -191,13 +191,14 @@ public class Sentencia_Inicio implements Instruccion
                 
                 ObjetoEntrada salida_importar = new ObjetoEntrada();
                 salida_importar.setJTEntrada(entrada.getJTEntrada());
+                salida_importar.setConsola(entrada.getConsola());
                 salida_importar.setPath_archivo(entrada.getPath_archivo());
                 salida_importar.setNombre_archivo(entrada.getNombre_archivo());
                 salida_importar.setExtesion_archivo("fs");
                 
                 FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader(new StringReader(traduccion)));
                 FS_ANALIZADORES.Sintactico_FS sintactico_fs = new FS_ANALIZADORES.Sintactico_FS(lexico_fs);
-                sintactico_fs.setObjetoEntrada(entrada);
+                sintactico_fs.setObjetoEntrada(salida_importar);
                 sintactico_fs.setImportar(false);
                 sintactico_fs.parse();                               
             }

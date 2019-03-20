@@ -6,6 +6,8 @@
 package UI;
 
 import javax.swing.JTextPane;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 /**
  *
@@ -13,7 +15,8 @@ import javax.swing.JTextPane;
  */
 public class ObjetoEntrada 
 {    
-    private JTextPane JTEntrada;
+    private boolean guardar_como;
+    private RSyntaxTextArea JTEntrada;
     private JTextPane consola;        
     
     private String path_archivo;
@@ -22,7 +25,10 @@ public class ObjetoEntrada
     
     public ObjetoEntrada()
     {
-        this.JTEntrada = new JTextPane();        
+        guardar_como = true;
+        this.JTEntrada = new RSyntaxTextArea();  
+        this.JTEntrada.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
+        this.JTEntrada.setCodeFoldingEnabled(true);
         this.consola = null;
         
         this.path_archivo = "";
@@ -30,11 +36,19 @@ public class ObjetoEntrada
         this.extesion_archivo = "";        
     }
 
-    public JTextPane getJTEntrada() {
+    public boolean getGuardar_como() {
+        return guardar_como;
+    }
+
+    public void setGuardar_como(boolean guardar_como) {
+        this.guardar_como = guardar_como;
+    }
+
+    public RSyntaxTextArea getJTEntrada() {
         return JTEntrada;
     }
 
-    public void setJTEntrada(JTextPane JTEntrada) {
+    public void setJTEntrada(RSyntaxTextArea JTEntrada) {
         this.JTEntrada = JTEntrada;
     }
 
@@ -68,5 +82,19 @@ public class ObjetoEntrada
 
     public void setExtesion_archivo(String extesion_archivo) {
         this.extesion_archivo = extesion_archivo;
-    }            
+        if(this.extesion_archivo.equalsIgnoreCase("gxml"))
+        {
+            this.JTEntrada.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_HTML);
+            this.JTEntrada.setCodeFoldingEnabled(true);
+            this.JTEntrada.repaint();
+        }
+        else
+        {
+            this.JTEntrada.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+            this.JTEntrada.setCodeFoldingEnabled(true);
+            this.JTEntrada.repaint();
+        }
+    }
+
+             
 }

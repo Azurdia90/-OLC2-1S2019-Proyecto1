@@ -89,8 +89,9 @@ public class Sentencia_Importar implements Instruccion
                     
                     ObjetoEntrada salida_importar = new ObjetoEntrada();
                     salida_importar.setJTEntrada(salida.getJTEntrada());
+                    salida_importar.setConsola(salida.getConsola());
                     salida_importar.setPath_archivo(salida.getPath_archivo());
-                    salida_importar.setNombre_archivo(path.substring(path.length() - 2, path.length()));
+                    salida_importar.setNombre_archivo(path.substring(0, path.length()-3));
                     salida_importar.setExtesion_archivo("fs");
                     
                     FS_ANALIZADORES.Lexico_FS lexico_fs = new FS_ANALIZADORES.Lexico_FS(new BufferedReader( new StringReader(cadena_analizar)));

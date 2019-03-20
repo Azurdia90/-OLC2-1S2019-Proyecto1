@@ -125,6 +125,16 @@ public class Sentencia_Texto implements Instruccion
                     return true;
                 }
             }
+            else if(lista_elementos.get(i).IsElementOrNot("fuente") && principal > 0)
+            {
+                texto_nuevo.setFuente(lista_elementos.get(i).getValor().toString());
+                completo = true;
+                principal--;
+                if(principal == 0)
+                {
+                    return true;
+                }
+            }
             else if(lista_elementos.get(i).IsElementOrNot("tam") && principal > 0)
             {
                 texto_nuevo.setTamaño((Integer) lista_elementos.get(i).getValor());

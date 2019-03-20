@@ -412,9 +412,8 @@ TAG_ENVIAR   ::= s_less:n1 r_enviar LISTA_ELEMENTOS:n2  s_greather contenido_tag
 
 TAG_MULTIMEDIA ::=  s_less:n1 r_multimedia LISTA_ELEMENTOS:n2  s_greather  s_less s_div r_multimedia s_greather
                     {:
-                        RESULT = null;
+                        RESULT = new Sentencia_Multimedia(n2,n1right,n1left,entrada);
                     :};                
-
 
 CONTENIDO_CONTROL   ::= CONTENIDO_CONTROL:n2 TAG_DEFECTO:n1
                         {:
@@ -707,7 +706,7 @@ ELEMENTO_ACCION ::= r_accion:n1 s_equal s_key_open SENTENCIA_LLAMADA:n2 s_key_cl
 
 ELEMENTO_PATH  ::=  r_path:n1 s_equal cadena:n2
                     {:
-                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2, n1right, n1left);
+                        RESULT = new GXML_Elemento(n1, Tabla_Enums.tipo_primitivo_Simbolo.cadena, n2.substring(1,n2.length()-1), n1right, n1left);
                     :};
 
 ELEMENTO_AUTOREPRODUCCION  ::=  r_autoreproduccion:n1 s_equal booleano:n2

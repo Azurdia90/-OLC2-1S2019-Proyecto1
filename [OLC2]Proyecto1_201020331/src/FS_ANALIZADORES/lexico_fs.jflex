@@ -107,7 +107,7 @@ r_clic   = "alclic"
 r_cargar = "alcargar"
 r_cerrar = "alcerrar"
 
-comentario_single = [/][/] [^\n]* [\n]
+comentario_single = [/][/] [^\n]*
 comentario_multi = [/]"*" [^*]* "*"[/]
 
 %{

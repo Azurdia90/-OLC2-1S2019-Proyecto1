@@ -76,7 +76,7 @@ public class FS_Caja_Texto extends JTextField
         this.id = p_identificador;
         this.pos_x = p_pos_x;
         this.pos_y = p_pos_y;
-        this.ancho = 300;
+        this.ancho = 700;
         this.alto = 100;
         
         this.color = Color.BLACK;

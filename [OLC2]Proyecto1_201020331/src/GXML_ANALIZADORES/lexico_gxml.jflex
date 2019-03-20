@@ -16,6 +16,8 @@ import UI.ObjetoEntrada;
 %cup                            
 
 %state CA
+%state comentario_single
+%state comentario_multi
 
 letra         = [a-zA-ZnÑ]
 identificador = ({letra}|("_"{letra}))({letra}|"_"|{digito})*
@@ -93,10 +95,10 @@ r_minimo           = "minimo"
 r_accion           = "accion"
 r_referencia       = "referencia" 
 r_path             = "path" 
-r_autoreproduccion = "autoreproduccion"
+r_autoreproduccion = "auto-reproduccion"
 
-comentario_single = [#][#] [^\n]* [\n]
-comentario_multi = [#]"$" [^*]* "$"[#]
+//comentario_single = [#][#] [^\n]*
+//comentario_multi = [$]"#" [^#]* "#"[$]
 
 %{
 //codigo que se utilizara en el analizador lexico
@@ -130,6 +132,16 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 %}
 
 %%
+
+<CA>       {contenido_tag}          { yybegin(YYINITIAL); texto_contenido+=yytext(); if(!(texto_contenido.replaceAll("\n","").trim().equals(""))) return new Symbol(Tabla_Simbolos_GXML_CUP.contenido_tag, yycolumn, yyline, texto_contenido);}
+
+<YYINITIAL>"$#"                     {yybegin(comentario_multi);}
+<comentario_multi> .                {}
+<comentario_multi> "#$"             {yybegin(YYINITIAL);}
+
+<YYINITIAL>"##"                     {yybegin(comentario_single);}
+<comentario_single> [^"\n"]         {}
+<comentario_single> "\n"            {yybegin(YYINITIAL);}
 
 //simbolos de operacion
 <YYINITIAL>{s_par_open}             {return new Symbol(Tabla_Simbolos_GXML_CUP.s_par_open, yycolumn,yyline, new String(yytext()));}
@@ -205,12 +217,10 @@ private void _error(String erro_texto, int erro_column, int erro_line)
 <YYINITIAL>{cadena}                 {return new Symbol(Tabla_Simbolos_GXML_CUP.cadena, yycolumn,yyline, new String(yytext()));}
 <YYINITIAL>{identificador}          {return new Symbol(Tabla_Simbolos_GXML_CUP.identificador, yycolumn,yyline, new String(yytext()));}
 
-<CA>       {contenido_tag}          { yybegin(YYINITIAL); texto_contenido+=yytext(); if(!(texto_contenido.replaceAll("\n","").trim().equals(""))) return new Symbol(Tabla_Simbolos_GXML_CUP.contenido_tag, yycolumn, yyline, texto_contenido);}
-
 //tokens omitidos
 [ \t\r\f\n]+            {/* Se ignoran */}  
-{comentario_multi}      {/* Se ignoran */}
-{comentario_single}     {/* Se ignoran */}
+//{comentario_multi}      {/* Se ignoran */}
+//{comentario_single}     {/* Se ignoran */}
 
 /* CUAQUIER OTRO */ 
 .         		{_error( new String (yytext()),yycolumn,yyline);}
