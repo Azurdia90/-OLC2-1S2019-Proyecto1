@@ -5,6 +5,7 @@
  */
 package UI;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -30,6 +31,9 @@ public class ExtemeEditor extends javax.swing.JFrame {
     public ExtemeEditor() {        
         initComponents();
         lista_objetos_entrada = new ArrayList<ObjetoEntrada>();
+        this.jTPConsola.setBackground(Color.BLACK);
+        this.jTPConsola.setForeground(Color.GREEN);
+        this.jTPConsola.setCaretColor(Color.GREEN);
         this.agregar_pestaña();
     }
 

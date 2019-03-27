@@ -44,6 +44,8 @@ public class Sentencia_Asignacion implements Instruccion
         this.fila = Integer.parseInt(nodo_sentencia.getFila());
         this.columna = Integer.parseInt(nodo_sentencia.getColumna());
         
+        this.lista_identificadores = new ArrayList<>();
+        
         if(nodo_sentencia.getHijos().get(0).IsNodoOrNot("LISTA_IDENTIFICADORES"))
         {
             this.crearLista_identificadores(nodo_sentencia.getHijos().get(0), lista_identificadores);
@@ -81,6 +83,7 @@ public class Sentencia_Asignacion implements Instruccion
             Simbolo valor_asignar = null;
             Simbolo arreglo_asignar = null;
             Simbolo objeto_asignar = null;
+            
             if(tipo_valor == 1)
             {
                 valor_asignar = expresion.ejecutar(entorno_local, salida);
@@ -197,7 +200,7 @@ public class Sentencia_Asignacion implements Instruccion
     
     private void crearLista_identificadores(Nodo_AST_FS lista_identificadores, ArrayList<String> identificadores)
     {            
-        identificadores = new ArrayList<String>();
+       
         for(int i = 0; i < lista_identificadores.getHijos().size(); i++)
         {
             identificadores.add(lista_identificadores.getHijos().get(i).getValor());

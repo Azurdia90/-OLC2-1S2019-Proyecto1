@@ -5,6 +5,8 @@
  */
 package FS_OBJETOS;
 
+import FS_TABLA_SIMBOLOS.Simbolo;
+import FS_TABLA_SIMBOLOS.Tabla_Enums;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JComboBox;
@@ -24,6 +26,8 @@ public class FS_ComboBox extends JComboBox
     private FS_Arreglo listadatos;
     private String defecto;
     
+    private Simbolo defecto_final;
+        
     //CONSTRUCTOR PARA FS
     public FS_ComboBox(int p_alto, int p_ancho, FS_Arreglo p_listadatos, int p_posx, int p_posy, String p_defecto, String p_id)
     {
@@ -36,8 +40,14 @@ public class FS_ComboBox extends JComboBox
         this.listadatos = p_listadatos;
         this.defecto = p_defecto;
         
+        Simbolo defecto_final = new Simbolo();
+        defecto_final.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+        defecto_final.setRol(Tabla_Enums.tipo_Simbolo.variable);
+        defecto_final.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+        defecto_final.setValor(defecto);
+        
         this.cargarDatos();
-        this.setSelectedItem(defecto);
+        this.setSelectedItem(defecto_final);
                 
         this.setBounds(pos_x, pos_y, ancho, alto);                       
         this.setVisible(true); 
@@ -56,6 +66,13 @@ public class FS_ComboBox extends JComboBox
         
         this.listadatos = null;
         this.defecto = "";
+        
+        Simbolo defecto_final = new Simbolo();
+        defecto_final.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+        defecto_final.setRol(Tabla_Enums.tipo_Simbolo.variable);
+        defecto_final.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+        defecto_final.setValor(defecto);
+        this.setSelectedItem(defecto_final);
         
         this.setBounds(pos_x, pos_y, ancho, alto);
         this.setVisible(true); 
@@ -128,6 +145,13 @@ public class FS_ComboBox extends JComboBox
     
     public void actualizarComboBox()
     {
+        Simbolo defecto_final = new Simbolo();
+        defecto_final.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+        defecto_final.setRol(Tabla_Enums.tipo_Simbolo.variable);
+        defecto_final.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+        defecto_final.setValor(defecto);
+        
+        this.setSelectedItem(defecto_final);        
         this.setBounds(pos_x, pos_y, ancho, alto);
         this.repaint();
     }

@@ -59,6 +59,7 @@ public class Tabla_Enums
         igual_numerico,igual_caracter,igual_booleano,
         igual_numerico_caracter,igual_caracter_numerico,
         not,and,or,
+        igual_nulo, diferente_nulo,
         error
     }
 }

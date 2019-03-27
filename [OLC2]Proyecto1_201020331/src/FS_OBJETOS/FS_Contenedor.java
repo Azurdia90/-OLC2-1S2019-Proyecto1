@@ -166,7 +166,7 @@ public class FS_Contenedor extends JPanel
         return "var " + padre + "_cont_" + id + " = " + padre + ".CrearContenedor(" + alto + ", " + ancho + ", \"" +  traducirColor() + "\", " + (borde == true ? "verdadero" : "falso") + ", " + pos_x + ", " + pos_y + "); \n";
     }
     
-    private String traducirColor()
+    public String traducirColor()
     {
         return getHexadecimal(color.getRed(),color.getGreen(),color.getBlue());
     }

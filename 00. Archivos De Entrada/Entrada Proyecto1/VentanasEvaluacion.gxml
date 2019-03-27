@@ -1,0 +1,277 @@
+<Importar>
+VentanaReportes.gxml
+</Importar>
+
+<Ventana id = "VentanaAritmetica" Color = "#2E2EFE" tipo = "Secundaria">
+	<Contenedor id = "ContenedorAritmeticas" X = 10 Y = 10 Alto = 1000 Ancho = 1000 Borde = verdadero>
+		<Texto Nombre = "lblBienvenida" X = 450 Y = 20 Fuente = "Times New Roman" Tam = 18 Negrita = verdadero Cursiva = verdadero>
+			Bienvenido a la prueba de Aritmetica, responda las siguientes preguntas
+		</Texto>
+		<Texto Nombre = "lblNombre" X = 10 Y = 50>
+			Ingrese su Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 50 Alto = 20 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+		
+		<Texto Nombre = "lblPotencia" X = 10 Y = 150>
+			Ingrese la potencia de 5 a la 5:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CPotencia" X = 150 Y = 150 Alto = 50 Ancho = 100 Minimo = 0 Maximo = 5000>
+		</Control>
+		<Boton Nombre = "btnPotencia" X = 300 Y = 150 Alto = 50 Ancho = 100 Accion = {VerPotencia(5,5)}>
+			Ver Respuesta
+		</Boton>
+		
+		<Texto Nombre = "lblFactorial" X = 10 Y = 250>
+			Ingrese el Factorial de 7:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CFactorial" X = 150 Y = 250 Alto = 50 Ancho = 100 Minimo = 0 Maximo = 6000>
+		</Control>
+		<Boton Nombre = "btnFactorial" X = 300 Y = 250 Alto = 50 Ancho = 100 Accion = {VerFactorial(7)}>
+			Ver Respuesta
+		</Boton>
+		
+		<Texto Nombre = "lblInvertir" X = 10 Y = 350>
+			Ingrese el numero invertido de 351230347:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CInvertido" X = 150 Y = 350 Alto = 50 Ancho = 100 Minimo = 0>
+		</Control>
+		<Boton Nombre = "btnInvertido" X = 300 Y = 350 Alto = 50 Ancho = 100 Accion = {VerInvertido(351230347)}>
+			Ver Respuesta
+		</Boton>
+		
+		<Texto Nombre = "lblMCD" X = 10 Y = 450>
+			Ingrese el mcd de 240,506 con 10:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CMCD" X = 150 Y = 450 Alto = 50 Ancho = 100 Minimo = 0>
+		</Control>
+		<Boton Nombre = "btnMCD" X = 300 Y = 450 Alto = 50 Ancho = 100 Accion = {VerMCD(240,506)}>
+			Ver Respuesta
+		</Boton>
+		
+		<Texto Nombre = "lblFibonacci" X = 10 Y = 550>
+			Ingrese el Fibonacci de 19:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CFibonacci" X = 150 Y = 550 Alto = 50 Ancho = 100 Minimo = 0 Maximo = 6000>
+		</Control>
+		<Boton Nombre = "btnFibonacci" X = 300 Y = 550 Alto = 50 Ancho = 100 Accion = {VerFibonacci(19)}>
+			Ver Respuesta
+		</Boton>
+	</Contenedor>
+	<Contenedor id = "ContEnviarAritmetica" x = 10 Y = 1010 Alto = 100 Ancho = 200>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 40 Referencia = "VentanaHistoria">
+			Contestar
+		</Enviar>
+	</Contenedor>
+</Ventana>
+
+
+<Ventana id = "VentanaHistoria" Color = "#2E2EFE" tipo = "Secundaria">
+	<Contenedor id = "ContenedorHistoria" X = 10 Y = 10 Alto = 1000 Ancho = 1000 Borde = verdadero>
+		<Texto Nombre = "lblBienvenida" X = 450 Y = 20 Fuente = "Times New Roman" Tam = 18 Negrita = verdadero Cursiva = verdadero>
+			Bienvenido a la prueba de Historia, responda las siguientes preguntas
+		</Texto>
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Ingrese su Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+
+		<Texto Nombre = "lblPaisaje1" X = 10 Y = 250>
+			Ingrese el paisaje de la foto
+		</Texto>
+		<Control tipo = "desplegable" Nombre = "CDPaisaje1" X = 150 Y = 250 Alto = 50 Ancho = 100>
+			<ListaDatos>
+				<Dato>Playa</Dato>
+				<Dato>Luna</Dato>
+				<Dato>Selva</Dato>
+				<Dato>Desierto</Dato>
+				<Dato>Oceano</Dato>
+			</ListaDatos>
+		</Control>
+		<Multimedia Path = "playa.jpg" tipo = "Imagen" X = 300 Y = 250 Alto = 100 Ancho = 100 Nombre = "MultPlaya">
+		</Multimedia>
+		<Boton Nombre = "btnPlaya" X = 500 Y = 250 Alto = 50 Ancho = 100 Accion = {Paisaje(10)}>
+			Ver Respuesta
+		</Boton>
+
+		<Texto Nombre = "lblPaisaje2" X = 10 Y = 400>
+			Ingrese el paisaje de la foto
+		</Texto>
+		<Control tipo = "desplegable" Nombre = "CDPaisaje2" X = 150 Y = 400 Alto = 50 Ancho = 100>
+			<ListaDatos>
+				<Dato>Playa</Dato>
+				<Dato>Luna</Dato>
+				<Dato>Selva</Dato>
+				<Dato>Desierto</Dato>
+				<Dato>Oceano</Dato>
+			</ListaDatos>
+		</Control>
+		<Multimedia Path = "luna.jpg" tipo = "Imagen" X = 300 Y = 400 Alto = 100 Ancho = 100 Nombre = "MultLuna">
+		</Multimedia>
+		<Boton Nombre = "btnLuna" X = 500 Y = 400 Alto = 50 Ancho = 100 Accion = {Paisaje(20)}>
+			Ver Respuesta
+		</Boton>
+
+		<Texto Nombre = "lblPaisaje3" X = 10 Y = 550>
+			Ingrese el paisaje de la foto
+		</Texto>
+		<Control tipo = "desplegable" Nombre = "CDPaisaje3" X = 150 Y = 550 Alto = 50 Ancho = 100>
+			<ListaDatos>
+				<Dato>Playa</Dato>
+				<Dato>Luna</Dato>
+				<Dato>Selva</Dato>
+				<Dato>Desierto</Dato>
+				<Dato>Oceano</Dato>
+			</ListaDatos>
+		</Control>
+		<Multimedia Path = "selva.jpg" tipo = "Imagen" X = 300 Y = 550 Alto = 100 Ancho = 100 Nombre = "MultSelva">
+		</Multimedia>
+		<Boton Nombre = "btnSelva" X = 500 Y = 550 Alto = 50 Ancho = 100 Accion = {Paisaje(30)}>
+			Ver Respuesta
+		</Boton>
+
+		<Texto Nombre = "lblPaisaje4" X = 10 Y = 700>
+			Ingrese el paisaje de la foto
+		</Texto>
+		<Control tipo = "desplegable" Nombre = "CDPaisaje4" X = 150 Y = 700 Alto = 50 Ancho = 100>
+			<ListaDatos>
+				<Dato>Playa</Dato>
+				<Dato>Luna</Dato>
+				<Dato>Selva</Dato>
+				<Dato>Desierto</Dato>
+				<Dato>Oceano</Dato>
+			</ListaDatos>
+		</Control>
+		<Multimedia Path = "Desierto.jpg" tipo = "Imagen" X = 300 Y = 700 Alto = 100 Ancho = 100 Nombre = "MultDesierto">
+		</Multimedia>
+		<Boton Nombre = "btnDesierto" X = 500 Y = 700 Alto = 50 Ancho = 100 Accion = {Paisaje(40)}>
+			Ver Respuesta
+		</Boton>
+
+		<Texto Nombre = "lblPaisaje5" X = 10 Y = 850>
+			Ingrese el paisaje de la foto
+		</Texto>
+		<Control tipo = "desplegable" Nombre = "CDPaisaje5" X = 150 Y = 850 Alto = 50 Ancho = 100>
+			<ListaDatos>
+				<Dato>Playa</Dato>
+				<Dato>Luna</Dato>
+				<Dato>Selva</Dato>
+				<Dato>Desierto</Dato>
+				<Dato>Oceano</Dato>
+			</ListaDatos>
+		</Control>
+		<Multimedia Path = "oceano.jpg" tipo = "Imagen" X = 300 Y = 850 Alto = 100 Ancho = 100 Nombre = "MultOceano">
+		</Multimedia>
+		<Boton Nombre = "btnOceano" X = 500 Y = 850 Alto = 50 Ancho = 100 Accion = {Paisaje(50)}>
+			Ver Respuesta
+		</Boton>
+	</Contenedor>
+	<Contenedor id = "ContEnviarHistoria" x = 10 Y = 1010 Alto = 100 Ancho = 200>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 40 Referencia = "VentanaIngles">
+			Contestar
+		</Enviar>
+	</Contenedor>
+</Ventana>
+
+<Ventana id = "VentanaIngles" Color = "#2E2EFE" tipo = "Secundaria">
+	<Contenedor id = "ContenedorIngles" X = 10 Y = 10 Alto = 1000 Ancho = 1000 Borde = verdadero>
+		<Texto Nombre = "lblBienvenida" X = 450 Y = 20 Fuente = "Times New Roman" Tam = 18 Negrita = verdadero Cursiva = verdadero>
+			Bienvenido a la prueba de Ingles, responda las siguientes preguntas
+		</Texto>
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Ingrese su Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>	
+		<Multimedia Path = "Ackermann.mp3" tipo = "Musica" X = 450 Y = 50 Alto = 50 Ancho = 100 Nombre = "AudioIngles">
+		</Multimedia>
+
+		<Texto Nombre = "lblPregunta" X = 10 Y = 250>
+			What algorithm is the audio talking about?
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTPregunta" X = 100 Y = 250 Alto = 50 Ancho = 150>
+			<Defecto>Ingrese aqui su respuesta</Defecto>
+		</Control>
+		<Boton Nombre = "btnPregunta" X = 300 Y = 250 Alto = 50 Ancho = 100 Accion = {Pregunta("Tipo")}>
+			Ver Respuesta
+		</Boton>
+
+		<Texto Nombre = "lblAckerman" X = 10 Y = 350>
+			Ingrese el ackerman de 3,11:
+		</Texto>
+		<Control tipo = "Numerico" Nombre = "CAckerman" X = 150 Y = 350 Alto = 50 Ancho = 100 Minimo = 0>
+		</Control>
+		<Boton Nombre = "btnAckerman" X = 300 Y = 350 Alto = 50 Ancho = 100 Accion = {Pregunta("Resultado")}>
+			Ver Respuesta
+		</Boton>		
+	</Contenedor>
+	<Contenedor id = "ContEnviarIngles" x = 10 Y = 1010 Alto = 100 Ancho = 200>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 40 Referencia = "VentanaLogica">
+			Contestar
+		</Enviar>
+	</Contenedor>
+</Ventana>
+
+<Ventana id = "VentanaLogica" Color = "#2E2EFE" tipo = "Secundaria">
+	<Contenedor id = "ContenedorLogica" X = 10 Y = 10 Alto = 1000 Ancho = 1000 Borde = verdadero>
+		<Texto Nombre = "lblBienvenida" X = 450 Y = 20 Fuente = "Times New Roman" Tam = 18 Negrita = verdadero Cursiva = verdadero>
+			Bienvenido a la prueba de Logica, responda las siguientes preguntas
+		</Texto>
+		<Texto Nombre = "lblNombre" X = 10 Y = 20>
+			Ingrese su Nombre:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTNombre" X = 100 Y = 20 Alto = 10 Ancho = 100>
+			<Defecto>Ingrese aqui su nombre</Defecto>
+		</Control>
+
+		<Texto Nombre = "lblHanoi" X = 10 Y = 150>
+			Resuelva las torres de Hanoi con 3 discos, origen 1, destino 3 y auxiliar 2
+		</Texto>
+		<Control tipo = "TextoArea" Nombre = "CHanoi" X = 150 Y = 150 Alto = 150>
+		</Control>
+		<Boton Nombre = "btnHanoi" X = 300 Y = 150 Alto = 50 Ancho = 100 Accion = {hanoi(3,1,2,3)}>
+			Ver Respuesta
+		</Boton>
+		<Texto Nombre = "lblHF" X = 10 Y = 350>
+			Ingrese el Hofstader Femenina 10:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTHF" X = 150 Y = 350 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnHF" X = 300 Y = 350 Alto = 50 Ancho = 100 Accion = {VerFemenina()}>
+			Ver Respuesta
+		</Boton>
+		<Texto Nombre = "lblHM" X = 10 Y = 450>
+			Ingrese el Hofstader Maculino 10:
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTHM" X = 150 Y = 450 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnHM" X = 300 Y = 450 Alto = 50 Ancho = 100 Accion = {VerMasculino()}>
+			Ver Respuesta
+		</Boton>
+		<Texto Nombre = "lblPar" X = 10 Y = 550>
+			Ingrese si 26 es par o impar
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTPar" X = 150 Y = 550 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnPar" X = 300 Y = 550 Alto = 50 Ancho = 100 Accion = {VerPar(26)}>
+			Ver Respuesta
+		</Boton>
+		<Texto Nombre = "lblImpar" X = 10 Y = 650>
+			Ingrese si 27 es par o impar
+		</Texto>
+		<Control tipo = "texto" Nombre = "CTImpar" X = 150 Y = 650 Alto = 50 Ancho = 100>
+		</Control>
+		<Boton Nombre = "btnImpar" X = 300 Y = 650 Alto = 50 Ancho = 100 Accion = {VerImpar(27)}>
+			Ver Respuesta
+		</Boton>
+	</Contenedor>
+	<Contenedor id = "ContEnviarLogicas" x = 10 Y = 1010 Alto = 100 Ancho = 200>
+		<Enviar Nombre = "btnEnviar" X = 75 Y = 30 Alto = 70 Ancho = 40 Referencia = "VentanaReportes">
+			Contestar
+		</Enviar>
+	</Contenedor>
+</Ventana>

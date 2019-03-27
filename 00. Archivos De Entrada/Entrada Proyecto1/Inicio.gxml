@@ -1,0 +1,29 @@
+<Importar>
+VentanasEvaluacion.gxml
+</Importar>
+
+<Importar>
+FuncionesEvaluacion.fs
+</Importar>
+
+<Ventana id = "VentanaPrincipal" Color = "#000000" tipo = "prinCipal">
+	<Contenedor id = "Contenedor1" X = 10 Y = 10 Alto = 400 Ancho = 400 Borde = verdadero>
+		<Texto Nombre = "lblEvaluacion" X = 10 Y = 10 Negrita = verdadero>
+			Haga clic en el siguiente boton para iniciar la evaluacion 
+		</Texto>
+		<Boton Nombre = "btnEvaluacion" X = 60 Y = 40 Accion = {Bienvenido()} Referencia = "VentanaAritmetica">
+			<Texto Nombre = "lblbtnEvaluacion">
+				Iniciar Evaluacion
+			</Texto>
+		</Boton>
+		<Texto Nombre = "lblReportes" X = 10 Y = 250 Cursiva = verdadero>
+			Haga clic en el siguiente boton para iniciar el area de reportes
+		</Texto>
+		<Boton Nombre = "btnReportes" X = 60 Y = 300 Accion = {BienvenidoReporte()} Referencia = "VentanaReportes">
+			Iniciar Reportes
+		</Boton>
+		<Enviar Nombre = "btnEnviar" X = 60 Y = 350 Accion = {EnviarSinFuncionalidad()}>
+			Sin funcionalidad
+		</Enviar>
+	</Contenedor>
+</Ventana>

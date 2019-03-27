@@ -413,8 +413,193 @@ public class Sentencia_Multimedia implements Instruccion
     }
 
     @Override
-    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Simbolo ejecutar(Entorno entorno_local, FS_Arreglo lista_componentes, ObjetoEntrada salida) 
+    {
+        try
+        {
+            boolean continuar = cargar_principales();
+            if(continuar)
+            {
+                FS_Imagen imagen_nueva;
+                FS_Musica musica_nueva;
+                FS_Video  video_nuevo;
+                
+                Simbolo simbolo_contenedor = new Simbolo();
+                simbolo_contenedor.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                simbolo_contenedor.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                simbolo_contenedor.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                simbolo_contenedor.setIdentificador(nombre);   
+                
+                if(tipo.equalsIgnoreCase("imagen"))
+                {
+                    imagen_nueva = new FS_Imagen(nombre,path,posx,posy,salida);
+                                        
+                    if(cargar_opcionales(imagen_nueva))
+                    {
+                        simbolo_contenedor.setValor(imagen_nueva);
+                    }
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                        nuevo_simbolo.setValor("Creación del Controlador Multimedia no fue realizada, error: La imagen tiene elementos adicionales o los ya existentes son incorrectos.");
+
+                        return nuevo_simbolo;  
+                    }
+                    
+                    if(!entorno_local.containsKey(nombre))
+                    {                                                    
+                        entorno_local.Crear(nombre, simbolo_contenedor);
+
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.cadena);
+                        nuevo_simbolo.setIdentificador("10-4");            
+                        nuevo_simbolo.setValor(imagen_nueva);
+
+                        return nuevo_simbolo;
+                    }   
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                        nuevo_simbolo.setValor("Creación Multimedia no fue realizada, error: la imagen " + nombre + " ya fue creada.");
+
+                        return nuevo_simbolo;
+                    } 
+                }
+                else if( tipo.equalsIgnoreCase("musica"))
+                {
+                    musica_nueva = new FS_Musica(nombre,path,posx,posy,salida);
+                                        
+                    if(cargar_opcionales(musica_nueva))
+                    {
+                        simbolo_contenedor.setValor(musica_nueva);
+                    }
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                        nuevo_simbolo.setValor("Creación Multimedia no fue realizada, error: Música tiene elementos adicionales o los ya existentes son incorrectos.");
+
+                        return nuevo_simbolo;  
+                    }                                        
+                    
+                    if(!entorno_local.containsKey(nombre))
+                    {
+                        entorno_local.Crear(nombre, simbolo_contenedor);
+
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setIdentificador(nombre);            
+                        nuevo_simbolo.setValor(musica_nueva);
+
+                        return nuevo_simbolo;
+                    }   
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                        nuevo_simbolo.setValor("Creación Multimedia no fue realizada, error: la etiqueta musica  " + nombre + " ya fue creada.");
+
+                        return nuevo_simbolo;
+                    }  
+                }
+                else if( tipo.equalsIgnoreCase("video"))
+                {
+                    video_nuevo = new FS_Video(nombre,path,posx,posy);
+                                        
+                    if(cargar_opcionales(video_nuevo))
+                    {
+                        simbolo_contenedor.setValor(video_nuevo);
+                    }
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                        nuevo_simbolo.setValor("Creación del Video no fue realizado, error: El Controlador Video tiene elementos adicionales o los ya existentes son incorrectos.");
+
+                        return nuevo_simbolo;  
+                    }
+                                        
+                    if(!entorno_local.containsKey(nombre))
+                    {
+                        entorno_local.Crear(nombre, simbolo_contenedor);
+
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.objeto);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.identificador);
+                        nuevo_simbolo.setIdentificador(nombre);            
+                        nuevo_simbolo.setValor(video_nuevo);
+
+                        return nuevo_simbolo;
+                    }   
+                    else
+                    {
+                        Simbolo nuevo_simbolo = new Simbolo();
+                        nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                        nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                        nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                        nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                        nuevo_simbolo.setValor("Creación Multimedia no fue realizada, error: la etiqueta video " + nombre + " ya fue creada.");
+
+                        return nuevo_simbolo;
+                    }  
+                }
+                else
+                {
+                    Simbolo nuevo_simbolo = new Simbolo();
+                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                    nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                    nuevo_simbolo.setValor("Creación Multimedia no fue realizada, error: el tipo ingresado no existe para este componente.");
+
+                    return nuevo_simbolo;                    
+                }
+            }
+            else
+            {
+                Simbolo nuevo_simbolo = new Simbolo();
+                nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+                nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+                nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+                nuevo_simbolo.setValor("Creación del Controlador no fue realizada, error: no cuenta con los elementos principales para su creación.");
+
+                return nuevo_simbolo;
+            }            
+        }
+        catch(Exception e)
+        {
+            Simbolo nuevo_simbolo = new Simbolo();
+            nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+            nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
+            nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.error);
+            nuevo_simbolo.setIdentificador( fila + " - " + columna);            
+            nuevo_simbolo.setValor("Creación del Controlador no fue realizada, error: " + e.getMessage());
+
+            return nuevo_simbolo;
+        }
     }
     
 }

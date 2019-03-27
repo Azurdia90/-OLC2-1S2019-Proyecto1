@@ -41,7 +41,7 @@ public class Expresion implements Instruccion
         this.fila = Integer.parseInt(p_expresion.getFila());
         this.columna = Integer.parseInt(p_expresion.getColumna());
         
-        if(p_expresion.IsNodoOrNot("booleano") || p_expresion.IsNodoOrNot("entero") || p_expresion.IsNodoOrNot("decimal") || p_expresion.IsNodoOrNot("caracter") || p_expresion.IsNodoOrNot("cadena") || p_expresion.IsNodoOrNot("identificador"))
+        if(p_expresion.IsNodoOrNot("booleano") || p_expresion.IsNodoOrNot("entero") || p_expresion.IsNodoOrNot("decimal") || p_expresion.IsNodoOrNot("caracter") || p_expresion.IsNodoOrNot("cadena") || p_expresion.IsNodoOrNot("identificador") || p_expresion.IsNodoOrNot("nulo"))
         {//si es un dato primitivo
             op_izq = p_expresion;
             operador = null;

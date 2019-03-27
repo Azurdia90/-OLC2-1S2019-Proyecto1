@@ -175,7 +175,7 @@ public class FS_Area_Texto extends JTextArea
         this.pos_y = pos_y;
     }
 
-    public boolean isBold() {
+    public boolean getBold() {
         return bold;
     }
 
@@ -183,7 +183,7 @@ public class FS_Area_Texto extends JTextArea
         this.bold = bold;
     }
 
-    public boolean isItalic() {
+    public boolean getItalic() {
         return italic;
     }
 
@@ -230,7 +230,7 @@ public class FS_Area_Texto extends JTextArea
         return  padre + ".CrearAreaTexto(" + alto + "," + ancho + ",\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() + "\", " + pos_x + ", " + pos_y + ", " + (bold == true ? "verdadero" : "falso") + ", " + (italic == true ? "verdadero" : "falso") + ", \"" +  texto.trim()  + "\", \"" + id + "\"); \n";
     }
     
-    private String traducirColor()
+    public String traducirColor()
     {
         return getHexadecimal(color.getRed(),color.getGreen(),color.getBlue());
     }

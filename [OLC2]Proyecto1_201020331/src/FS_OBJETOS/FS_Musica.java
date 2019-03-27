@@ -164,7 +164,7 @@ public class FS_Musica extends JButton //implements ActionListener
         this.ancho = ancho;
     }
 
-    public boolean isAutoreproduccion() {
+    public boolean getAutoreproduccion() {
         return autoreproduccion;
     }
 

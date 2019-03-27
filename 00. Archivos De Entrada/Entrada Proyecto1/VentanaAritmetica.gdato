@@ -1,0 +1,406 @@
+<lista>
+    <principal>
+         <CTNombre>"Julio Arango"</CTNombre>
+         <CPotencia>3125</CPotencia>
+         <CFactorial>5040</CFactorial>
+         <CInvertido>743032153</CInvertido>
+         <CMCD>2</CMCD>
+         <CFibonacci>4181</CFibonacci>
+    </principal>
+    <principal>
+          <CTNombre>"Julia Sierra"</CTNombre>
+         <CPotencia>3125</CPotencia>
+         <CFactorial>5040</CFactorial>
+         <CInvertido>743032153</CInvertido>
+         <CMCD>2</CMCD>
+         <CFibonacci>4181</CFibonacci>
+    </principal>
+    <principal>
+         <CTNombre>"Alba Chinchilla"</CTNombre>
+         <CPotencia>3125</CPotencia>
+         <CFactorial>5040</CFactorial>
+         <CInvertido>743032153</CInvertido>
+         <CMCD>2</CMCD>
+         <CFibonacci>4181</CFibonacci>
+    </principal>
+    <principal>
+         <CTNombre>"Gustavo Gamboa"</CTNombre>
+         <CPotencia>3125</CPotencia>
+         <CFactorial>5040</CFactorial>
+         <CInvertido>743032153</CInvertido>
+         <CMCD>2</CMCD>
+         <CFibonacci>4181</CFibonacci>
+    </principal>
+    <principal>
+         <CTNombre>"Juan Carlos Alberto"</CTNombre>
+         <CPotencia>3125</CPotencia>
+         <CFactorial>5040</CFactorial>
+         <CInvertido>743032153</CInvertido>
+         <CMCD>2</CMCD>
+         <CFibonacci>4181</CFibonacci>
+    </principal>
+
+    <principal>
+    </principal>
+
+
+    <principal>
+    </principal>
+
+
+    <principal>
+    </principal>
+
+
+    <principal>
+    </principal>
+
+
+    <principal>
+    </principal>
+
+
+    <principal>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"pamis"</CTNombre>
+        <CPotencia>30</CPotencia>
+        <CFactorial>20</CFactorial>
+        <CInvertido>70</CInvertido>
+        <CMCD>90</CMCD>
+        <CFibonacci>80</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"rfdfdre"</CTNombre>
+        <CPotencia>550</CPotencia>
+        <CFactorial>555</CFactorial>
+        <CInvertido>450</CInvertido>
+        <CMCD>770</CMCD>
+        <CFibonacci>780</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNombre>"Ingrese aqui su nombre"</CTNombre>
+        <CPotencia>0</CPotencia>
+        <CFactorial>0</CFactorial>
+        <CInvertido>0</CInvertido>
+        <CMCD>0</CMCD>
+        <CFibonacci>0</CFibonacci>
+    </principal>
+
+
+    <principal>
+        <CTNOMBRE>"miiii"</CTNOMBRE>
+        <CPOTENCIA>0</CPOTENCIA>
+        <CFACTORIAL>0</CFACTORIAL>
+        <CINVERTIDO>0</CINVERTIDO>
+        <CMCD>0</CMCD>
+        <CFIBONACCI>0</CFIBONACCI>
+    </principal>
+
+
+    <principal>
+        <CTNOMBRE>"blacky"</CTNOMBRE>
+        <CPOTENCIA>0</CPOTENCIA>
+        <CFACTORIAL>0</CFACTORIAL>
+        <CINVERTIDO>0</CINVERTIDO>
+        <CMCD>0</CMCD>
+        <CFIBONACCI>0</CFIBONACCI>
+    </principal>
+
+
+    <principal>
+        <CTNOMBRE>"jenifer pamela "</CTNOMBRE>
+        <CPOTENCIA>5</CPOTENCIA>
+        <CFACTORIAL>4</CFACTORIAL>
+        <CINVERTIDO>4</CINVERTIDO>
+        <CMCD>3</CMCD>
+        <CFIBONACCI>3</CFIBONACCI>
+    </principal>
+
+</lista>

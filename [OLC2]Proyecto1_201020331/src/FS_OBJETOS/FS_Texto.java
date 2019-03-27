@@ -151,7 +151,7 @@ public class FS_Texto extends JLabel
         this.pos_y = pos_y;
     }
 
-    public boolean isBold() {
+    public boolean getBold() {
         return bold;
     }
 
@@ -159,7 +159,7 @@ public class FS_Texto extends JLabel
         this.bold = bold;
     }
 
-    public boolean isItalic() {
+    public boolean getItalic() {
         return italic;
     }
 
@@ -207,7 +207,7 @@ public class FS_Texto extends JLabel
         return  padre + ".CrearTexto(\"" + fuente + "\", " + tamaño + ", \"" +  traducirColor() + "\", " + pos_x + ", " + pos_y + ", " + (bold == true ? "verdadero" : "falso") + ", " + (italic == true ? "verdadero" : "falso") + ", \"" +  texto.trim()  + "\"); \n";
     }
     
-    private String traducirColor()
+    public String traducirColor()
     {
         return getHexadecimal(color.getRed(),color.getGreen(),color.getBlue());
     }

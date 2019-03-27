@@ -179,7 +179,7 @@ public class FS_Ventana extends JFrame
         return traduccirArbol(nodo_alcerrar);
     }
     
-    private String traducirColor()
+    public String traducirColor()
     {
         return getHexadecimal(color.getRed(),color.getGreen(),color.getBlue());
     }

@@ -91,7 +91,7 @@ public class FS_Video
         this.ancho = ancho;
     }
 
-    public boolean isAutoreproduccion() {
+    public boolean getAutoreproduccion() {
         return autoreproduccion;
     }
 

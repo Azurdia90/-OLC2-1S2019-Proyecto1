@@ -37,13 +37,13 @@ public class Diferente_Que implements Instruccion
     */
     
     private Tabla_Enums.tipo_operacion [][] tabla_diferente_que = {                                                 
-                                                                {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
-                                                                {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_booleano,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
-                                                                {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
-                                                                {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
-                                                                {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
-                                                                {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
-                                                                {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
+                                                                {Tabla_Enums.tipo_operacion.diferente_nulo,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
+                                                                {Tabla_Enums.tipo_operacion.diferente_nulo,Tabla_Enums.tipo_operacion.diferente_booleano,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
+                                                                {Tabla_Enums.tipo_operacion.diferente_nulo,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
+                                                                {Tabla_Enums.tipo_operacion.diferente_nulo,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.diferente_numerico_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
+                                                                {Tabla_Enums.tipo_operacion.diferente_nulo,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
+                                                                {Tabla_Enums.tipo_operacion.diferente_nulo,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter_numerico,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.diferente_caracter,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
+                                                                {Tabla_Enums.tipo_operacion.diferente_nulo,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error},
                                                                 {Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error,Tabla_Enums.tipo_operacion.error}
                                                               };
     public Diferente_Que(Expresion p_izq, Expresion p_der) 
@@ -138,7 +138,19 @@ public class Diferente_Que implements Instruccion
                     nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.booleano);
                     nuevo_simbolo.setValor(resultado_final == true ? "verdadero" :"falso");
                     
-                    return nuevo_simbolo;                 
+                    return nuevo_simbolo;
+                case diferente_nulo:
+                    val1_entero = valor1.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.nulo ? 1 : 0 ;
+                    val2_entero = valor2.getTipo() == Tabla_Enums.tipo_primitivo_Simbolo.nulo ? 1 : 0 ;
+                    resultado_final = val1_entero != val2_entero;
+                    
+                    nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.aceptado);
+                    nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);
+                    nuevo_simbolo.setIdentificador("10-4");
+                    nuevo_simbolo.setTipo(Tabla_Enums.tipo_primitivo_Simbolo.booleano);
+                    nuevo_simbolo.setValor(resultado_final == true ? "verdadero" :"falso");
+                    
+                    return nuevo_simbolo; 
                 case error:                    
                     nuevo_simbolo.setRol(Tabla_Enums.tipo_Simbolo.error);
                     nuevo_simbolo.setAcceso(Tabla_Enums.tipo_Acceso.publico);

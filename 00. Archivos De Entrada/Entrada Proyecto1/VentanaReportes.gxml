@@ -1,0 +1,27 @@
+<Ventana id = "VentanaReportes" Color = "#000000" tipo = "Secundaria">
+	<Contenedor id = "ContenedorReportes" X = 10 Y = 10 Alto = 800 Ancho = 800 Borde = verdadero>
+		<Boton Nombre = "btnEvaluacion1" X = 60 Y = 40 Accion = {ReporteAritmetico()}>
+			<Texto Nombre = "lblbtnEvaluacion">
+				Reporte Aritmeticos
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion2" X = 60 Y = 40  Accion = {ReporteHistorico()}>
+			<Texto Nombre = "lblbtnEvaluacion">
+				Reporte Historicos
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion3" X = 60 Y = 40  Accion = {ReporteIngles()}>
+			<Texto Nombre = "lblbtnEvaluacion">
+				Reporte Ingles
+			</Texto>
+		</Boton>
+		<Boton Nombre = "btnEvaluacion4" X = 60 Y = 40 Accion = {ReporteLogico()}>
+			<Texto Nombre = "lblbtnEvaluacion">
+				Reporte Logicos
+			</Texto>
+		</Boton>
+		<Enviar Nombre = "btnEnviar" X = 60 Y = 350 Accion = {EnviarSinFuncionalidad()}>
+			Sin funcionalidad
+		</Enviar>
+	</Contenedor>
+</Ventana>

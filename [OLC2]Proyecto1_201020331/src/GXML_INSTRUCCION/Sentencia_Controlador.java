@@ -1073,5 +1073,4 @@ public class Sentencia_Controlador implements Instruccion
             return nuevo_simbolo;
         }
     }    
-
 }
